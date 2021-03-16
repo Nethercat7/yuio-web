@@ -1,13 +1,40 @@
 <template>
   <div id="app">
     <el-container style="min-height: 100vh">
-      <el-aside style="width:200px">Aside</el-aside>
+      <el-aside style="width: auto">
+        <el-menu
+          class="menu"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          default-active="1"
+          :collapse="collapsed"
+        >
+          <div>
+            <img class="logo" src="./assets/logo.png" alt="Logo" />
+          </div>
+          <el-menu-item index="1">
+            <i class="el-icon-menu"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>院系管理</span>
+            </template>
+            <el-menu-item index="2-1">学院管理</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
       <el-container>
-        <el-header> Header </el-header>
+        <el-header class="header">
+          <el-button :icon="collapsed?'el-icon-s-unfold':'el-icon-s-fold'" @click="toggleCollapsed"></el-button>
+        </el-header>
         <el-main>
           <router-view></router-view>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer class="footer">Footer</el-footer>
       </el-container>
     </el-container>
   </div>
@@ -16,11 +43,37 @@
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      collapsed: false,
+    };
+  },
+  methods: {
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed;
+    }
+  },
 };
 </script>
 
 <style>
 body {
   margin: 0;
+}
+.menu {
+  width: 200px;
+  min-height: 100vh;
+  border-right: 0 !important;
+}
+.header,
+.footer {
+  background-color: #545c64;
+  color: #fff;
+  line-height: 60px;
+}
+.logo {
+  margin: auto;
+  height: 60px;
+  display: block;
 }
 </style>
