@@ -7,13 +7,13 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
-          default-active="1"
           :collapse="collapsed"
+          :default-openeds="['2']"
         >
           <div>
             <img class="logo" src="./assets/logo.png" alt="Logo" />
           </div>
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="$router.push('/')">
             <i class="el-icon-menu"></i>
             <span slot="title">首页</span>
           </el-menu-item>
@@ -23,7 +23,8 @@
               <i class="el-icon-location"></i>
               <span>院系管理</span>
             </template>
-            <el-menu-item index="2-1">学院管理</el-menu-item>
+            <el-menu-item index="2-1" @click="$router.push('/school/college')">学院管理</el-menu-item>
+            <el-menu-item index="2-2" @click="$router.push('/school/major')">专业管理</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -59,6 +60,7 @@ export default {
 <style>
 body {
   margin: 0;
+  background-color: #f3f3f4;
 }
 .menu {
   width: 200px;
