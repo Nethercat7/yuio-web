@@ -8,6 +8,8 @@ import router from './router'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
+require("./mock/mock")
+
 new Vue({
   render: h => h(App),
   router

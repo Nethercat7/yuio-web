@@ -84,7 +84,7 @@
     </el-row>
     <!-- 表单 -->
     <el-dialog
-      :title="type == 'add' ? '添加院系' : '修改院系'"
+      :title="type == 'add' ? '添加专业' : '修改专业'"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="closeDialog"
@@ -115,6 +115,8 @@
 </template>
 
 <script>
+var Mock = require("mockjs");
+
 export default {
   name: "majorManagement",
   data() {
@@ -221,7 +223,7 @@ export default {
     },
     parseData() {
       let data = this.tableData;
-      let temp = [];//存放已添加进筛选条件中的数据
+      let temp = []; //存放已添加进筛选条件中的数据
       for (let i = 0; i < data.length; i++) {
         if (data[i].major_status == 0) {
           data[i].major_status_display = "正常";
@@ -264,9 +266,22 @@ export default {
     clearFilter() {
       this.$refs.table.clearFilter();
     },
+    test() {
+      var data = Mock.mock({
+        // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+        "list|1-10": [
+          {
+            // 属性 id 是一个自增数，起始值为 1，每次增 1
+            "id|+1": 1,
+          },
+        ],
+      });
+      console.log(JSON.stringify(data, null, 4))
+    },
   },
   mounted() {
     this.parseData();
+    this.test();
   },
 };
 </script>

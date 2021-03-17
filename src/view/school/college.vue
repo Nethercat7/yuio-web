@@ -8,14 +8,16 @@
         >
         <el-button size="mini" type="primary">导入</el-button>
         <el-button size="mini" type="warning">导出</el-button>
-        <el-button size="mini" type="danger" @click="clearFilter">重置筛选</el-button>
+        <el-button size="mini" type="danger" @click="clearFilter"
+          >重置筛选</el-button
+        >
       </el-col>
     </el-row>
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
         <el-table
-        ref="table"
+          ref="table"
           :data="
             collegeData.filter(
               (data) =>
@@ -38,10 +40,7 @@
             label="状态"
             prop="college_status_display"
             sortable
-            :filters="[
-              { text: '正常', value: '正常' },
-              { text: '禁用', value: '禁用' },
-            ]"
+            :filters="statusList"
             :filter-method="filterHandler"
           >
           </el-table-column>
@@ -98,7 +97,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.college_remark"></el-input>
+          <el-input type="textarea" v-model="form.college_description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -110,6 +109,7 @@
 </template>
 
 <script>
+import api from "@/api/api";
 export default {
   name: "collegeManagement",
   data() {
@@ -122,30 +122,9 @@ export default {
         college_status: "",
         college_remark: "",
       },
-      collegeData: [
-        {
-          college_name: "经济与管理学院",
-          college_code: "JG",
-          college_students: 777,
-          college_status: 0,
-          college_status_display: "",
-        },
-        {
-          college_name: "电子工程学院",
-          college_code: "DZ",
-          college_students: 123,
-          college_status: 0,
-          college_status_display: "",
-        },
-        {
-          college_name: "外国语学院",
-          college_code: "WY",
-          college_students: 453,
-          college_status: 1,
-          college_status_display: "",
-        },
-      ],
+      collegeData: [],
       search: "",
+      statusList: [],
     };
   },
   methods: {
@@ -185,16 +164,6 @@ export default {
         })
         .catch(() => {});
     },
-    parseData() {
-      let colleges = this.collegeData;
-      for (let i = 0; i < colleges.length; i++) {
-        if (colleges[i].college_status == 0) {
-          colleges[i].college_status_display = "正常";
-        } else {
-          colleges[i].college_status_display = "禁用";
-        }
-      }
-    },
     tableRowClassName({ row }) {
       if (row.college_status == 1) {
         return "warning-row";
@@ -211,12 +180,35 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
-    clearFilter(){
-       this.$refs.table.clearFilter();
-    }
+    clearFilter() {
+      this.$refs.table.clearFilter();
+    },
+    getCollegeData() {
+      api.getCollege().then((resp) => {
+        let data = resp.data.data;
+        let temp=[]
+        for (let i = 0; i < data.length; i++) {
+          //将状态码转换为文本
+          if (data[i].college_status === 0) {
+            data[i].college_status_display = "正常";
+          } else {
+            data[i].college_status_display = "禁用";
+          }
+          //添加状态过滤器
+          if (!temp.includes(data[i].college_status_display)) {
+            temp.push(data[i].college_status_display);
+            this.statusList.push({
+              text: data[i].college_status_display,
+              value: data[i].college_status_display,
+            });
+          }
+        }
+        this.collegeData = data;
+      });
+    },
   },
-  mounted() {
-    this.parseData();
+  created() {
+    this.getCollegeData();
   },
 };
 </script>
