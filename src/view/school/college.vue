@@ -1,10 +1,12 @@
 <template>
   <div>
+    <!-- 选项卡 -->
     <div class="card">
       <el-button size="mini" @click="openDialog('add')">添加</el-button>
       <el-button size="mini">导入</el-button>
       <el-button size="mini">导出</el-button>
     </div>
+    <!-- 表格 -->
     <div class="card">
       <el-table :data="collegeData">
         <el-table-column label="院系名称" prop="college_name">
@@ -17,7 +19,9 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="openDialog('upd', scope.$index, scope.row)"
+            <el-button
+              size="mini"
+              @click="openDialog('upd', scope.$index, scope.row)"
               >编辑</el-button
             >
             <el-button size="mini" type="danger">删除</el-button>
@@ -25,14 +29,13 @@
         </el-table-column>
       </el-table>
     </div>
-
+    <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加院系' : '修改院系'"
       :visible.sync="dialogVisible"
       width="50%"
       :before-close="closeDialog"
     >
-      <!-- 表单内容 -->
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
           <el-input v-model="form.college_name"></el-input>
@@ -50,7 +53,6 @@
           <el-input type="textarea" v-model="form.college_remark"></el-input>
         </el-form-item>
       </el-form>
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog()">取 消</el-button>
         <el-button type="primary" @click="submitDialog()">确 定</el-button>
@@ -125,8 +127,12 @@ export default {
       this.dialogVisible = false;
     },
     closeDialog() {
-      this.dialogVisible = false;
-      this.form = {};
+      this.$confirm("编写的数据将丢失，确认关闭吗？").then(() => {
+        this.dialogVisible = false;
+        this.form = {};
+      }).catch(()=>{
+          
+      });
     },
   },
 };
