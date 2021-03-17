@@ -21,9 +21,9 @@
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>院系管理</span>
+              <span>基本信息管理</span>
             </template>
-            <el-menu-item index="2-1" @click="$router.push('/school/college')">学院管理</el-menu-item>
+            <el-menu-item index="2-1" @click="$router.push('/school/college')">院系管理</el-menu-item>
             <el-menu-item index="2-2" @click="$router.push('/school/major')">专业管理</el-menu-item>
           </el-submenu>
         </el-menu>

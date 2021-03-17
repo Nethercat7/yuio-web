@@ -2,7 +2,7 @@
   <div>
     <el-row class="card">
       <!-- 选项卡 -->
-      <el-col :lg="12" :md="24">
+      <el-col :span="24">
         <el-button size="mini" @click="openDialog('add')" type="success"
           >添加</el-button
         >
@@ -13,7 +13,19 @@
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
-        <el-table :data="collegeData" :row-class-name="tableRowClassName">
+        <el-table
+          :data="
+            collegeData.filter(
+              (data) =>
+                !search ||
+                data.college_name
+                  .toLowerCase()
+                  .includes(search.toLowerCase()) ||
+                data.college_code.toLowerCase().includes(search.toLowerCase())
+            )
+          "
+          :row-class-name="tableRowClassName"
+        >
           <el-table-column label="院系名称" prop="college_name" sortable>
           </el-table-column>
           <el-table-column label="院系编号" prop="college_code" sortable>
@@ -23,6 +35,14 @@
           <el-table-column label="状态" prop="college_status_display" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
+            <!-- eslint-disable-next-line -->
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="输入院系名称或编号进行搜索"
+              />
+            </template>
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -91,7 +111,6 @@ export default {
         college_status: "",
         college_remark: "",
       },
-      bak: [],
       collegeData: [
         {
           college_name: "经济与管理学院",
@@ -115,6 +134,7 @@ export default {
           college_status_display: "",
         },
       ],
+      search: "",
     };
   },
   methods: {
