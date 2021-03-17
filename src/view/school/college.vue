@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="card">
-      <el-button @click="dialogVisible = true">添加</el-button>
-      <el-button>导入</el-button>
-      <el-button>导出</el-button>
+      <el-button size="mini" @click="openDialog('add')">添加</el-button>
+      <el-button size="mini">导入</el-button>
+      <el-button size="mini">导出</el-button>
     </div>
     <div class="card">
       <el-table :data="collegeData">
@@ -13,15 +13,25 @@
         </el-table-column>
         <el-table-column label="学生数量" prop="college_students">
         </el-table-column>
-        <el-table-column label="状态" prop="college_status"> </el-table-column>
+        <el-table-column label="状态" prop="college_status_display">
+        </el-table-column>
         <el-table-column label="操作">
-          <el-button>编辑</el-button>
-          <el-button>删除</el-button>
+          <template slot-scope="scope">
+            <el-button size="mini" @click="openDialog('upd', scope.$index, scope.row)"
+              >编辑</el-button
+            >
+            <el-button size="mini" type="danger">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
 
-    <el-dialog title="添加院系" :visible.sync="dialogVisible" width="30%">
+    <el-dialog
+      :title="type == 'add' ? '添加院系' : '修改院系'"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="closeDialog"
+    >
       <!-- 表单内容 -->
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
@@ -42,10 +52,8 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCollege"
-          >确 定</el-button
-        >
+        <el-button @click="closeDialog()">取 消</el-button>
+        <el-button type="primary" @click="submitDialog()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -57,45 +65,70 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form:{
-          college_name:'',
-          college_code:'',
-          college_status:'',
-          college_remark:''
+      type: "",
+      form: {
+        college_name: "",
+        college_code: "",
+        college_status: "",
+        college_remark: "",
       },
       collegeData: [
         {
           college_name: "经济与管理学院",
           college_code: "JG",
           college_students: 777,
-          college_status: "正常",
+          college_status: 0,
+          college_status_display: "正常",
         },
         {
           college_name: "电子工程学院",
           college_code: "DZ",
           college_students: 123,
-          college_status: "正常",
+          college_status: 0,
+          college_status_display: "正常",
         },
         {
           college_name: "外国语学院",
           college_code: "WY",
           college_students: 453,
-          college_status: "正常",
+          college_status: 1,
+          college_status_display: "禁用",
         },
       ],
     };
   },
-  methods:{
-      addCollege(){
-          console.log(this.form);
-          this.$message({
-          message: '添加成功',
-          type: 'success'
-        });
-        this.dialogVisible=false;
-        this.form={}
+  methods: {
+    openDialog(type, index, row) {
+      this.dialogVisible = true;
+      if (type == "add") {
+        this.type = type;
+      } else {
+        this.type = type;
+        this.form = row;
       }
-  }
+    },
+    submitDialog() {
+      if (this.type == "add") {
+        console.log(this.form);
+        this.$message({
+          message: "添加成功",
+          type: "success",
+        });
+      } else {
+        console.log(this.form);
+        this.$message({
+          message: "修改成功",
+          type: "success",
+        });
+      }
+      this.form = {};
+      this.dialogVisible = false;
+    },
+    closeDialog() {
+      this.dialogVisible = false;
+      this.form = {};
+    },
+  },
 };
 </script>
 
