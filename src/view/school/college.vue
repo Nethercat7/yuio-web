@@ -1,34 +1,48 @@
 <template>
   <div>
-    <!-- 选项卡 -->
-    <div class="card">
-      <el-button size="mini" @click="openDialog('add')">添加</el-button>
-      <el-button size="mini">导入</el-button>
-      <el-button size="mini">导出</el-button>
-    </div>
-    <!-- 表格 -->
-    <div class="card">
-      <el-table :data="collegeData">
-        <el-table-column label="院系名称" prop="college_name">
-        </el-table-column>
-        <el-table-column label="院系编号" prop="college_code">
-        </el-table-column>
-        <el-table-column label="学生数量" prop="college_students">
-        </el-table-column>
-        <el-table-column label="状态" prop="college_status_display">
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="openDialog('upd', scope.$index, scope.row)"
-              >编辑</el-button
-            >
-            <el-button size="mini" type="danger">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-row class="card">
+      <!-- 选项卡 -->
+      <el-col :lg="12" :md="24">
+        <el-button size="mini" @click="openDialog('add')">添加</el-button>
+        <el-button size="mini">导入</el-button>
+        <el-button size="mini">导出</el-button>
+      </el-col>
+    </el-row>
+    <el-row class="card">
+      <!-- 表格 -->
+      <el-col :span="24">
+        <el-table :data="collegeData" :row-class-name="tableRowClassName">
+          <el-table-column label="院系名称" prop="college_name">
+          </el-table-column>
+          <el-table-column label="院系编号" prop="college_code">
+          </el-table-column>
+          <el-table-column label="毕业生数量" prop="college_students">
+          </el-table-column>
+          <el-table-column label="状态" prop="college_status_display">
+          </el-table-column>
+          <el-table-column label="操作" fixed="right">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="openDialog('upd', scope.$index, scope.row)"
+                >编辑</el-button
+              >
+              <el-popconfirm
+                title="删除后将无法恢复，确定删除吗？"
+                style="padding: 7px 15px"
+                icon="el-icon-info"
+                icon-color="red"
+                @confirm="delete(scope.$index)"
+              >
+                <el-button slot="reference" size="mini" type="danger"
+                  >删除</el-button
+                >
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
     <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加院系' : '修改院系'"
@@ -80,21 +94,21 @@ export default {
           college_code: "JG",
           college_students: 777,
           college_status: 0,
-          college_status_display: "正常",
+          college_status_display: "",
         },
         {
           college_name: "电子工程学院",
           college_code: "DZ",
           college_students: 123,
           college_status: 0,
-          college_status_display: "正常",
+          college_status_display: "",
         },
         {
           college_name: "外国语学院",
           college_code: "WY",
           college_students: 453,
           college_status: 1,
-          college_status_display: "禁用",
+          college_status_display: "",
         },
       ],
     };
@@ -127,13 +141,38 @@ export default {
       this.dialogVisible = false;
     },
     closeDialog() {
-      this.$confirm("编写的数据将丢失，确认关闭吗？").then(() => {
-        this.dialogVisible = false;
-        this.form = {};
-      }).catch(()=>{
-          
-      });
+      this.$confirm("编写的数据将丢失，确认关闭吗？")
+        .then(() => {
+          this.dialogVisible = false;
+          this.form = {};
+        })
+        .catch(() => {});
     },
+    parseData() {
+      let colleges = this.collegeData;
+      for (let i = 0; i < colleges.length; i++) {
+        if (colleges[i].college_status == 0) {
+          colleges[i].college_status_display = "正常";
+        } else {
+          colleges[i].college_status_display = "禁用";
+        }
+      }
+    },
+    tableRowClassName({ row }) {
+      if (row.college_status == 1) {
+        return "warning-row";
+      }
+    },
+    delete(index){
+        this.collegeData.splice(index,1);
+        this.$message({
+            message:"成功删除",
+            type:"success"
+        })
+    }
+  },
+  mounted() {
+    this.parseData();
   },
 };
 </script>
@@ -145,5 +184,12 @@ export default {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #fff;
+}
+.el-table .warning-row {
+  background-color: oldlace;
+}
+
+.el-table .success-row {
+  background-color: #f0f9eb;
 }
 </style>
