@@ -3,28 +3,31 @@
     <el-row class="card">
       <!-- 选项卡 -->
       <el-col :lg="12" :md="24">
-        <el-button size="mini" @click="openDialog('add')">添加</el-button>
-        <el-button size="mini">导入</el-button>
-        <el-button size="mini">导出</el-button>
+        <el-button size="mini" @click="openDialog('add')" type="success"
+          >添加</el-button
+        >
+        <el-button size="mini" type="primary">导入</el-button>
+        <el-button size="mini" type="warning">导出</el-button>
       </el-col>
     </el-row>
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
         <el-table :data="collegeData" :row-class-name="tableRowClassName">
-          <el-table-column label="院系名称" prop="college_name">
+          <el-table-column label="院系名称" prop="college_name" sortable>
           </el-table-column>
-          <el-table-column label="院系编号" prop="college_code">
+          <el-table-column label="院系编号" prop="college_code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="college_students">
+          <el-table-column label="毕业生数量" prop="college_students" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="college_status_display">
+          <el-table-column label="状态" prop="college_status_display" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="openDialog('upd', scope.$index, scope.row)"
+                @click="openDialog('upd', scope.row)"
+                type="info"
                 >编辑</el-button
               >
               <el-popconfirm
@@ -32,7 +35,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="delete(scope.$index)"
+                @confirm="deleteRow(scope.$index)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -88,6 +91,7 @@ export default {
         college_status: "",
         college_remark: "",
       },
+      bak: [],
       collegeData: [
         {
           college_name: "经济与管理学院",
@@ -114,18 +118,19 @@ export default {
     };
   },
   methods: {
-    openDialog(type, index, row) {
+    openDialog(type, row) {
       this.dialogVisible = true;
       if (type == "add") {
         this.type = type;
       } else {
         this.type = type;
-        this.form = row;
+        this.form = JSON.parse(JSON.stringify(row));
       }
     },
     submitDialog() {
       if (this.type == "add") {
         console.log(this.form);
+        this.collegeData.push(this.form);
         this.$message({
           message: "添加成功",
           type: "success",
@@ -139,6 +144,7 @@ export default {
       }
       this.form = {};
       this.dialogVisible = false;
+      this.parseData();
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -163,13 +169,13 @@ export default {
         return "warning-row";
       }
     },
-    delete(index){
-        this.collegeData.splice(index,1);
-        this.$message({
-            message:"成功删除",
-            type:"success"
-        })
-    }
+    deleteRow(index) {
+      this.collegeData.splice(index, 1);
+      this.$message({
+        message: "成功删除",
+        type: "success",
+      });
+    },
   },
   mounted() {
     this.parseData();
