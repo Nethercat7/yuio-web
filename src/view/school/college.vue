@@ -97,7 +97,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.college_description"></el-input>
+          <el-input
+            type="textarea"
+            v-model="form.college_description"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -109,7 +112,8 @@
 </template>
 
 <script>
-import api from "@/api/api";
+import api from '@/api/api'
+
 export default {
   name: "collegeManagement",
   data() {
@@ -140,7 +144,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         console.log(this.form);
-        this.collegeData.push(this.form);
+        this.add(this.form);
         this.$message({
           message: "添加成功",
           type: "success",
@@ -154,7 +158,6 @@ export default {
       }
       this.form = {};
       this.dialogVisible = false;
-      this.parseData();
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -185,8 +188,9 @@ export default {
     },
     getCollegeData() {
       api.getCollege().then((resp) => {
+        console.log(resp);
         let data = resp.data.data;
-        let temp=[]
+        let temp = [];
         for (let i = 0; i < data.length; i++) {
           //将状态码转换为文本
           if (data[i].college_status === 0) {
@@ -207,9 +211,9 @@ export default {
       });
     },
   },
-  created() {
+  mounted(){
     this.getCollegeData();
-  },
+  }
 };
 </script>
 

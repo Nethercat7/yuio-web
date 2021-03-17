@@ -2,12 +2,11 @@ import axios from 'axios'
 import {Message} from 'element-ui'
 //import storage from "../assets/storage";
 
-//创建Axios实例
-const service=axios.create({
-  //设置公共API
-  baseURI:process.env.BASE_API,
-  //设置超时时间 3S
-  timeout:30*1000
+// create an axios instance
+const service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 5000 // request timeout
 })
 
 //配置请求拦截器

@@ -1,8 +1,7 @@
-import Mock from 'mockjs' // 引入mockjs
+import College from './data/college';
 
-import tableData from './data/tableData'
-import collegeData from './data/collegeData'
+const Mock = require('mockjs');
 
-Mock.mock('/data/tableData', 'get', tableData) // tableData
-
-Mock.mock('/school/college', 'get', collegeData)
+Mock.mock('/school/college','get',function(){
+    return College.get();
+})

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Layout from '@/view/index'
 import College from '@/view/school/college'
 import Major from '@/view/school/major'
+import Test from '@/view/test'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push;
@@ -23,6 +24,10 @@ export default new Router({
         {
             path: '/school/major',
             component: Major
+        },
+        {
+            path:'/test',
+            component:Test
         }
     ]
 })
