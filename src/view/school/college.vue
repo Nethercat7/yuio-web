@@ -8,12 +8,14 @@
         >
         <el-button size="mini" type="primary">导入</el-button>
         <el-button size="mini" type="warning">导出</el-button>
+        <el-button size="mini" type="danger" @click="clearFilter">重置筛选</el-button>
       </el-col>
     </el-row>
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
         <el-table
+        ref="table"
           :data="
             collegeData.filter(
               (data) =>
@@ -32,7 +34,16 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="college_students" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="college_status_display" sortable>
+          <el-table-column
+            label="状态"
+            prop="college_status_display"
+            sortable
+            :filters="[
+              { text: '正常', value: '正常' },
+              { text: '禁用', value: '禁用' },
+            ]"
+            :filter-method="filterHandler"
+          >
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <!-- eslint-disable-next-line -->
@@ -196,6 +207,13 @@ export default {
         type: "success",
       });
     },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    clearFilter(){
+       this.$refs.table.clearFilter();
+    }
   },
   mounted() {
     this.parseData();
