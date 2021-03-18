@@ -32,7 +32,7 @@
           </el-table-column>
           <el-table-column label="专业编号" prop="major_code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="major_students" sortable>
+          <el-table-column label="毕业生数量" prop="major_student" sortable>
           </el-table-column>
           <el-table-column
             label="所属院系"
@@ -103,7 +103,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.major_remark"></el-input>
+          <el-input type="textarea" v-model="form.major_desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-var Mock = require("mockjs");
+import api from "@/api/api";
 
 export default {
   name: "majorManagement",
@@ -127,61 +127,12 @@ export default {
         major_name: "",
         major_code: "",
         major_status: "",
-        major_remark: "",
+        major_desciption: "",
       },
-      tableData: [
-        {
-          major_name: "信息管理与信息系统",
-          major_code: "XG",
-          major_students: 173,
-          major_status: 0,
-          major_status_display: "",
-          major_college: "经济与管理学院",
-        },
-        {
-          major_name: "计算机应用技术",
-          major_code: "JY",
-          major_students: 123,
-          major_status: 0,
-          major_status_display: "",
-          major_college: "电子信息工程学院",
-        },
-        {
-          major_name: "国际贸易",
-          major_code: "GM",
-          major_students: 110,
-          major_status: 1,
-          major_status_display: "",
-          major_college: "经济与管理学院",
-        },
-        {
-          major_name: "汽车维修工程",
-          major_code: "QX",
-          major_students: 129,
-          major_status: 0,
-          major_status_display: "",
-          major_college: "机械学院",
-        },
-        {
-          major_name: "室内设计",
-          major_code: "SN",
-          major_students: 70,
-          major_status: 1,
-          major_status_display: "",
-          major_college: "艺术学院",
-        },
-        {
-          major_name: "幼儿教育",
-          major_code: "YJ",
-          major_students: 89,
-          major_status: 0,
-          major_status_display: "",
-          major_college: "职教学院",
-        },
-      ],
       search: "",
       statusFilter: [],
       collegeFilter: [],
+      tableData: null,
     };
   },
   methods: {
@@ -221,32 +172,6 @@ export default {
         })
         .catch(() => {});
     },
-    parseData() {
-      let data = this.tableData;
-      let temp = []; //存放已添加进筛选条件中的数据
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].major_status == 0) {
-          data[i].major_status_display = "正常";
-        } else {
-          data[i].major_status_display = "禁用";
-        }
-        //挑选数组中未被添加进筛选条件的数据
-        if (!temp.includes(data[i].major_status_display)) {
-          temp.push(data[i].major_status_display);
-          this.statusFilter.push({
-            text: data[i].major_status_display,
-            value: data[i].major_status_display,
-          });
-        }
-        if (!temp.includes(data[i].major_college)) {
-          temp.push(data[i].major_college);
-          this.collegeFilter.push({
-            text: data[i].major_college,
-            value: data[i].major_college,
-          });
-        }
-      }
-    },
     tableRowClassName({ row }) {
       if (row.major_status == 1) {
         return "warning-row";
@@ -266,22 +191,38 @@ export default {
     clearFilter() {
       this.$refs.table.clearFilter();
     },
-    test() {
-      var data = Mock.mock({
-        // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
-        "list|1-10": [
-          {
-            // 属性 id 是一个自增数，起始值为 1，每次增 1
-            "id|+1": 1,
-          },
-        ],
+    getMajor() {
+      api.getMajor().then((resp) => {
+        this.tableData = resp.data.data;
+        let data = this.tableData;
+        let temp = []; //存放已添加进筛选条件中的数据
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].major_status == 0) {
+            data[i].major_status_display = "正常";
+          } else {
+            data[i].major_status_display = "禁用";
+          }
+          //挑选数组中未被添加进筛选条件的数据
+          if (!temp.includes(data[i].major_status_display)) {
+            temp.push(data[i].major_status_display);
+            this.statusFilter.push({
+              text: data[i].major_status_display,
+              value: data[i].major_status_display,
+            });
+          }
+          if (!temp.includes(data[i].major_college)) {
+            temp.push(data[i].major_college);
+            this.collegeFilter.push({
+              text: data[i].major_college,
+              value: data[i].major_college,
+            });
+          }
+        }
       });
-      console.log(JSON.stringify(data, null, 4))
     },
   },
   mounted() {
-    this.parseData();
-    this.test();
+    this.getMajor();
   },
 };
 </script>
