@@ -34,7 +34,7 @@
           </el-table-column>
           <el-table-column label="院系编号" prop="college_code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="college_students" sortable>
+          <el-table-column label="毕业生数量" prop="college_student" sortable>
           </el-table-column>
           <el-table-column
             label="状态"
@@ -113,7 +113,6 @@
 
 <script>
 import api from '@/api/api'
-
 export default {
   name: "collegeManagement",
   data() {
@@ -188,7 +187,6 @@ export default {
     },
     getCollegeData() {
       api.getCollege().then((resp) => {
-        console.log(resp);
         let data = resp.data.data;
         let temp = [];
         for (let i = 0; i < data.length; i++) {
