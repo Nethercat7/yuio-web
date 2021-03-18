@@ -19,14 +19,16 @@
         <el-table
           ref="table"
           :data="
-            collegeData.filter(
-              (data) =>
-                !search ||
-                data.college_name
-                  .toLowerCase()
-                  .includes(search.toLowerCase()) ||
-                data.college_code.toLowerCase().includes(search.toLowerCase())
-            )
+            collegeData
+              .filter(
+                (data) =>
+                  !search ||
+                  data.college_name
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                  data.college_code.toLowerCase().includes(search.toLowerCase())
+              )
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           "
           :row-class-name="tableRowClassName"
         >
@@ -74,6 +76,18 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 分页器 -->
+        <el-pagination
+          layout="total,sizes,prev, pager, next,jumper"
+          :total="total"
+          @current-change="changePage"
+          :current-page="currentPage"
+          :hide-on-single-page="true"
+          @size-change="changeSize"
+          :page-size="pageSize"
+          style="margin-top: 10px; text-align: center"
+        >
+        </el-pagination>
       </el-col>
     </el-row>
     <!-- 表单 -->
@@ -128,6 +142,9 @@ export default {
       collegeData: [],
       search: "",
       statusList: [],
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
     };
   },
   methods: {
@@ -150,6 +167,7 @@ export default {
               type: "success",
             });
             this.getCollegeData();
+            this.total++;
           }
         });
       } else {
@@ -186,6 +204,7 @@ export default {
         message: "成功删除",
         type: "success",
       });
+      this.total--;
     },
     filterHandler(value, row, column) {
       const property = column["property"];
@@ -196,6 +215,7 @@ export default {
     },
     getCollegeData() {
       api.getCollege().then((resp) => {
+        this.total=resp.data.total;
         let data = resp.data.data;
         let temp = [];
         for (let i = 0; i < data.length; i++) {
@@ -216,6 +236,13 @@ export default {
         }
         this.collegeData = data;
       });
+    },
+    //页面切换控制器
+    changePage(val) {
+      this.currentPage = val;
+    },
+    changeSize(val) {
+      this.pageSize = val;
     },
   },
   mounted() {

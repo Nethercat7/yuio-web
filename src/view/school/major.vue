@@ -19,12 +19,16 @@
         <el-table
           ref="table"
           :data="
-            tableData.filter(
-              (data) =>
-                !search ||
-                data.major_name.toLowerCase().includes(search.toLowerCase()) ||
-                data.major_code.toLowerCase().includes(search.toLowerCase())
-            )
+            tableData
+              .filter(
+                (data) =>
+                  !search ||
+                  data.major_name
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                  data.major_code.toLowerCase().includes(search.toLowerCase())
+              )
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
           "
           :row-class-name="tableRowClassName"
         >
@@ -80,6 +84,18 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 分页器 -->
+        <el-pagination
+          layout="total,sizes,prev, pager, next,jumper"
+          :total="total"
+          @current-change="changePage"
+          :current-page="currentPage"
+          :hide-on-single-page="true"
+          @size-change="changeSize"
+          :page-size="pageSize"
+          style="margin-top:10px;text-align:center"
+        >
+        </el-pagination>
       </el-col>
     </el-row>
     <!-- 表单 -->
@@ -121,6 +137,7 @@ export default {
   name: "majorManagement",
   data() {
     return {
+      tableData: [],
       dialogVisible: false,
       type: "",
       form: {
@@ -132,7 +149,9 @@ export default {
       search: "",
       statusFilter: [],
       collegeFilter: [],
-      tableData: null,
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
     };
   },
   methods: {
@@ -194,6 +213,7 @@ export default {
     getMajor() {
       api.getMajor().then((resp) => {
         this.tableData = resp.data.data;
+        this.total = resp.data.total;
         let data = this.tableData;
         let temp = []; //存放已添加进筛选条件中的数据
         for (let i = 0; i < data.length; i++) {
@@ -220,6 +240,13 @@ export default {
         }
       });
     },
+    //页面切换控制器
+    changePage(val) {
+      this.currentPage = val;
+    },
+    changeSize(val){
+      this.pageSize=val;
+    }
   },
   mounted() {
     this.getMajor();

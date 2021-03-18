@@ -63,6 +63,7 @@ let resp = {
 }
 
 function get() {
+    resp.total=resp.data.length;
     return resp;
 }
 

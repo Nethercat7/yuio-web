@@ -8,7 +8,7 @@ let resp={
 
 function get(){
     let data=Mock.mock({
-        "data|10":[{
+        "data|100":[{
             major_id:'@id',
             major_code:'@string',
             major_name:"@name Major",
@@ -20,6 +20,7 @@ function get(){
         }]
     })
     resp.data=data.data;
+    resp.total=resp.data.length;
     return resp;
 }
 
