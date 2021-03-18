@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import api from '@/api/api'
+import api from "@/api/api";
 export default {
   name: "collegeManagement",
   data() {
@@ -123,7 +123,7 @@ export default {
         college_name: "",
         college_code: "",
         college_status: "",
-        college_remark: "",
+        college_description: "",
       },
       collegeData: [],
       search: "",
@@ -143,16 +143,25 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         console.log(this.form);
-        this.add(this.form);
-        this.$message({
-          message: "添加成功",
-          type: "success",
+        api.addCollege(this.form).then((resp) => {
+          if (resp.data.code === 1) {
+            this.$message({
+              message: "添加成功",
+              type: "success",
+            });
+            this.getCollegeData();
+          }
         });
       } else {
         console.log(this.form);
-        this.$message({
-          message: "修改成功",
-          type: "success",
+        api.updCollege(this.form).then((resp) => {
+          if (resp.data.code === 1) {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+            this.getCollegeData();
+          }
         });
       }
       this.form = {};
@@ -209,9 +218,9 @@ export default {
       });
     },
   },
-  mounted(){
+  mounted() {
     this.getCollegeData();
-  }
+  },
 };
 </script>
 
