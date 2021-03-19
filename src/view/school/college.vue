@@ -167,7 +167,6 @@ export default {
               type: "success",
             });
             this.getCollegeData();
-            this.total++;
           }
         });
       } else {
@@ -244,6 +243,19 @@ export default {
     changeSize(val) {
       this.pageSize = val;
     },
+    querySearch(queryString, cb) {
+      var restaurants = this.collegeData;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+        return (restaurant) => {
+          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
   },
   mounted() {
     this.getCollegeData();

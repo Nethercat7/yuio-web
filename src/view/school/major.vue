@@ -2,14 +2,27 @@
   <div>
     <el-row class="card">
       <!-- 选项卡 -->
-      <el-col :span="24">
+      <el-col :span="12">
         <el-button size="mini" @click="openDialog('add')" type="success"
           >添加</el-button
         >
         <el-button size="mini" type="primary">导入</el-button>
         <el-button size="mini" type="warning">导出</el-button>
-        <el-button size="mini" type="danger" @click="clearFilter"
-          >重置筛选</el-button
+      </el-col>
+      <el-col :span="12" style="text-align: right">
+        <el-autocomplete
+          v-model="keyword"
+          placeholder="请输入内容"
+          size="mini"
+          style="margin-right: 10px"
+          :trigger-on-focus="false"
+          :fetch-suggestions="searchSuggestions"
+        ></el-autocomplete>
+        <el-button size="mini" type="success" @click="handleSearch"
+          >搜索</el-button
+        >
+        <el-button size="mini" type="danger" @click="resetResult"
+          >重置</el-button
         >
       </el-col>
     </el-row>
@@ -19,16 +32,10 @@
         <el-table
           ref="table"
           :data="
-            tableData
-              .filter(
-                (data) =>
-                  !search ||
-                  data.major_name
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  data.major_code.toLowerCase().includes(search.toLowerCase())
-              )
-              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+            tableData.slice(
+              (currentPage - 1) * pageSize,
+              currentPage * pageSize
+            )
           "
           :row-class-name="tableRowClassName"
         >
@@ -38,31 +45,11 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="major_student" sortable>
           </el-table-column>
-          <el-table-column
-            label="所属院系"
-            prop="major_college"
-            sortable
-            :filters="collegeFilter"
-            :filter-method="filterHandler"
-          >
+          <el-table-column label="所属院系" prop="major_college" sortable>
           </el-table-column>
-          <el-table-column
-            label="状态"
-            prop="major_status_display"
-            sortable
-            :filters="statusFilter"
-            :filter-method="filterHandler"
-          >
+          <el-table-column label="状态" prop="major_status_display" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
-            <!-- eslint-disable-next-line -->
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入专业名称或编号进行搜索"
-              />
-            </template>
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -93,7 +80,7 @@
           :hide-on-single-page="true"
           @size-change="changeSize"
           :page-size="pageSize"
-          style="margin-top:10px;text-align:center"
+          style="margin-top: 10px; text-align: center"
         >
         </el-pagination>
       </el-col>
@@ -138,6 +125,8 @@ export default {
   data() {
     return {
       tableData: [],
+      tableDataBak: [],
+      keyword: "",
       dialogVisible: false,
       type: "",
       form: {
@@ -146,9 +135,6 @@ export default {
         major_status: "",
         major_desciption: "",
       },
-      search: "",
-      statusFilter: [],
-      collegeFilter: [],
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -203,39 +189,18 @@ export default {
         type: "success",
       });
     },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
-    },
-    clearFilter() {
-      this.$refs.table.clearFilter();
-    },
-    getMajor() {
+    getData() {
       api.getMajor().then((resp) => {
         this.tableData = resp.data.data;
+        this.tableDataBak = resp.data.data;
         this.total = resp.data.total;
         let data = this.tableData;
-        let temp = []; //存放已添加进筛选条件中的数据
         for (let i = 0; i < data.length; i++) {
+          data[i].value = data[i].major_name;
           if (data[i].major_status == 0) {
             data[i].major_status_display = "正常";
           } else {
             data[i].major_status_display = "禁用";
-          }
-          //挑选数组中未被添加进筛选条件的数据
-          if (!temp.includes(data[i].major_status_display)) {
-            temp.push(data[i].major_status_display);
-            this.statusFilter.push({
-              text: data[i].major_status_display,
-              value: data[i].major_status_display,
-            });
-          }
-          if (!temp.includes(data[i].major_college)) {
-            temp.push(data[i].major_college);
-            this.collegeFilter.push({
-              text: data[i].major_college,
-              value: data[i].major_college,
-            });
           }
         }
       });
@@ -244,12 +209,34 @@ export default {
     changePage(val) {
       this.currentPage = val;
     },
-    changeSize(val){
-      this.pageSize=val;
-    }
+    changeSize(val) {
+      this.pageSize = val;
+    },
+    searchSuggestions(queryString, cb) {
+      var restaurants = this.tableDataBak;
+      var results = queryString
+        ? restaurants.filter(this.createFilter())
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    handleSearch() {
+      this.tableData = this.tableDataBak;
+      this.tableData = this.tableData.filter(this.createFilter());
+      this.total = this.tableData.length;
+    },
+    createFilter() {
+      return (data) =>
+        data.major_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.major_code.toLowerCase().includes(this.keyword.toLowerCase());
+    },
+    resetResult() {
+      this.tableData = this.tableDataBak;
+      this.keyword = "";
+    },
   },
   mounted() {
-    this.getMajor();
+    this.getData();
   },
 };
 </script>
@@ -261,6 +248,10 @@ export default {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #fff;
+}
+.element-right {
+  display: inline;
+  text-align: right;
 }
 .el-table .warning-row {
   background-color: oldlace;

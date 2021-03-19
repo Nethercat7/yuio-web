@@ -72,6 +72,7 @@ function add(options) {
     obj.college_id = Mock.mock('@id');
     obj.college_student = Mock.mock('@int(100,700)');
     resp.data.push(obj);
+    resp.total=resp.data.length;
     return resp;
 }
 
@@ -82,6 +83,7 @@ function upd(options) {
             resp.data[i] = obj;
         }
     }
+    resp.total=resp.data.length;
     return resp;
 }
 
