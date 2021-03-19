@@ -12,6 +12,9 @@ let api={
     updCollege(params){
         return http.post(`${request}/school/college/upd`,params)
     },
+    delCollege(params){
+        return http.get(`${request}/school/college/del`,params)
+    },
     getMajors(params){
         return http.get(`${request}/school/major`,params)
     },

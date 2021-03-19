@@ -12,6 +12,9 @@ Mock.mock('/school/college/add','post',function(options){
 Mock.mock('/school/college/upd','post',function(options){
     return College.upd(options)
 })
+Mock.mock('/school/college/del','get',function(options){
+    return College.del(options)
+})
 Mock.mock('/school/major','get',function(){
     return Major.get();
 })

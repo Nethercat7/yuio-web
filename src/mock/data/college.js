@@ -73,6 +73,8 @@ function add(options) {
     obj.college_students = Mock.mock('@int(100,700)');
     resp.data.push(obj);
     resp.total=resp.data.length;
+    resp.msg="成功添加";
+    resp.type="success";
     return resp;
 }
 
@@ -84,11 +86,26 @@ function upd(options) {
         }
     }
     resp.total=resp.data.length;
+    resp.msg="成功修改";
+    resp.type="success";
+    return resp;
+}
+
+function del(param){
+    for(let i=0;i<resp.data.length;i++){
+        if(resp.data[i].college_id===param.body){
+            let index=resp.data.indexOf(resp.data[i]);
+            resp.data.splice(index,1);
+        }
+    }
+    resp.msg="成功删除";
+    resp.type="success";
     return resp;
 }
 
 module.exports = {
     get,
     add,
-    upd
+    upd,
+    del
 }

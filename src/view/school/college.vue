@@ -60,7 +60,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="deleteRow(scope.$index)"
+                @confirm="deleteRow(scope.row.college_id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -137,7 +137,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      keyword: ""
+      keyword: "",
     };
   },
   methods: {
@@ -153,23 +153,19 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         api.addCollege(this.form).then((resp) => {
-          if (resp.code === 1) {
-            this.$message({
-              message: "添加成功",
-              type: "success",
-            });
-            this.getData();
-          }
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+          if (resp.code === 1) this.getData();
         });
       } else {
         api.updCollege(this.form).then((resp) => {
-          if (resp.code === 1) {
-            this.$message({
-              message: "修改成功",
-              type: "success",
-            });
-            this.getData();
-          }
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+          if (resp.code === 1) this.getData();
         });
       }
       this.form = {};
@@ -188,13 +184,14 @@ export default {
         return "warning-row";
       }
     },
-    deleteRow(index) {
-      this.tableData.splice(index, 1);
-      this.$message({
-        message: "成功删除",
-        type: "success",
-      });
-      this.total--;
+    deleteRow(id) {
+      api.delCollege(id).then(resp=>{
+        this.$message({
+          message:resp.msg,
+          type:resp.type
+        })
+        if(resp.code===1) this.getData();
+      })
     },
     getData() {
       api.getColleges().then((resp) => {
