@@ -8,7 +8,6 @@
         >
         <el-button size="mini" type="primary">导入</el-button>
         <el-button size="mini" type="warning">导出</el-button>
-        >
       </el-col>
       <el-col :span="12" style="text-align: right">
         <el-autocomplete
@@ -44,7 +43,7 @@
           </el-table-column>
           <el-table-column label="院系编号" prop="college_code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="college_student" sortable>
+          <el-table-column label="毕业生数量" prop="college_students" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="college_status_display" sortable>
           </el-table-column>
@@ -138,7 +137,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      keyword: "",
+      keyword: ""
     };
   },
   methods: {
@@ -153,7 +152,6 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        console.log(this.form);
         api.addCollege(this.form).then((resp) => {
           if (resp.data.code === 1) {
             this.$message({
@@ -164,7 +162,6 @@ export default {
           }
         });
       } else {
-        console.log(this.form);
         api.updCollege(this.form).then((resp) => {
           if (resp.data.code === 1) {
             this.$message({
@@ -192,7 +189,7 @@ export default {
       }
     },
     deleteRow(index) {
-      this.collegeData.splice(index, 1);
+      this.tableData.splice(index, 1);
       this.$message({
         message: "成功删除",
         type: "success",
@@ -200,12 +197,12 @@ export default {
       this.total--;
     },
     getData() {
-      api.getCollege().then((resp) => {
+      api.getColleges().then((resp) => {
         this.tableDataBak = resp.data.data;
         this.total = resp.data.total;
         let data = resp.data.data;
         for (let i = 0; i < data.length; i++) {
-          data[i].value=data[i].college_name;
+          data[i].value = data[i].college_name;
           //将状态码转换为文本
           if (data[i].college_status === 0) {
             data[i].college_status_display = "正常";

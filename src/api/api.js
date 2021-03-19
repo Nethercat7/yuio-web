@@ -3,7 +3,7 @@ import http from '../utils/http'
 let request = ''
 
 let api={
-    getCollege(params){
+    getColleges(params){
         return http.get(`${request}/school/college`,params)
     },
     addCollege(params){
@@ -12,8 +12,11 @@ let api={
     updCollege(params){
         return http.post(`${request}/school/college/upd`,params)
     },
-    getMajor(params){
+    getMajors(params){
         return http.get(`${request}/school/major`,params)
+    },
+    addMajor(params){
+        return http.post(`${request}/school/major/add`,params)
     }
 }
 

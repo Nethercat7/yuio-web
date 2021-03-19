@@ -1,5 +1,5 @@
 import College from './data/college';
-import Mjaor from './data/major';
+import Major from './data/major';
 
 const Mock = require('mockjs');
 
@@ -13,5 +13,8 @@ Mock.mock('/school/college/upd','post',function(options){
     return College.upd(options)
 })
 Mock.mock('/school/major','get',function(){
-    return Mjaor.get();
+    return Major.get();
+})
+Mock.mock('/school/major/add','post',function(params){
+    return Major.add(params);
 })

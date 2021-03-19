@@ -43,7 +43,7 @@
           </el-table-column>
           <el-table-column label="专业编号" prop="major_code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="major_student" sortable>
+          <el-table-column label="毕业生数量" prop="major_students" sortable>
           </el-table-column>
           <el-table-column label="所属院系" prop="major_college" sortable>
           </el-table-column>
@@ -99,6 +99,17 @@
         <el-form-item label="编号">
           <el-input v-model="form.major_code"></el-input>
         </el-form-item>
+        <el-form-item label="所属院系">
+          <el-select v-model="form.major_college" placeholder="请选择">
+            <el-option
+              v-for="item in colleges"
+              :key="item.college_id"
+              :label="item.college_name"
+              :value="item.college_id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.major_status">
             <el-radio :label="0">启用</el-radio>
@@ -138,6 +149,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
+      colleges: [],
     };
   },
   methods: {
@@ -152,14 +164,14 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        console.log(this.form);
-        this.collegeData.push(this.form);
-        this.$message({
-          message: "添加成功",
-          type: "success",
+        api.addMajor(this.form).then((resp) => {
+          this.$message({
+            message: resp.data.msg,
+            type: resp.data.type,
+          });
+          if (resp.data.code === 1) this.getMajors();
         });
       } else {
-        console.log(this.form);
         this.$message({
           message: "修改成功",
           type: "success",
@@ -167,7 +179,6 @@ export default {
       }
       this.form = {};
       this.dialogVisible = false;
-      this.parseData();
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -189,12 +200,11 @@ export default {
         type: "success",
       });
     },
-    getData() {
-      api.getMajor().then((resp) => {
-        this.tableData = resp.data.data;
+    getMajors() {
+      api.getMajors().then((resp) => {
         this.tableDataBak = resp.data.data;
         this.total = resp.data.total;
-        let data = this.tableData;
+        let data = resp.data.data;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].major_name;
           if (data[i].major_status == 0) {
@@ -203,6 +213,7 @@ export default {
             data[i].major_status_display = "禁用";
           }
         }
+        this.tableData = data;
       });
     },
     //页面切换控制器
@@ -233,10 +244,16 @@ export default {
     resetResult() {
       this.tableData = this.tableDataBak;
       this.keyword = "";
-    }
+    },
+    getColleges() {
+      api.getColleges().then((resp) => {
+        this.colleges = resp.data.data;
+      });
+    },
   },
   mounted() {
-    this.getData();
+    this.getMajors();
+    this.getColleges();
   },
 };
 </script>
