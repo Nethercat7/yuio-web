@@ -49,31 +49,46 @@ function get() {
 
 function add(params) {
     let obj = JSON.parse(params.body);
-    let college=colleges.filter(data => data.college_id.includes(obj.major_college));
+    let college = colleges.filter(data => data.college_id.includes(obj.major_college));
     obj.major_id = Mock.mock("@id");
-    obj.major_college=(college[0].college_name);
+    obj.major_college = (college[0].college_name);
     obj.major_students = Mock.mock("@int(20,150)");
     resp.data.push(obj);
-    resp.msg="添加成功";
-    resp.type="success";
+    resp.msg = "添加成功";
+    resp.type = "success";
     return resp;
 }
 
-function del(params){
-    for(let i=0;i<resp.data.length;i++){
-        if(resp.data[i].major_id===params.body){
-            let index=resp.data.indexOf(resp.data[i])
-            resp.data.splice(index,1);
+function del(params) {
+    for (let i = 0; i < resp.data.length; i++) {
+        if (resp.data[i].major_id === params.body) {
+            let index = resp.data.indexOf(resp.data[i])
+            resp.data.splice(index, 1);
         }
     }
-    resp.msg="成功删除";
-    resp.type="success";
+    resp.msg = "成功删除";
+    resp.type = "success";
     console.log(resp);
+    return resp;
+}
+
+function upd(params) {
+    let obj = JSON.parse(params.body);
+    let college = colleges.filter(data => data.college_id.includes(obj.major_college));
+    obj.major_college = college[0].college_name;
+    for (let i = 0; i < resp.data.length; i++) {
+        if (resp.data[i].major_id === obj.major_id) {
+            resp.data[i] = obj;
+        }
+    }
+    resp.msg = "成功修改";
+    resp.type = "success"
     return resp;
 }
 
 module.exports = {
     get,
     add,
-    del
+    del,
+    upd
 }

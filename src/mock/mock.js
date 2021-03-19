@@ -24,3 +24,6 @@ Mock.mock('/school/major/add','post',function(params){
 Mock.mock('/school/major/del','get',function(params){
     return Major.del(params);
 })
+Mock.mock('/school/major/upd','post',function(params){
+    return Major.upd(params);
+})

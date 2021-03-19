@@ -172,9 +172,12 @@ export default {
           if (resp.code === 1) this.getMajors();
         });
       } else {
-        this.$message({
-          message: "修改成功",
-          type: "success",
+        api.updMajor(this.form).then((resp) => {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+          if(resp.code===1) this.getMajors();
         });
       }
       this.form = {};
@@ -194,14 +197,14 @@ export default {
       }
     },
     delMajor(id) {
-      api.delMajor(id).then(resp=>{
-        if(resp.code===1){
+      api.delMajor(id).then((resp) => {
+        if (resp.code === 1) {
           this.getMajors();
         }
         this.$message({
-          message:resp.msg,
-          type:resp.type
-        })
+          message: resp.msg,
+          type: resp.type,
+        });
       });
     },
     getMajors() {
@@ -251,7 +254,7 @@ export default {
     },
     getColleges() {
       api.getColleges().then((resp) => {
-        this.colleges = resp.data.data;
+        this.colleges = resp.data;
       });
     },
   },
