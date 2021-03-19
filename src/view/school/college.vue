@@ -2,14 +2,28 @@
   <div>
     <el-row class="card">
       <!-- 选项卡 -->
-      <el-col :span="24">
+      <el-col :span="12">
         <el-button size="mini" @click="openDialog('add')" type="success"
           >添加</el-button
         >
         <el-button size="mini" type="primary">导入</el-button>
         <el-button size="mini" type="warning">导出</el-button>
-        <el-button size="mini" type="danger" @click="clearFilter"
-          >重置筛选</el-button
+        >
+      </el-col>
+      <el-col :span="12" style="text-align: right">
+        <el-autocomplete
+          v-model="keyword"
+          placeholder="请输入内容"
+          size="mini"
+          style="margin-right: 10px"
+          :trigger-on-focus="false"
+          :fetch-suggestions="searchSuggestions"
+        ></el-autocomplete>
+        <el-button size="mini" type="success" @click="handleSearch"
+          >搜索</el-button
+        >
+        <el-button size="mini" type="danger" @click="resetResult"
+          >重置</el-button
         >
       </el-col>
     </el-row>
@@ -19,16 +33,10 @@
         <el-table
           ref="table"
           :data="
-            collegeData
-              .filter(
-                (data) =>
-                  !search ||
-                  data.college_name
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  data.college_code.toLowerCase().includes(search.toLowerCase())
-              )
-              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+            tableData.slice(
+              (currentPage - 1) * pageSize,
+              currentPage * pageSize
+            )
           "
           :row-class-name="tableRowClassName"
         >
@@ -38,23 +46,9 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="college_student" sortable>
           </el-table-column>
-          <el-table-column
-            label="状态"
-            prop="college_status_display"
-            sortable
-            :filters="statusList"
-            :filter-method="filterHandler"
-          >
+          <el-table-column label="状态" prop="college_status_display" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
-            <!-- eslint-disable-next-line -->
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入院系名称或编号进行搜索"
-              />
-            </template>
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -131,6 +125,8 @@ export default {
   name: "collegeManagement",
   data() {
     return {
+      tableData: [],
+      tableDataBak: [],
       dialogVisible: false,
       type: "",
       form: {
@@ -139,12 +135,10 @@ export default {
         college_status: "",
         college_description: "",
       },
-      collegeData: [],
-      search: "",
-      statusList: [],
       currentPage: 1,
       pageSize: 10,
       total: 0,
+      keyword: "",
     };
   },
   methods: {
@@ -166,7 +160,7 @@ export default {
               message: "添加成功",
               type: "success",
             });
-            this.getCollegeData();
+            this.getData();
           }
         });
       } else {
@@ -177,7 +171,7 @@ export default {
               message: "修改成功",
               type: "success",
             });
-            this.getCollegeData();
+            this.getData();
           }
         });
       }
@@ -205,35 +199,21 @@ export default {
       });
       this.total--;
     },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
-    },
-    clearFilter() {
-      this.$refs.table.clearFilter();
-    },
-    getCollegeData() {
+    getData() {
       api.getCollege().then((resp) => {
-        this.total=resp.data.total;
+        this.tableDataBak = resp.data.data;
+        this.total = resp.data.total;
         let data = resp.data.data;
-        let temp = [];
         for (let i = 0; i < data.length; i++) {
+          data[i].value=data[i].college_name;
           //将状态码转换为文本
           if (data[i].college_status === 0) {
             data[i].college_status_display = "正常";
           } else {
             data[i].college_status_display = "禁用";
           }
-          //添加状态过滤器
-          if (!temp.includes(data[i].college_status_display)) {
-            temp.push(data[i].college_status_display);
-            this.statusList.push({
-              text: data[i].college_status_display,
-              value: data[i].college_status_display,
-            });
-          }
         }
-        this.collegeData = data;
+        this.tableData = data;
       });
     },
     //页面切换控制器
@@ -243,22 +223,31 @@ export default {
     changeSize(val) {
       this.pageSize = val;
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.collegeData;
+    searchSuggestions(queryString, cb) {
+      var restaurants = this.tableDataBak;
       var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
+        ? restaurants.filter(this.createFilter())
         : restaurants;
       // 调用 callback 返回建议列表的数据
       cb(results);
     },
-    createFilter(queryString) {
-        return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
+    handleSearch() {
+      this.tableData = this.tableDataBak;
+      this.tableData = this.tableData.filter(this.createFilter());
+      this.total = this.tableData.length;
+    },
+    createFilter() {
+      return (data) =>
+        data.college_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.college_code.toLowerCase().includes(this.keyword.toLowerCase());
+    },
+    resetResult() {
+      this.tableData = this.tableDataBak;
+      this.keyword = "";
+    },
   },
   mounted() {
-    this.getCollegeData();
+    this.getData();
   },
 };
 </script>

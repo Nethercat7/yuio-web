@@ -233,7 +233,7 @@ export default {
     resetResult() {
       this.tableData = this.tableDataBak;
       this.keyword = "";
-    },
+    }
   },
   mounted() {
     this.getData();
