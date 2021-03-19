@@ -31,7 +31,7 @@ service.interceptors.request.use(config=>{
 
 //配置响应拦截器
 service.interceptors.response.use(resp=>{
-  return resp
+  return resp.data
 },error=>{
   /***** 接收到异常响应的处理开始 *****/
   if (error && error.response) {

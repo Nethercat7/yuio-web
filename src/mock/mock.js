@@ -18,3 +18,6 @@ Mock.mock('/school/major','get',function(){
 Mock.mock('/school/major/add','post',function(params){
     return Major.add(params);
 })
+Mock.mock('/school/major/del','get',function(params){
+    return Major.del(params);
+})

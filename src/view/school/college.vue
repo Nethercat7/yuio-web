@@ -153,7 +153,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         api.addCollege(this.form).then((resp) => {
-          if (resp.data.code === 1) {
+          if (resp.code === 1) {
             this.$message({
               message: "添加成功",
               type: "success",
@@ -163,7 +163,7 @@ export default {
         });
       } else {
         api.updCollege(this.form).then((resp) => {
-          if (resp.data.code === 1) {
+          if (resp.code === 1) {
             this.$message({
               message: "修改成功",
               type: "success",
@@ -198,9 +198,9 @@ export default {
     },
     getData() {
       api.getColleges().then((resp) => {
-        this.tableDataBak = resp.data.data;
-        this.total = resp.data.total;
-        let data = resp.data.data;
+        this.tableDataBak = resp.data;
+        this.total = resp.total;
+        let data = resp.data;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].college_name;
           //将状态码转换为文本

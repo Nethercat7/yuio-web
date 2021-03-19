@@ -17,6 +17,9 @@ let api={
     },
     addMajor(params){
         return http.post(`${request}/school/major/add`,params)
+    },
+    delMajor(params){
+        return http.get(`${request}/school/major/del`,params)
     }
 }
 

@@ -70,7 +70,7 @@ function get() {
 function add(options) {
     let obj = JSON.parse(options.body);
     obj.college_id = Mock.mock('@id');
-    obj.college_student = Mock.mock('@int(100,700)');
+    obj.college_students = Mock.mock('@int(100,700)');
     resp.data.push(obj);
     resp.total=resp.data.length;
     return resp;

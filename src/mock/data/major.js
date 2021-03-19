@@ -2,9 +2,7 @@ const Mock = require('mockjs');
 
 let resp = {
     code: 1,
-    data: null,
-    msg: 'success',
-    type: 'success'
+    data: null
 }
 
 let colleges = [{
@@ -56,10 +54,26 @@ function add(params) {
     obj.major_college=(college[0].college_name);
     obj.major_students = Mock.mock("@int(20,150)");
     resp.data.push(obj);
+    resp.msg="添加成功";
+    resp.type="success";
+    return resp;
+}
+
+function del(params){
+    for(let i=0;i<resp.data.length;i++){
+        if(resp.data[i].major_id===params.body){
+            let index=resp.data.indexOf(resp.data[i])
+            resp.data.splice(index,1);
+        }
+    }
+    resp.msg="成功删除";
+    resp.type="success";
+    console.log(resp);
     return resp;
 }
 
 module.exports = {
     get,
-    add
+    add,
+    del
 }

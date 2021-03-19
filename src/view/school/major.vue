@@ -62,7 +62,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="deleteRow(scope.$index)"
+                @confirm="delMajor(scope.row.major_id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -166,10 +166,10 @@ export default {
       if (this.type == "add") {
         api.addMajor(this.form).then((resp) => {
           this.$message({
-            message: resp.data.msg,
-            type: resp.data.type,
+            message: resp.msg,
+            type: resp.type,
           });
-          if (resp.data.code === 1) this.getMajors();
+          if (resp.code === 1) this.getMajors();
         });
       } else {
         this.$message({
@@ -193,18 +193,22 @@ export default {
         return "warning-row";
       }
     },
-    deleteRow(index) {
-      this.tableData.splice(index, 1);
-      this.$message({
-        message: "成功删除",
-        type: "success",
+    delMajor(id) {
+      api.delMajor(id).then(resp=>{
+        if(resp.code===1){
+          this.getMajors();
+        }
+        this.$message({
+          message:resp.msg,
+          type:resp.type
+        })
       });
     },
     getMajors() {
       api.getMajors().then((resp) => {
-        this.tableDataBak = resp.data.data;
-        this.total = resp.data.total;
-        let data = resp.data.data;
+        this.tableDataBak = resp.data;
+        this.total = resp.total;
+        let data = resp.data;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].major_name;
           if (data[i].major_status == 0) {
