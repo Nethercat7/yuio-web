@@ -26,6 +26,15 @@ let api={
     },
     updMajor(params){
         return http.post(`${request}/school/major/upd`,params)
+    },
+    getClasses(params){
+        return http.get(`${request}/school/class`,params)
+    },
+    addClass(params){
+        return http.post(`${request}/school/class/add`,params)
+    },
+    delClass(params){
+        return http.post(`${request}/school/class/del`,params)
     }
 }
 

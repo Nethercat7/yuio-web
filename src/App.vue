@@ -25,6 +25,7 @@
             </template>
             <el-menu-item index="2-1" @click="$router.push('/school/college')">院系管理</el-menu-item>
             <el-menu-item index="2-2" @click="$router.push('/school/major')">专业管理</el-menu-item>
+            <el-menu-item index="2-3" @click="$router.push('/school/class')">班级管理</el-menu-item>
           </el-submenu>
 
           <el-menu-item index="3" @click="$router.push('/test')">

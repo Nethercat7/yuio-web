@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Layout from '@/view/index'
 import College from '@/view/school/college'
 import Major from '@/view/school/major'
+import Class from '@/view/school/class'
 import Test from '@/view/test'
 Vue.use(Router)
 
@@ -26,8 +27,12 @@ export default new Router({
             component: Major
         },
         {
-            path:'/test',
-            component:Test
+            path: '/school/class',
+            component: Class
+        },
+        {
+            path: '/test',
+            component: Test
         }
     ]
 })

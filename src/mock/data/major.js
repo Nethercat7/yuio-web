@@ -68,7 +68,6 @@ function del(params) {
     }
     resp.msg = "成功删除";
     resp.type = "success";
-    console.log(resp);
     return resp;
 }
 
