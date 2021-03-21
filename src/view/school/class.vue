@@ -289,8 +289,8 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.major_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.major_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.class_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.class_code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;

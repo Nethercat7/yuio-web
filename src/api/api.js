@@ -3,6 +3,7 @@ import http from '../utils/http'
 let request = ''
 
 let api={
+    //院系管理
     getColleges(params){
         return http.get(`${request}/school/college`,params)
     },
@@ -15,6 +16,7 @@ let api={
     delCollege(params){
         return http.get(`${request}/school/college/del`,params)
     },
+    //专业管理
     getMajors(params){
         return http.get(`${request}/school/major`,params)
     },
@@ -27,6 +29,7 @@ let api={
     updMajor(params){
         return http.post(`${request}/school/major/upd`,params)
     },
+    //班级管理
     getClasses(params){
         return http.post(`${request}/school/class`,params)
     },
