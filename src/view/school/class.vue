@@ -45,9 +45,9 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="class_students" sortable>
           </el-table-column>
-          <el-table-column label="所属院系" prop="class_college" sortable>
+          <el-table-column label="所属院系" prop="class_college_name" sortable>
           </el-table-column>
-          <el-table-column label="所属专业" prop="class_major" sortable>
+          <el-table-column label="所属专业" prop="class_major_name" sortable>
           </el-table-column>
           <el-table-column label="所属年级" prop="class_grade" sortable>
           </el-table-column>
@@ -104,7 +104,11 @@
           <el-input v-model="form.class_code"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
-          <el-select v-model="form.class_college" placeholder="请选择">
+          <el-select
+            v-model="form.class_college_id"
+            placeholder="请选择"
+            @change="handleChange(form.class_college_id)"
+          >
             <el-option
               v-for="item in colleges"
               :key="item.college_id"
@@ -116,9 +120,9 @@
         </el-form-item>
         <el-form-item label="所属专业">
           <el-select
-            v-model="form.class_major"
+            v-model="form.class_major_id"
             placeholder="请选择"
-            @change="handleSelect"
+            @change="handleChange(form.class_major_id)"
           >
             <el-option
               v-for="item in majors"
@@ -176,7 +180,7 @@ export default {
       total: 0,
       colleges: [],
       majors: [],
-      grade: []
+      grade: [],
     };
   },
   methods: {
@@ -188,10 +192,12 @@ export default {
     getMajors() {
       api.getMajors().then((resp) => {
         this.majors = resp.data;
+        //对接后台API后删除
+        this.getClasses(this.majors);
       });
     },
-    getClasses() {
-      api.getClasses().then((resp) => {
+    getClasses(params) {
+      api.getClasses(params).then((resp) => {
         this.tableDataBak = resp.data;
         this.total = resp.total;
         let data = resp.data;
@@ -217,22 +223,22 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addClass(this.form).then(resp=>{
+        api.addClass(this.form).then((resp) => {
           this.$message({
-            message:resp.msg,
-            type:resp.type
-          })
-          if(resp.code===1) this.getClasses();
-        })
+            message: resp.msg,
+            type: resp.type,
+          });
+          if (resp.code === 1) this.getClasses();
+        });
       } else {
         console.log(this.colleges);
-        api.updClass(this.form).then(resp=>{
+        api.updClass(this.form).then((resp) => {
           this.$message({
-            message:resp.msg,
-            type:resp.type
-          })
-          if(resp.code===1) this.getClasses();
-        })
+            message: resp.msg,
+            type: resp.type,
+          });
+          if (resp.code === 1) this.getClasses();
+        });
       }
       this.form = {};
       this.dialogVisible = false;
@@ -290,8 +296,16 @@ export default {
       this.tableData = this.tableDataBak;
       this.keyword = "";
     },
-    handleSelect() {
-      console.log("changed");
+    handleChange(val) {
+      let college = this.colleges.filter((data) =>
+        data.college_id.includes(val)
+      );
+      let major = this.majors.filter((data) => data.major_id.includes(val));
+      if (college.length === 0) {
+        this.form.class_major_name = major[0].major_name;
+      } else {
+        this.form.class_college_name = college[0].college_name;
+      }
     },
     getGrade() {
       let date = new Date().getFullYear();
@@ -306,7 +320,6 @@ export default {
   mounted() {
     this.getColleges();
     this.getMajors();
-    this.getClasses();
     this.getGrade();
   },
 };

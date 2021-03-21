@@ -28,8 +28,8 @@ Mock.mock('/school/major/del','get',function(params){
 Mock.mock('/school/major/upd','post',function(params){
     return Major.upd(params);
 })
-Mock.mock('/school/class','get',function(){
-    return Class.get();
+Mock.mock('/school/class','post',function(params){
+    return Class.get(params);
 })
 Mock.mock('/school/class/add','post',function(params){
     return Class.add(params);

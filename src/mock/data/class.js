@@ -1,8 +1,9 @@
 const Mock = require('mockjs');
+const Random=Mock.Random;
 
 let resp = {
     code: 1,
-    data: null
+    data: []
 }
 
 let colleges = [{
@@ -28,66 +29,62 @@ let colleges = [{
     college_name: '马克思主义学院',
 }]
 
-function get() {
-    if (resp.data === null) {
-        let data = Mock.mock({
-            "data|50": [{
+function get(params) {
+    if (resp.data.length===0)
+        for (let i = 0; i < 200; i++) {
+            let majors = JSON.parse(params.body);
+            let cIndex=Random.integer(0,colleges.length-1);
+            let mIndex=Random.integer(0,majors.length-1)
+            let data = Mock.mock({
                 class_id: '@id',
                 class_code: '@string',
                 class_name: '@name Class',
                 class_students: '@int(20,50)',
-                'class_college|1': ['经济与管理学院', '机械与交通工程学院', '生物与化学工程学院', '土木建筑工程学院', '电气与信息工程学院', '计算机科学与通信工程学院', '马克思主义学院'],
-                class_major: '@name Major',
                 class_grade: '2017',
                 class_status: '@int(0,1)',
                 class_desciption: '@paragraph',
-                class_create_time: '@date(yyyy-MM-dd hh:mm:ss)'
-            }]
-        })
-        resp.data = data.data;
-    }
+                class_create_time: '@date(yyyy-MM-dd hh:mm:ss)',
+                class_college_id:colleges[cIndex].college_id,
+                class_college_name:colleges[cIndex].college_name,
+                class_major_id:majors[mIndex].major_id,
+                class_major_name:majors[mIndex].major_name
+            })
+            resp.data.push(data);
+        }
     resp.total = resp.data.length;
     return resp;
 }
 
 function add(params) {
     let obj = JSON.parse(params.body);
-    let college = colleges.filter(data => data.college_id.includes(obj.class_college));
-    obj.class_college = college[0].college_name;
-    obj.class_id = Mock.mock("@id");
-    obj.class_students = Mock.mock("@int(20,50)")
-    obj.class_create_time = Mock.mock('@date(yyyy-MM-dd hh:mm:ss)')
+    obj.class_id=Mock.mock('@id');
+    obj.class_students=Mock.mock("@int(20,50)");
     resp.data.push(obj);
-    resp.msg = "成功添加班级" + obj.class_name;
+    resp.msg = "成功添加";
     resp.type = "success";
-    console.log(resp.data)
     return resp;
 }
 
-function del(params){
-    let className;
+function del(params) {
     for (let i = 0; i < resp.data.length; i++) {
         if (resp.data[i].class_id === params.body) {
             let index = resp.data.indexOf(resp.data[i])
-            className=resp.data[i].class_name;
             resp.data.splice(index, 1);
         }
     }
-    resp.msg = "成功删除班级:"+className;
+    resp.msg = "成功删除";
     resp.type = "success";
     return resp;
 }
 
 function upd(params) {
     let obj = JSON.parse(params.body);
-    let college = colleges.filter(data => data.college_id.includes(obj.class_college));
-    obj.class_college = college[0].college_name;
     for (let i = 0; i < resp.data.length; i++) {
         if (resp.data[i].class_id === obj.class_id) {
             resp.data[i] = obj;
         }
     }
-    resp.msg = "成功修改班级:"+obj.class_name;
+    resp.msg = "成功修改";
     resp.type = "success"
     return resp;
 }

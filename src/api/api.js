@@ -28,7 +28,7 @@ let api={
         return http.post(`${request}/school/major/upd`,params)
     },
     getClasses(params){
-        return http.get(`${request}/school/class`,params)
+        return http.post(`${request}/school/class`,params)
     },
     addClass(params){
         return http.post(`${request}/school/class/add`,params)
