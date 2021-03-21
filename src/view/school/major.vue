@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="major_students" sortable>
           </el-table-column>
-          <el-table-column label="所属院系" prop="major_college" sortable>
+          <el-table-column label="所属院系" prop="major_college_name" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="major_status_display" sortable>
           </el-table-column>
@@ -100,7 +100,7 @@
           <el-input v-model="form.major_code"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
-          <el-select v-model="form.major_college" placeholder="请选择">
+          <el-select v-model="form.major_college_id" placeholder="请选择" @change="handelChange">
             <el-option
               v-for="item in colleges"
               :key="item.college_id"
@@ -140,12 +140,7 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {
-        major_name: "",
-        major_code: "",
-        major_status: "",
-        major_desciption: "",
-      },
+      form: {},
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -177,7 +172,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if(resp.code===1) this.getMajors();
+          if (resp.code === 1) this.getMajors();
         });
       }
       this.form = {};
@@ -214,6 +209,7 @@ export default {
         let data = resp.data;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].major_name;
+          //状态转文字
           if (data[i].major_status == 0) {
             data[i].major_status_display = "正常";
           } else {
@@ -257,6 +253,10 @@ export default {
         this.colleges = resp.data;
       });
     },
+    handelChange(){
+      let college=this.colleges.filter(data=>data.college_id.includes(this.form.major_college_id));
+      this.form.major_college_name=college[0].college_name;
+    }
   },
   mounted() {
     this.getMajors();

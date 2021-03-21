@@ -37,3 +37,6 @@ Mock.mock('/school/class/add','post',function(params){
 Mock.mock('/school/class/del','get',function(params){
     return Class.del(params);
 })
+Mock.mock('/school/class/upd','post',function(params){
+    return Class.upd(params);
+})

@@ -34,8 +34,11 @@ let api={
         return http.post(`${request}/school/class/add`,params)
     },
     delClass(params){
-        return http.post(`${request}/school/class/del`,params)
-    }
+        return http.get(`${request}/school/class/del`,params)
+    },
+    updClass(params){
+        return http.post(`${request}/school/class/upd`,params)
+    },
 }
 
 export default api

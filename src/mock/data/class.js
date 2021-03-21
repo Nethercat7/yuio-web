@@ -78,8 +78,23 @@ function del(params){
     return resp;
 }
 
+function upd(params) {
+    let obj = JSON.parse(params.body);
+    let college = colleges.filter(data => data.college_id.includes(obj.class_college));
+    obj.class_college = college[0].college_name;
+    for (let i = 0; i < resp.data.length; i++) {
+        if (resp.data[i].class_id === obj.class_id) {
+            resp.data[i] = obj;
+        }
+    }
+    resp.msg = "成功修改班级:"+obj.class_name;
+    resp.type = "success"
+    return resp;
+}
+
 module.exports = {
     get,
     add,
-    del
+    del,
+    upd
 }

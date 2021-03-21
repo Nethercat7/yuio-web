@@ -225,7 +225,14 @@ export default {
           if(resp.code===1) this.getClasses();
         })
       } else {
-        console.log(this.form);
+        console.log(this.colleges);
+        api.updClass(this.form).then(resp=>{
+          this.$message({
+            message:resp.msg,
+            type:resp.type
+          })
+          if(resp.code===1) this.getClasses();
+        })
       }
       this.form = {};
       this.dialogVisible = false;

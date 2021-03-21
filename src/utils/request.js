@@ -89,7 +89,8 @@ service.interceptors.response.use(resp=>{
   Message.error(error.message)
   /***** 处理结束 *****/
   //如果不需要错误处理，以上的处理过程都可省略
-  return Promise.resolve(error.response)
+  //return Promise.resolve(error.response)
+  return Promise.resolve()
 })
 
 export default service
