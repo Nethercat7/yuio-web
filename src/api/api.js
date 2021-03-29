@@ -52,6 +52,9 @@ let api={
     delStudent(params){
         return http.get(`${request}/student/del`,params)
     },
+    updStudent(params){
+        return http.post(`${request}/student/upd`,params)
+    },
 }
 
 export default api

@@ -50,3 +50,6 @@ Mock.mock('/student','get',function(params){
 Mock.mock('/student/del','get',function(params){
     return Student.del(params);
 })
+Mock.mock('/student/upd','post',function(params){
+    return Student.upd(params);
+})

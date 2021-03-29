@@ -269,13 +269,12 @@ export default {
           if (resp.code === 1) this.getStudents();
         });
       } else {
-        console.log(this.colleges);
-        api.updClass(this.form).then((resp) => {
+        api.updStudent(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getClasses();
+          if (resp.code === 1) this.getStudents();
         });
       }
       this.form = {};
