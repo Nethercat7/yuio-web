@@ -40,12 +40,51 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="姓名" prop="student_name" sortable>
+          <!-- 表格展开行 -->
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form
+                label-position="left"
+                inline
+                label-suffix=":"
+                class="demo-table-expand"
+              >
+                <el-form-item label="姓名">
+                  <span>{{ props.row.student_name }}</span>
+                </el-form-item>
+                <el-form-item label="学号">
+                  <span>{{ props.row.student_code }}</span>
+                </el-form-item>
+                <el-form-item label="性别">
+                  <span>{{ props.row.student_gender_display }}</span>
+                </el-form-item>
+                <el-form-item label="电话号码">
+                  <span>{{ props.row.student_phone }}</span>
+                </el-form-item>
+                <el-form-item label="所属院系">
+                  <span>{{ props.row.student_college_name }}</span>
+                </el-form-item>
+                <el-form-item label="所属专业">
+                  <span>{{ props.row.student_major_name }}</span>
+                </el-form-item>
+                <el-form-item label="所属年级">
+                  <span>{{ props.row.student_grade }}</span>
+                </el-form-item>
+                <el-form-item label="状态">
+                  <span>{{ props.row.student_status_display }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="姓名"
+            prop="student_name"
+            sortable
+            width="100px"
+          >
           </el-table-column>
           <el-table-column label="学号" prop="student_code" sortable>
           </el-table-column>
-          <!-- <el-table-column label="电话号码" prop="student_phone" sortable>
-          </el-table-column> -->
           <el-table-column
             label="所属院系"
             prop="student_college_name"
@@ -54,13 +93,18 @@
           </el-table-column>
           <el-table-column label="所属专业" prop="student_major_name" sortable>
           </el-table-column>
-          <el-table-column label="所属年级" prop="student_grade" sortable>
+          <el-table-column
+            label="所属年级"
+            prop="student_grade"
+            sortable
+            width="150  px"
+          >
           </el-table-column>
           <el-table-column label="所属班级" prop="student_class_name" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="student_status_display" sortable>
           </el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -79,6 +123,14 @@
                   >删除</el-button
                 >
               </el-popconfirm>
+              <el-dropdown>
+                <el-button size="mini" type="primary">更多</el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>
+                    <span @click="dialogVisible2=true">重置密码</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
@@ -100,7 +152,6 @@
     <el-dialog
       :title="type == 'add' ? '添加学生信息' : '修改学生信息'"
       :visible.sync="dialogVisible"
-      width="30%"
       :before-close="closeDialog"
     >
       <el-form
@@ -115,6 +166,15 @@
         </el-form-item>
         <el-form-item label="学号">
           <el-input v-model="form.student_code"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-radio-group v-model="form.student_gender">
+            <el-radio :label="0">男</el-radio>
+            <el-radio :label="1">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="电话号码">
+          <el-input v-model="form.student_phone"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
           <el-select
@@ -238,6 +298,12 @@ export default {
         this.total = resp.data.length;
         //状态码转文字
         for (let i = 0; i < data.length; i++) {
+          if (data[i].student_gender === 0) {
+            data[i].student_gender_display = "男";
+          } else if (data[i].student_gender === 1) {
+            data[i].student_gender_display = "女";
+          }
+
           if (data[i].student_status === 0) {
             data[i].student_status_display = "正常";
           } else if (data[i].student_status === 1) {
@@ -332,7 +398,7 @@ export default {
     },
     resetResult() {
       this.tableData = this.tableDataBak;
-      this.total=this.tableData.length;
+      this.total = this.tableData.length;
       this.keyword = "";
     },
     handleChange(val, type) {
@@ -389,5 +455,17 @@ export default {
 
 .el-table .success-row {
   background-color: #f0f9eb;
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
 }
 </style>

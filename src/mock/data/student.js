@@ -27,7 +27,9 @@ function get() {
                 student_major_name: '@name Major',
                 student_status: '@integer(0,2)',
                 student_class_id:'@id',
-                student_class_name:'@name Class'
+                student_class_name:'@name Class',
+                student_gender:'@integer(0,1)',
+                student_phone:'@id'
             })
             resp.data.push(data);
         }
