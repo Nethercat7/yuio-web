@@ -47,3 +47,6 @@ Mock.mock('/student/add','post',function(params){
 Mock.mock('/student','get',function(params){
     return Student.get(params);
 })
+Mock.mock('/student/del','get',function(params){
+    return Student.del(params);
+})

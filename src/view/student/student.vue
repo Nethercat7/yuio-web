@@ -17,6 +17,7 @@
           style="margin-right: 10px"
           :trigger-on-focus="false"
           :fetch-suggestions="searchSuggestions"
+          value-key="student_name"
         ></el-autocomplete>
         <el-button size="mini" type="success" @click="handleSearch"
           >搜索</el-button
@@ -72,7 +73,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.class_id)"
+                @confirm="handleDelete(scope.row.student_id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -234,6 +235,7 @@ export default {
     getStudents() {
       api.getStudents().then((resp) => {
         let data = resp.data;
+        this.total = resp.data.length;
         //状态码转文字
         for (let i = 0; i < data.length; i++) {
           if (data[i].student_status === 0) {
@@ -244,8 +246,8 @@ export default {
             data[i].student_status_display = "退学";
           }
         }
-        this.tableData = data;
         this.tableDataBak = data;
+        this.tableData = data;
       });
     },
     openDialog(type, row) {
@@ -293,9 +295,9 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delClass(id).then((resp) => {
+      api.delStudent(id).then((resp) => {
         if (resp.code === 1) {
-          this.getClasses();
+          this.getStudents();
         }
         this.$message({
           message: resp.msg,
@@ -319,17 +321,19 @@ export default {
       cb(results);
     },
     handleSearch() {
+      //搜索前先恢复备份的完整数据，然后在进行搜索。防止在当前搜索结果中进行第二次搜索找不到数据。
       this.tableData = this.tableDataBak;
       this.tableData = this.tableData.filter(this.createFilter());
       this.total = this.tableData.length;
     },
     createFilter() {
       return (data) =>
-        data.class_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.class_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.student_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.student_code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;
+      this.total=this.tableData.length;
       this.keyword = "";
     },
     handleChange(val, type) {
@@ -344,8 +348,8 @@ export default {
         )[0];
         this.form.student_major_name = major.major_name;
       } else if (type === "class") {
-        let asd = this.classes.filter((data) => data.class_id.includes(val))[0];
-        this.form.student_class_name = asd.class_name;
+        let cls = this.classes.filter((data) => data.class_id.includes(val))[0];
+        this.form.student_class_name = cls.class_name;
       }
     },
     getGrade() {

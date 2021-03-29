@@ -49,6 +49,9 @@ let api={
     getStudents(params){
         return http.get(`${request}/student`,params)
     },
+    delStudent(params){
+        return http.get(`${request}/student/del`,params)
+    },
 }
 
 export default api
