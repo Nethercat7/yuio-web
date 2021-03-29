@@ -43,8 +43,8 @@
           </el-table-column>
           <el-table-column label="学号" prop="student_code" sortable>
           </el-table-column>
-          <el-table-column label="电话号码" prop="student_phone" sortable>
-          </el-table-column>
+          <!-- <el-table-column label="电话号码" prop="student_phone" sortable>
+          </el-table-column> -->
           <el-table-column
             label="所属院系"
             prop="student_college_name"
@@ -55,7 +55,7 @@
           </el-table-column>
           <el-table-column label="所属年级" prop="student_grade" sortable>
           </el-table-column>
-          <el-table-column label="所属班级" prop="student_class" sortable>
+          <el-table-column label="所属班级" prop="student_class_name" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="student_status_display" sortable>
           </el-table-column>
@@ -116,7 +116,11 @@
           <el-input v-model="form.student_code"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
-          <el-select v-model="form.student_college_id" placeholder="请选择">
+          <el-select
+            v-model="form.student_college_id"
+            placeholder="请选择"
+            @change="handleChange(form.student_college_id, 'college')"
+          >
             <el-option
               v-for="item in colleges"
               :key="item.college_id"
@@ -127,7 +131,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所属专业">
-          <el-select v-model="form.student_major_id" placeholder="请选择">
+          <el-select
+            v-model="form.student_major_id"
+            placeholder="请选择"
+            @change="handleChange(form.student_major_id, 'major')"
+          >
             <el-option
               v-for="item in majors"
               :key="item.major_id"
@@ -149,7 +157,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所属班级">
-          <el-select v-model="form.student_class" placeholder="请选择">
+          <el-select
+            v-model="form.student_class_id"
+            placeholder="请选择"
+            @change="handleChange(form.student_class_id, 'class')"
+          >
             <el-option
               v-for="item in classes"
               :key="item.class_id"
@@ -164,7 +176,6 @@
             <el-radio :label="0">正常</el-radio>
             <el-radio :label="1">休学</el-radio>
             <el-radio :label="2">退学</el-radio>
-            <el-radio :label="3">其他</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -220,6 +231,23 @@ export default {
         this.classes = resp.data;
       });
     },
+    getStudents() {
+      api.getStudents().then((resp) => {
+        let data = resp.data;
+        //状态码转文字
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].student_status === 0) {
+            data[i].student_status_display = "正常";
+          } else if (data[i].student_status === 1) {
+            data[i].student_status_display = "休学";
+          } else if (data[i].student_status === 2) {
+            data[i].student_status_display = "退学";
+          }
+        }
+        this.tableData = data;
+        this.tableDataBak = data;
+      });
+    },
     openDialog(type, row) {
       this.dialogVisible = true;
       if (type == "add") {
@@ -231,12 +259,12 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addStudents(this.form).then((resp) => {
+        api.addStudent(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getClasses();
+          if (resp.code === 1) this.getStudents();
         });
       } else {
         console.log(this.colleges);
@@ -260,7 +288,7 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.class_status == 1) {
+      if (row.student_status != 0) {
         return "warning-row";
       }
     },
@@ -304,32 +332,22 @@ export default {
       this.tableData = this.tableDataBak;
       this.keyword = "";
     },
-    /* handleChange(val, type) {
+    handleChange(val, type) {
       if (type === "college") {
-        this.majors = this.majorsBak;
-        this.majors = this.majors.filter((data) =>
-          data.major_college_id.includes(val)
-        );
-        if (this.form.student_major_id) this.form.student_major_id = "";
-        this.classes = this.classesBak;
-        this.classes = this.classes.filter((data) =>
-          data.class_college_id.includes(val)
-        );
-        if (this.form.student_class_id) this.form.student_class_id = "";
+        let college = this.colleges.filter((data) =>
+          data.college_id.includes(val)
+        )[0];
+        this.form.student_college_name = college.college_name;
       } else if (type === "major") {
-        let major = this.majors.filter((data) => data.major_id.includes(val));
-        this.form.student_college_id = major[0].major_college_id;
-        this.classes = this.classes.filter((data) =>
-          data.class_major_id.includes(val)
-        );
-        if (this.form.student_class_id) this.form.student_class_id = "";
-      } else if (type === "grade") {
-        let classes = this.classes.filter((data) =>
-          data.class_grade.includes(val)
-        );
-        this.classes = classes;
+        let major = this.majors.filter((data) =>
+          data.major_id.includes(val)
+        )[0];
+        this.form.student_major_name = major.major_name;
+      } else if (type === "class") {
+        let asd = this.classes.filter((data) => data.class_id.includes(val))[0];
+        this.form.student_class_name = asd.class_name;
       }
-    }, */
+    },
     getGrade() {
       let date = new Date().getFullYear();
       let dateArr = []; //用于存放今年往后十年的年份
@@ -345,6 +363,7 @@ export default {
     this.getMajors();
     this.getGrade();
     this.getClasses();
+    this.getStudents();
   },
 };
 </script>

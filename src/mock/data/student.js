@@ -12,6 +12,11 @@ function add(params){
     return resp;
 }
 
+function get(){
+    return resp;
+}
+
 module.exports={
-    add
+    add,
+    get
 }

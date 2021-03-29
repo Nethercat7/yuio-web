@@ -44,3 +44,6 @@ Mock.mock('/school/class/upd','post',function(params){
 Mock.mock('/student/add','post',function(params){
     return Student.add(params);
 })
+Mock.mock('/student','get',function(params){
+    return Student.get(params);
+})

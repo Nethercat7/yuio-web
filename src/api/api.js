@@ -43,8 +43,11 @@ let api={
         return http.post(`${request}/school/class/upd`,params)
     },
     //学生管理
-    addStudents(params){
+    addStudent(params){
         return http.post(`${request}/student/add`,params)
+    },
+    getStudents(params){
+        return http.get(`${request}/student`,params)
     },
 }
 
