@@ -4,6 +4,7 @@ import Layout from '@/view/index'
 import College from '@/view/school/college'
 import Major from '@/view/school/major'
 import Class from '@/view/school/class'
+import Student from '@/view/student/student'
 import Test from '@/view/test'
 Vue.use(Router)
 
@@ -29,6 +30,10 @@ export default new Router({
         {
             path: '/school/class',
             component: Class
+        },
+        {
+            path: '/student',
+            component: Student
         },
         {
             path: '/test',

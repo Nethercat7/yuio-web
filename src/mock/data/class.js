@@ -1,40 +1,13 @@
 const Mock = require('mockjs');
-const Random=Mock.Random;
 
 let resp = {
     code: 1,
     data: []
 }
 
-let colleges = [{
-    college_id: '430000197107012143',
-    college_name: '经济与管理学院',
-}, {
-    college_id: '610000198201238526',
-    college_name: '机械与交通工程学院',
-}, {
-    college_id: '210000200202030853',
-    college_name: '生物与化学工程学院',
-}, {
-    college_id: '450000200702223402',
-    college_name: '土木建筑工程学院',
-}, {
-    college_id: '230000200611067853',
-    college_name: '电气与信息工程学院',
-}, {
-    college_id: '210000198001017302',
-    college_name: '计算机科学与通信工程学院',
-}, {
-    college_id: '71000020120426500X',
-    college_name: '马克思主义学院',
-}]
-
-function get(params) {
+function get() {
     if (resp.data.length===0)
         for (let i = 0; i < 200; i++) {
-            let majors = JSON.parse(params.body);
-            let cIndex=Random.integer(0,colleges.length-1);
-            let mIndex=Random.integer(0,majors.length-1)
             let data = Mock.mock({
                 class_id: '@id',
                 class_code: '@string',
@@ -44,10 +17,10 @@ function get(params) {
                 class_status: '@int(0,1)',
                 class_desciption: '@paragraph',
                 class_create_time: '@date(yyyy-MM-dd hh:mm:ss)',
-                class_college_id:colleges[cIndex].college_id,
-                class_college_name:colleges[cIndex].college_name,
-                class_major_id:majors[mIndex].major_id,
-                class_major_name:majors[mIndex].major_name
+                class_college_id:'@id',
+                class_college_name:'@name College',
+                class_major_id:'@id',
+                class_major_name:'@name Major'
             })
             resp.data.push(data);
         }

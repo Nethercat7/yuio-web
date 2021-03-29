@@ -42,6 +42,10 @@ let api={
     updClass(params){
         return http.post(`${request}/school/class/upd`,params)
     },
+    //学生管理
+    addStudents(params){
+        return http.post(`${request}/student/add`,params)
+    },
 }
 
 export default api

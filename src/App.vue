@@ -23,12 +23,23 @@
               <i class="el-icon-location"></i>
               <span>基本信息管理</span>
             </template>
-            <el-menu-item index="2-1" @click="$router.push('/school/college')">院系管理</el-menu-item>
-            <el-menu-item index="2-2" @click="$router.push('/school/major')">专业管理</el-menu-item>
-            <el-menu-item index="2-3" @click="$router.push('/school/class')">班级管理</el-menu-item>
+            <el-menu-item index="2-1" @click="$router.push('/school/college')"
+              >院系管理</el-menu-item
+            >
+            <el-menu-item index="2-2" @click="$router.push('/school/major')"
+              >专业管理</el-menu-item
+            >
+            <el-menu-item index="2-3" @click="$router.push('/school/class')"
+              >班级管理</el-menu-item
+            >
           </el-submenu>
 
-          <el-menu-item index="3" @click="$router.push('/test')">
+          <el-menu-item index="3" @click="$router.push('/student')">
+            <i class="el-icon-menu"></i>
+            <span slot="title">学生信息管理</span>
+          </el-menu-item>
+
+          <el-menu-item index="4" @click="$router.push('/test')">
             <i class="el-icon-menu"></i>
             <span slot="title">测试模块</span>
           </el-menu-item>
@@ -36,7 +47,10 @@
       </el-aside>
       <el-container>
         <el-header class="header">
-          <el-button :icon="collapsed?'el-icon-s-unfold':'el-icon-s-fold'" @click="toggleCollapsed"></el-button>
+          <el-button
+            :icon="collapsed ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
+            @click="toggleCollapsed"
+          ></el-button>
         </el-header>
         <el-main>
           <router-view></router-view>
@@ -58,7 +72,7 @@ export default {
   methods: {
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
-    }
+    },
   },
 };
 </script>

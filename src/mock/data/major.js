@@ -31,7 +31,7 @@ let colleges = [{
 
 function get() {
     if (resp.data.length === 0) {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 30; i++) {
             let index = Random.integer(0, colleges.length-1);
             let data = Mock.mock({
                 major_id: '@id',

@@ -1,6 +1,7 @@
 import College from './data/college';
 import Major from './data/major';
 import Class from './data/class';
+import Student from './data/student';
 
 const Mock = require('mockjs');
 
@@ -39,4 +40,7 @@ Mock.mock('/school/class/del','get',function(params){
 })
 Mock.mock('/school/class/upd','post',function(params){
     return Class.upd(params);
+})
+Mock.mock('/student/add','post',function(params){
+    return Student.add(params);
 })
