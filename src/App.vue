@@ -43,6 +43,11 @@
             <i class="el-icon-menu"></i>
             <span slot="title">测试模块</span>
           </el-menu-item>
+
+          <el-menu-item index="5" @click="$router.push('/user')">
+            <i class="el-icon-menu"></i>
+            <span slot="title">用户管理</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-container>
@@ -97,5 +102,24 @@ body {
   margin: auto;
   height: 60px;
   display: block;
+}
+
+.card {
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+}
+.element-right {
+  display: inline;
+  text-align: right;
+}
+.el-table .warning-row {
+  background-color: oldlace;
+}
+
+.el-table .success-row {
+  background-color: #f0f9eb;
 }
 </style>

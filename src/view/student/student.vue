@@ -457,24 +457,6 @@ export default {
 </script>
 
 <style>
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-.element-right {
-  display: inline;
-  text-align: right;
-}
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
 .demo-table-expand {
   font-size: 0;
 }

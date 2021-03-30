@@ -55,6 +55,10 @@ let api={
     updStudent(params){
         return http.post(`${request}/student/upd`,params)
     },
+    //用户管理
+    getUsers(params){
+        return http.get(`${request}/user`,params)
+    }
 }
 
 export default api

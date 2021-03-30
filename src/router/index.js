@@ -6,6 +6,8 @@ import Major from '@/view/school/major'
 import Class from '@/view/school/class'
 import Student from '@/view/student/student'
 import Test from '@/view/test'
+import User from '@/view/user/user'
+
 Vue.use(Router)
 
 const originalPush = Router.prototype.push;
@@ -38,6 +40,10 @@ export default new Router({
         {
             path: '/test',
             component: Test
+        },
+        {
+            path: '/user',
+            component: User
         }
     ]
 })
