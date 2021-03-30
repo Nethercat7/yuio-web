@@ -2,8 +2,17 @@
   <div>
     <Toolbar></Toolbar>
     <el-row class="card">
+      <!-- 表格 -->
       <el-col :span="24">
-        <el-table ref="table" :data="tableData">
+        <el-table
+          ref="table"
+          :data="
+            tableData.slice(
+              (currentPage - 1) * pageSize,
+              currentPage * pageSize
+            )
+          "
+        >
           <el-table-column label="姓名" prop="user_name"></el-table-column>
           <el-table-column label="账号" prop="user_account"></el-table-column>
           <el-table-column label="性别" prop="user_gender"></el-table-column>
@@ -26,20 +35,28 @@
           </el-table-column>
         </el-table>
       </el-col>
+      <!-- 分页器 -->
+      <el-col :span="24">
+        <Pager :total="totalPage" :currentPage="currentPage" :page.sync="currentPage" :size.sync="pageSize"></Pager>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
 import Toolbar from "@/components/Toolbar";
+import Pager from "@/components/Pager";
 import api from "../../api/api";
 
 export default {
   name: "userManagement",
-  components: { Toolbar },
+  components: { Toolbar,Pager},
   data() {
     return {
       tableData: [],
+      totalPage: 0,
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   methods: {
@@ -47,8 +64,9 @@ export default {
       api.getUsers().then((resp) => {
         let data = resp.data;
         this.tableData = data;
+        this.totalPage = data.length;
       });
-    },
+    }
   },
   mounted() {
     this.getData();
