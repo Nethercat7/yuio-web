@@ -25,7 +25,6 @@ function get(){
 
 function add(params){
     let obj=JSON.parse(params.body);
-    console.log(obj);
     obj.user_id=Mock.mock('@id');
     resp.data.push(obj);
     resp.msg='成功添加';
@@ -33,7 +32,21 @@ function add(params){
     return resp;
 }
 
+function del(params){
+    for(let i=0;i<resp.data.length;i++){
+        if(resp.data[i].user_id===params.body){
+            let index=resp.data.indexOf(resp.data[i]);
+            resp.data.splice(index,1);
+            break;
+        }
+    }
+    resp.msg='成功删除';
+    resp.type='success';
+    return resp;
+}
+
 module.exports={
     get,
-    add
+    add,
+    del
 }

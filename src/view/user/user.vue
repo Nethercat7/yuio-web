@@ -51,13 +51,19 @@
             prop="user_status_display"
           ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
-            <template>
-              <el-button size="mini" type="info">编辑</el-button>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="info"
+                @click="openDialog('upd', scope.row)"
+                >编辑</el-button
+              >
               <el-popconfirm
                 title="删除后将无法恢复，确定删除吗？"
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
+                @confirm="handleDelete(scope.row.user_id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -234,6 +240,17 @@ export default {
       if (row.user_status != 0) {
         return "warning-row";
       }
+    },
+    handleDelete(id) {
+      api.delUser(id).then((resp) => {
+        if (resp.code === 1) {
+          this.getData();
+        }
+        this.$message({
+          message: resp.msg,
+          type: resp.type,
+        });
+      });
     },
   },
   mounted() {

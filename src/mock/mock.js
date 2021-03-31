@@ -60,3 +60,6 @@ Mock.mock('/user','get',function(params){
 Mock.mock('/user/add','post',function(params){
     return User.add(params);
 })
+Mock.mock('/user/del','get',function(params){
+    return User.del(params);
+})
