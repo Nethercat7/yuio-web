@@ -45,8 +45,22 @@ function del(params){
     return resp;
 }
 
+function upd(params){
+    let obj=JSON.parse(params.body);
+    for(let i=0;i<resp.data.length;i++){
+        if(resp.data[i].user_id===obj.user_id){
+            resp.data[i]=obj;
+            break;
+        }
+    }
+    resp.msg='成功修改';
+    resp.type='success';
+    return resp;
+}
+
 module.exports={
     get,
     add,
-    del
+    del,
+    upd
 }

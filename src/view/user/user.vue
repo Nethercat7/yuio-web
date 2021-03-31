@@ -217,12 +217,12 @@ export default {
           if (resp.code === 1) this.getData();
         });
       } else {
-        api.updStudent(this.form).then((resp) => {
+        api.updUser(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getStudents();
+          if (resp.code === 1) this.getData();
         });
       }
       this.form = {};

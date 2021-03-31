@@ -64,6 +64,9 @@ let api={
     },
     delUser(params){
         return http.get(`${request}/user/del`,params)
+    },
+    updUser(params){
+        return http.post(`${request}/user/upd`,params)
     }
 }
 
