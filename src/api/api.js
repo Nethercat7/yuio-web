@@ -58,6 +58,9 @@ let api={
     //用户管理
     getUsers(params){
         return http.get(`${request}/user`,params)
+    },
+    addUser(params){
+        return http.post(`${request}/user/add`,params)
     }
 }
 

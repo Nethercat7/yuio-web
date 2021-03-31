@@ -1,5 +1,4 @@
 const Mock=require('mockjs')
-const Random=require('mockjs').Random
 
 let resp={
     code:1,
@@ -16,7 +15,6 @@ function get(){
                 user_gender:'@integer(0,1)',
                 user_phone:'@id',
                 user_email:'@email',
-                user_avatar:Random.image('200x100'),
                 user_status:'@integer(0,1)'
             })
             resp.data.push(data)
@@ -25,6 +23,17 @@ function get(){
     return resp;
 }
 
+function add(params){
+    let obj=JSON.parse(params.body);
+    console.log(obj);
+    obj.user_id=Mock.mock('@id');
+    resp.data.push(obj);
+    resp.msg='成功添加';
+    resp.type='success';
+    return resp;
+}
+
 module.exports={
-    get
+    get,
+    add
 }
