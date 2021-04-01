@@ -80,6 +80,10 @@ let api={
     },
     delRole(params){
         return http.get(`${request}/role/del`,params)
+    },
+    //权限管理
+    getPerms(params){
+        return http.get(`${request}/perms/get`,params)
     }
 }
 

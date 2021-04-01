@@ -4,6 +4,7 @@ import Class from './data/class';
 import Student from './data/student';
 import User from './data/user';
 import Role from './data/role';
+import Perms from  './data/perms';
 
 const Mock = require('mockjs');
 
@@ -78,4 +79,7 @@ Mock.mock('/role/upd','post',function(params){
 })
 Mock.mock('/role/del','get',function(params){
     return Role.del(params);
+})
+Mock.mock('/perms/get','get',function(params){
+    return Perms.get(params);
 })

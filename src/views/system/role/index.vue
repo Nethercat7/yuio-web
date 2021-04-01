@@ -108,6 +108,22 @@
             <el-radio :label="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="操作权限">
+          <el-select v-model="value" @change="handlePermsSelect">
+            <el-option :value="0" label="全部权限"></el-option>
+            <el-option :value="1" label="自定义权限">自定义权限</el-option>
+          </el-select>
+          <el-tree
+            v-if="customize"
+            :data="perms"
+            :props="defaultProps"
+            show-checkbox
+            default-expand-all
+            ref="tree"
+            node-key="perms_id"
+            @check-change="handleNodeClick"
+          ></el-tree>
+        </el-form-item>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.role_desciption"></el-input>
         </el-form-item>
@@ -137,7 +153,14 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {},
+      form: {role_perms:'all'},
+      customize: false,
+      value: 0,
+      defaultProps: {
+        children: "children",
+        label: "perms_name",
+      },
+      perms: [],
     };
   },
   methods: {
@@ -155,6 +178,10 @@ export default {
         this.tableData = data;
         this.tableDataBak = data;
         this.total = data.length;
+      });
+      //获取权限
+      api.getPerms().then((resp) => {
+        this.perms = resp.data;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -232,6 +259,17 @@ export default {
           type: resp.type,
         });
       });
+    },
+    handleNodeClick() {
+      this.form.role_perms = this.$refs.tree.getCheckedKeys();
+    },
+    handlePermsSelect() {
+      if (this.value === 1) {
+        this.customize = true;
+        this.form.role_perms=[];
+      } else {
+        this.customize = false;
+      }
     },
   },
   mounted() {
