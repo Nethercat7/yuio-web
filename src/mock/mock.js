@@ -3,6 +3,7 @@ import Major from './data/major';
 import Class from './data/class';
 import Student from './data/student';
 import User from './data/user';
+import Role from './data/role';
 
 const Mock = require('mockjs');
 
@@ -65,4 +66,7 @@ Mock.mock('/user/del','get',function(params){
 })
 Mock.mock('/user/upd','post',function(params){
     return User.upd(params);
+})
+Mock.mock('/role','get',function(params){
+    return Role.get(params);
 })

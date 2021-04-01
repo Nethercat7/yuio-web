@@ -67,6 +67,10 @@ let api={
     },
     updUser(params){
         return http.post(`${request}/user/upd`,params)
+    },
+    //角色管理
+    getRoles(params){
+        return http.get(`${request}/role`,params)
     }
 }
 

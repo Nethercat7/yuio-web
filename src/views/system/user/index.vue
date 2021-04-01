@@ -121,6 +121,17 @@
             <el-radio :label="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="form.user_role" multiple filterable placeholder="请选择">
+            <el-option
+              v-for="item in roles"
+              :key="item.role_id"
+              :label="item.role_name"
+              :value="item.role_id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.user_desciption"></el-input>
         </el-form-item>
@@ -151,6 +162,7 @@ export default {
       dialogVisible: false,
       type: "",
       form: {},
+      roles:[]
     };
   },
   methods: {
@@ -175,6 +187,10 @@ export default {
         this.tableDataBak = data;
         this.total = data.length;
       });
+      //获取角色
+      api.getRoles().then(resp=>{
+        this.roles=resp.data;
+      })
     },
     searchSuggestions(queryString, cb) {
       let restaurants = this.tableDataBak;
