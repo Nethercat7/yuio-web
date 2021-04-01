@@ -452,6 +452,7 @@ export default {
     this.getGrade();
     this.getClasses();
     this.getStudents();
+    console.log(this.$route)
   },
 };
 </script>
