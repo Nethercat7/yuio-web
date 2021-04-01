@@ -97,19 +97,19 @@
         label-width="90px"
       >
         <el-form-item label="名称">
-          <el-input v-model="form.user_name"></el-input>
+          <el-input v-model="form.role_name"></el-input>
         </el-form-item>
         <el-form-item label="代号">
-          <el-input v-model="form.user_account"></el-input>
+          <el-input v-model="form.role_code"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.user_status">
+          <el-radio-group v-model="form.role_status">
             <el-radio :label="0">正常</el-radio>
             <el-radio :label="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.user_desciption"></el-input>
+          <el-input type="textarea" v-model="form.role_desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -190,7 +190,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addUser(this.form).then((resp) => {
+        api.addRole(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
