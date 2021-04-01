@@ -77,6 +77,9 @@ let api={
     },
     updRole(params){
         return http.post(`${request}/role/upd`,params)
+    },
+    delRole(params){
+        return http.get(`${request}/role/del`,params)
     }
 }
 

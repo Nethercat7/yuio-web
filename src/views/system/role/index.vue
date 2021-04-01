@@ -62,7 +62,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.user_id)"
+                @confirm="handleDelete(scope.row.role_id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -223,7 +223,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delUser(id).then((resp) => {
+      api.delRole(id).then((resp) => {
         if (resp.code === 1) {
           this.getData();
         }

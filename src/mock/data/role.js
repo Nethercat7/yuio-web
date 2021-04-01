@@ -44,6 +44,19 @@ function upd(params){
     return resp;
 }
 
+function del(params){
+    for (let index = 0; index < resp.data.length; index++) {
+        if(resp.data[index].role_id===params.body){
+            let i=resp.data.indexOf(resp.data[index]);
+            resp.data.splice(i,1);
+            break;
+        }
+    }
+    resp.msg='成功删除';
+    resp.type='success';
+    return resp;
+}
+
 function dateFtt(fmt, date) { //author: meizz   
     var o = {
         "M+": date.getMonth() + 1, //月份   
@@ -65,5 +78,6 @@ function dateFtt(fmt, date) { //author: meizz
 module.exports={
     get,
     add,
-    upd
+    upd,
+    del
 }
