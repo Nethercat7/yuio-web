@@ -8,6 +8,7 @@ import Layout from '@/layout/'
 
 //各模块路由
 import system from './modules/system'
+import statistics from  './modules/statistics'
 
 // 解决路由重复控制台报错
 const originalPush = Router.prototype.push;
@@ -21,6 +22,7 @@ const constantRoutes = [
         component: Layout
     },
     system,
+    statistics
 ]
 
 export default new Router({

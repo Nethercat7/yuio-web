@@ -153,7 +153,7 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {role_perms:'all'},
+      form: { role_perms: 1 },
       customize: false,
       value: 0,
       defaultProps: {
@@ -266,9 +266,10 @@ export default {
     handlePermsSelect() {
       if (this.value === 1) {
         this.customize = true;
-        this.form.role_perms=[];
+        this.form.role_perms = [];
       } else {
         this.customize = false;
+        this.form.role_perms = 1;
       }
     },
   },
