@@ -5,7 +5,7 @@ let request = ''
 let api={
     //院系管理
     getColleges(params){
-        return http.get(`${request}/school/college`,params)
+        return http.get(`${request}/school/college/get`,params)
     },
     addCollege(params){
         return http.post(`${request}/school/college/add`,params)
@@ -18,7 +18,7 @@ let api={
     },
     //专业管理
     getMajors(params){
-        return http.get(`${request}/school/major`,params)
+        return http.get(`${request}/school/major/get`,params)
     },
     addMajor(params){
         return http.post(`${request}/school/major/add`,params)
@@ -31,7 +31,7 @@ let api={
     },
     //班级管理
     getClasses(params){
-        return http.post(`${request}/school/class`,params)
+        return http.post(`${request}/school/class/get`,params)
     },
     addClass(params){
         return http.post(`${request}/school/class/add`,params)
@@ -47,7 +47,7 @@ let api={
         return http.post(`${request}/student/add`,params)
     },
     getStudents(params){
-        return http.get(`${request}/student`,params)
+        return http.get(`${request}/student/get`,params)
     },
     delStudent(params){
         return http.get(`${request}/student/del`,params)
@@ -57,7 +57,7 @@ let api={
     },
     //用户管理
     getUsers(params){
-        return http.get(`${request}/user`,params)
+        return http.get(`${request}/user/get`,params)
     },
     addUser(params){
         return http.post(`${request}/user/add`,params)
@@ -70,7 +70,7 @@ let api={
     },
     //角色管理
     getRoles(params){
-        return http.get(`${request}/role`,params)
+        return http.get(`${request}/role/get`,params)
     }
 }
 

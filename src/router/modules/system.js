@@ -32,6 +32,11 @@ const system = {
         component:()=>import('@/views/system/user/'),
         name:'UserManagement',
         meta:{title:'用户管理'}
+    },{
+        path:'role',
+        component:()=>import('@/views/system/role/'),
+        name:'RoleManagement',
+        meta:{title:'角色管理'}
     }]
 }
 

@@ -31,6 +31,7 @@
         >
         <el-menu-item index="2-4" @click="$router.push('/system/student')">学生管理</el-menu-item>
         <el-menu-item index="2-5" @click="$router.push('/system/user')">用户管理</el-menu-item>
+        <el-menu-item index='2-6' @click="$router.push('/system/role')">角色管理</el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>
