@@ -198,7 +198,7 @@ export default {
           if (resp.code === 1) this.getData();
         });
       } else {
-        api.updUser(this.form).then((resp) => {
+        api.updRole(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,

@@ -31,6 +31,19 @@ function add(params){
     return resp;
 }
 
+function upd(params){
+    let obj=JSON.parse(params.body);
+    for (let index = 0; index < resp.data.length; index++) {
+        if(resp.data[index].role_id===obj.role_id){
+            resp.data[index]=obj;
+            break;
+        }
+    }
+    resp.msg='成功修改';
+    resp.type='success';
+    return resp;
+}
+
 function dateFtt(fmt, date) { //author: meizz   
     var o = {
         "M+": date.getMonth() + 1, //月份   
@@ -51,5 +64,6 @@ function dateFtt(fmt, date) { //author: meizz
 
 module.exports={
     get,
-    add
+    add,
+    upd
 }

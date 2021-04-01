@@ -73,3 +73,6 @@ Mock.mock('/role/get','get',function(params){
 Mock.mock('/role/add','post',function(params){
     return Role.add(params);
 })
+Mock.mock('/role/upd','post',function(params){
+    return Role.upd(params);
+})
