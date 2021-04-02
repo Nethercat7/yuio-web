@@ -43,6 +43,7 @@
           <el-table-column
             prop="employment_rate"
             label="就业率"
+            :formatter="formatterRate"
           ></el-table-column>
           <el-table-column label="操作">
             <el-button size="mini" type="info">查看详情</el-button>
@@ -87,6 +88,9 @@ export default {
         this.tableData=resp.data;
       });
     },
+    formatterRate(row){
+      return row.employment_rate+'%';
+    }
   },
   mounted(){
     this.getData();
