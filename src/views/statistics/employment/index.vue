@@ -28,13 +28,10 @@
       <el-col :span="24">
         <el-table :data="tableData">
           <el-table-column
-            prop="name"
+            prop="college_name"
             label="学院名称"
           ></el-table-column>
-          <el-table-column
-            prop="total_people"
-            label="总人数"
-          ></el-table-column>
+          <el-table-column prop="total_people" label="总人数"></el-table-column>
           <el-table-column
             prop="employment_people"
             label="就业人数"
@@ -58,30 +55,42 @@
 
 <script>
 import EmploymentRate from "@/components/Charts/bar";
+import api from "../../../api/api";
 export default {
   components: { EmploymentRate },
   data() {
     return {
-      xData: [
-        "经济与管理学院",
-        "马克思学院",
-        "计算机学院",
-        "体育学院",
-        "艺术学院",
-        "汽车学院",
-        "电子信息工程学院",
+      xData: [],
+      data: [],
+      data1: [],
+      tableData: [
+        {
+          college_name: "经济与管理学院",
+          total_people: 377,
+          employment_people: 300,
+          unemployment_people: 77,
+          employment_rate: "90%",
+        },
       ],
-      data: [90, 95, 89, 93, 86, 92, 97],
-      data1: [120, 200, 150, 80, 70, 110, 130],
-      tableData: [{
-        name:'经济与管理学院',
-        total_people:377,
-        employment_people:300,
-        unemployment_people:77,
-        employment_rate:'90%'
-      }]
     };
   },
+  methods: {
+    getData() {
+      api.getERate().then((resp) => {
+        for(let i=0;i<resp.data.length;i++){
+          if(!resp.data[i].school){
+            this.xData.push(resp.data[i].college_name);
+            this.data.push(resp.data[i].employment_rate);
+            this.data1.push(resp.data[i].employment_people);
+          }
+        }
+        this.tableData=resp.data;
+      });
+    },
+  },
+  mounted(){
+    this.getData();
+  }
 };
 </script>
 

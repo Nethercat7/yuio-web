@@ -104,6 +104,11 @@ export default {
       option && myChart.setOption(option);
     },
   },
+  watch:{
+      data(){
+          this.inital()
+      }
+  },
   mounted() {
     this.inital();
   },

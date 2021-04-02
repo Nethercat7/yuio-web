@@ -84,6 +84,10 @@ let api={
     //权限管理
     getPerms(params){
         return http.get(`${request}/perms/get`,params)
+    },
+    //就业率
+    getERate(params){
+        return http.get(`${request}/eRate/get`,params)
     }
 }
 

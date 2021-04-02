@@ -5,6 +5,7 @@ import Student from './data/student';
 import User from './data/user';
 import Role from './data/role';
 import Perms from  './data/perms';
+import ERate from  './data/employmentRate';
 
 const Mock = require('mockjs');
 
@@ -82,4 +83,7 @@ Mock.mock('/role/del','get',function(params){
 })
 Mock.mock('/perms/get','get',function(params){
     return Perms.get(params);
+})
+Mock.mock('/eRate/get','get',function(params){
+    return ERate.get(params);
 })
