@@ -78,6 +78,7 @@ export default {
           data: this.xData,
           axisLabel: {
             interval: 0,
+            rotate: -15,
           },
         },
         yAxis: {
@@ -104,10 +105,10 @@ export default {
       option && myChart.setOption(option);
     },
   },
-  watch:{
-      data(){
-          this.inital()
-      }
+  watch: {
+    data() {
+      this.inital();
+    },
   },
   mounted() {
     this.inital();

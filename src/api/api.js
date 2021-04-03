@@ -88,6 +88,9 @@ let api={
     //就业率
     getERate(params){
         return http.get(`${request}/eRate/get`,params)
+    },
+    getERateTotal(params){
+        return http.get(`${request}/eRate/getTotal`,params)
     }
 }
 

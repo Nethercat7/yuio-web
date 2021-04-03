@@ -87,3 +87,6 @@ Mock.mock('/perms/get','get',function(params){
 Mock.mock('/eRate/get','get',function(params){
     return ERate.get(params);
 })
+Mock.mock('/eRate/getTotal','get',function(params){
+    return ERate.getTotal(params);
+})
