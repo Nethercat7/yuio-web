@@ -5,6 +5,7 @@
 <script>
 import * as echarts from "echarts";
 export default {
+  name:'BarChart',
   props: {
     id: {
       type: String,
@@ -26,7 +27,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    xData: {
+    name: {
       type: Array,
       default: null,
     },
@@ -34,17 +35,9 @@ export default {
       type: Array,
       default: null,
     },
-    showX: {
+    showName: {
       type: Boolean,
       default: true,
-    },
-    percentage: {
-      type: Boolean,
-      default: false,
-    },
-    showTop: {
-      type: Boolean,
-      default: false,
     },
     showTitle: {
       type: Boolean,
@@ -56,8 +49,12 @@ export default {
     },
     subTitle: {
       type: String,
-      default: null,
+      default: '',
     },
+    suffix:{
+      type:String,
+      default:''
+    }
   },
   methods: {
     inital() {
@@ -73,9 +70,9 @@ export default {
           left: "center",
         },
         xAxis: {
-          show: this.showX,
+          show: this.showName,
           type: "category",
-          data: this.xData,
+          data: this.name,
           axisLabel: {
             interval: 0,
             rotate: -15,
@@ -86,13 +83,15 @@ export default {
           axisLabel: {
             show: true,
             interval: "auto",
-            formatter: this.percentage ? "{value}%" : "{value}",
+            //formatter: this.showPercentage ? "{value}%" : "{value}",
+            formatter: "{value}"+this.suffix,
           },
         },
         tooltip: {
           show: this.showTooltip,
           trigger: "axis",
-          formatter: this.percentage ? "{b}:{c}%" : "{b}:{c}",
+          //formatter: this.showPercentage ? "{b}:{c}%" : "{b}:{c}",
+          formatter: "{b}： {c}"+this.suffix,
         },
         series: [
           {

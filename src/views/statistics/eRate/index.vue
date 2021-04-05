@@ -39,25 +39,27 @@
       <el-card>
         <el-col :span="12">
           <EmploymentRate
-            id="rate"
+            id="e-rate"
             :data="data"
-            :xData="xData"
-            :percentage="true"
+            :name="name"
+            showPercentage
             title="各学院就业率"
             subTitle="2021届"
-            :showX="true"
+            :showName="true"
             width="100%"
+            suffix="%"
           ></EmploymentRate>
         </el-col>
         <el-col :span="12">
           <EmploymentRate
-            id="people"
+            id="e-people"
             :data="data1"
-            :xData="xData"
+            :name="name"
             title="各学院就业人数"
             subTitle="2021届"
-            :showX="true"
+            :showName="true"
             width="100%"
+            suffix="人"
           ></EmploymentRate>
         </el-col>
       </el-card>
@@ -108,13 +110,14 @@
 </template>
 
 <script>
-import EmploymentRate from "@/components/Charts/bar";
+import EmploymentRate from "@/components/charts/bar";
 import api from "../../../api/api";
+
 export default {
   components: { EmploymentRate },
   data() {
     return {
-      xData: [],
+      name: [],
       data: [],
       data1: [],
       tableData: [
@@ -134,7 +137,7 @@ export default {
       api.getERate().then((resp) => {
         for (let i = 0; i < resp.data.length; i++) {
           if (!resp.data[i].school) {
-            this.xData.push(resp.data[i].college_name);
+            this.name.push(resp.data[i].college_name);
             this.data.push(resp.data[i].employment_rate);
             this.data1.push(resp.data[i].employment_people);
           }

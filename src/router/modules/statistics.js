@@ -9,7 +9,7 @@ const statistics={
         {
             path:'employment',
             name:'Employment',
-            component:()=>import('@/views/statistics/employment/'),
+            component:()=>import('@/views/statistics/eRate/'),
             meta:{title:'就业率统计'}
         }
     ]
