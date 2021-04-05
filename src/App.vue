@@ -59,7 +59,7 @@ body {
   background-color: #f0f9eb;
 }
 
-.card {
+.mb-20 {
   margin-bottom: 20px;
 }
 

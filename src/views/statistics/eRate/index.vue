@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row class="card" :gutter="24">
+    <el-row class="mb-20" :gutter="24">
       <el-col :span="6">
         <el-card class="text-center">
           <div slot="header">
@@ -35,10 +35,10 @@
       </el-col>
     </el-row>
 
-    <el-row class="card">
+    <el-row class="mb-20">
       <el-card>
         <el-col :span="12">
-          <EmploymentRate
+          <erate
             id="e-rate"
             :data="data"
             :name="name"
@@ -49,10 +49,10 @@
             width="100%"
             suffix="%"
             :rotate="-15"
-          ></EmploymentRate>
+          ></erate>
         </el-col>
         <el-col :span="12">
-          <EmploymentRate
+          <erate
             id="e-people"
             :data="data1"
             :name="name"
@@ -62,7 +62,7 @@
             width="100%"
             suffix="人"
             :rotate="-15"
-          ></EmploymentRate>
+          ></erate>
         </el-col>
       </el-card>
     </el-row>
@@ -112,11 +112,12 @@
 </template>
 
 <script>
-import EmploymentRate from "@/components/charts/bar";
+import erate from "@/components/charts/bar";
 import api from "../../../api/api";
 
 export default {
-  components: { EmploymentRate },
+  name:"EmploymentRate",
+  components: { erate },
   data() {
     return {
       name: [],

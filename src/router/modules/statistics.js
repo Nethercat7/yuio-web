@@ -7,10 +7,16 @@ const statistics={
     meta:{title:'数据统计'},
     children:[
         {
-            path:'employment',
-            name:'Employment',
+            path:'eRate',
+            name:'Employment Rate',
             component:()=>import('@/views/statistics/eRate/'),
             meta:{title:'就业率统计'}
+        }
+        ,{
+            path:'eStatus',
+            name:'Employment Status',
+            component:()=>import('@/views/statistics/eStatus/'),
+            meta:{title:'就业情况统计'}
         }
     ]
 }
