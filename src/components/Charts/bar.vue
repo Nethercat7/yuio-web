@@ -54,6 +54,14 @@ export default {
     suffix:{
       type:String,
       default:''
+    },
+    interval:{
+      type:Number,
+      default:0
+    },
+    rotate:{
+      type:Number,
+      default:0
     }
   },
   methods: {
@@ -74,8 +82,8 @@ export default {
           type: "category",
           data: this.name,
           axisLabel: {
-            interval: 0,
-            rotate: -15,
+            interval: this.interval,
+            rotate: this.rotate,
           },
         },
         yAxis: {

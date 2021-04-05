@@ -48,6 +48,7 @@
             :showName="true"
             width="100%"
             suffix="%"
+            :rotate="-15"
           ></EmploymentRate>
         </el-col>
         <el-col :span="12">
@@ -60,6 +61,7 @@
             :showName="true"
             width="100%"
             suffix="人"
+            :rotate="-15"
           ></EmploymentRate>
         </el-col>
       </el-card>
