@@ -91,6 +91,10 @@ let api={
     },
     getERateTotal(params){
         return http.get(`${request}/eRate/getTotal`,params)
+    },
+    //城市API
+    getCityies(params){
+        return http.get(`${request}/cityies/get`,params);
     }
 }
 

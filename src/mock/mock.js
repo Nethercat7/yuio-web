@@ -6,6 +6,7 @@ import User from './data/user';
 import Role from './data/role';
 import Perms from  './data/perms';
 import ERate from  './data/employmentRate';
+import Cityies from './data/cityies';
 
 const Mock = require('mockjs');
 
@@ -89,4 +90,8 @@ Mock.mock('/eRate/get','get',function(params){
 })
 Mock.mock('/eRate/getTotal','get',function(params){
     return ERate.getTotal(params);
+})
+//城市API
+Mock.mock('/cityies/get','get',function(params){
+    return Cityies.get(params);
 })
