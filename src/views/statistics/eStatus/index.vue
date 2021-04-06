@@ -42,7 +42,7 @@
         </el-col>
       </el-card>
     </el-row>
-    <el-row>
+    <el-row class="mb-20">
       <el-card>
         <el-col :span="12">
           <radar
@@ -53,7 +53,15 @@
           ></radar>
         </el-col>
         <el-col :span="12">
-          <p>xxx中大部分人选择从事的岗位是：xxx</p>
+          <p>xxx中大部分人选择从事的岗位是：xxx，有x%的人选择了该岗位</p>
+        </el-col>
+      </el-card>
+    </el-row>
+
+    <el-row>
+      <el-card>
+        <el-col :span="12">
+          <bar id="bar-1" :data="unemploylmentPeople" :name="intend" title="未就业人数打算" horizontal></bar> 
         </el-col>
       </el-card>
     </el-row>
@@ -70,9 +78,9 @@ export default {
   data() {
     return {
       cascaderProps: {
-        value:'id',
-        label:'labela',
-        checkStrictly:true
+        value: "id",
+        label: "labela",
+        checkStrictly: true,
       },
       data: [34, 54, 67, 90, 12, 56, 78, 12, 34, 59, 22, 34, 78, 76],
       name: [
@@ -118,7 +126,7 @@ export default {
         },
       ],
       jobPeople: [{ value: [100, 200, 300, 400, 500, 600], name: "工作岗位" }],
-      value: ["123213213213","213213213","2132132132"],
+      value: ["123213213213", "213213213", "2132132132"],
       options: [
         {
           id: "123213213213",
@@ -137,6 +145,8 @@ export default {
           ],
         },
       ],
+      unemploylmentPeople: [10,20,30,40,50,60,70],
+      intend:['继续找工作','考公务员','考研','研究生复试','考三支一扶','考西部计划志愿者','考选调生']
     };
   },
   methods: {

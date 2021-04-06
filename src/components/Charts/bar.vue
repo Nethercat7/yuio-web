@@ -5,7 +5,7 @@
 <script>
 import * as echarts from "echarts";
 export default {
-  name:'BarChart',
+  name: "BarChart",
   props: {
     id: {
       type: String,
@@ -49,20 +49,46 @@ export default {
     },
     subTitle: {
       type: String,
-      default: '',
+      default: "",
     },
-    suffix:{
-      type:String,
-      default:''
+    suffix: {
+      type: String,
+      default: "",
     },
-    interval:{
-      type:Number,
-      default:0
+    interval: {
+      type: Number,
+      default: 0,
     },
-    rotate:{
-      type:Number,
-      default:0
-    }
+    rotate: {
+      type: Number,
+      default: 0,
+    },
+    horizontal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      yAxis: {
+        type: "value",
+        axisLabel: {
+          show: true,
+          interval: "auto",
+          //formatter: this.showPercentage ? "{value}%" : "{value}",
+          formatter: "{value}" + this.suffix,
+        },
+      },
+      xAxis: {
+        show: this.showName,
+        type: "category",
+        data: this.name,
+        axisLabel: {
+          interval: this.interval,
+          rotate: this.rotate,
+        },
+      },
+    };
   },
   methods: {
     inital() {
@@ -77,29 +103,13 @@ export default {
           subtext: this.subTitle,
           left: "center",
         },
-        xAxis: {
-          show: this.showName,
-          type: "category",
-          data: this.name,
-          axisLabel: {
-            interval: this.interval,
-            rotate: this.rotate,
-          },
-        },
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            show: true,
-            interval: "auto",
-            //formatter: this.showPercentage ? "{value}%" : "{value}",
-            formatter: "{value}"+this.suffix,
-          },
-        },
+        xAxis: this.horizontal ? this.yAxis : this.xAxis,
+        yAxis: this.horizontal ? this.xAxis : this.yAxis,
         tooltip: {
           show: this.showTooltip,
           trigger: "axis",
           //formatter: this.showPercentage ? "{b}:{c}%" : "{b}:{c}",
-          formatter: "{b}： {c}"+this.suffix,
+          formatter: "{b}： {c}" + this.suffix,
         },
         series: [
           {
