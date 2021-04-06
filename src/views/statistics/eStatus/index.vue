@@ -1,6 +1,26 @@
 <template>
   <div>
     <el-row class="mb-20">
+      <el-col :span="24" style="text-align: right">
+        <el-card class="top-tools">
+          <el-cascader
+            size="mini"
+            v-model="value"
+            :options="options"
+            clearable
+            @change="handleChange"
+            :props="cascaderProps"
+            style="margin-right: 20px"
+            filterable
+            :show-all-levels="false"
+            ref="cascader"
+          ></el-cascader>
+          <el-button size="mini" type="success">切换</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row class="mb-20">
       <el-card>
         <el-col :span="12">
           <bar
@@ -49,6 +69,11 @@ export default {
   components: { bar, radar },
   data() {
     return {
+      cascaderProps: {
+        value:'id',
+        label:'labela',
+        checkStrictly:true
+      },
       data: [34, 54, 67, 90, 12, 56, 78, 12, 34, 59, 22, 34, 78, 76],
       name: [
         "北京",
@@ -93,10 +118,37 @@ export default {
         },
       ],
       jobPeople: [{ value: [100, 200, 300, 400, 500, 600], name: "工作岗位" }],
+      value: ["123213213213","213213213","2132132132"],
+      options: [
+        {
+          id: "123213213213",
+          labela: "广西科技大学",
+          children: [
+            {
+              id: "213213213",
+              labela: "经济与管理学院",
+              children: [
+                {
+                  id: "2132132132",
+                  labela: "信息管理与信息系统",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
+  },
+  methods: {
+    handleChange() {
+      console.log(this.$refs.cascader.getCheckedNodes(true));
+    },
   },
 };
 </script>
 
 <style>
+.top-tools .el-card__body {
+  padding: 10px !important;
+}
 </style>
