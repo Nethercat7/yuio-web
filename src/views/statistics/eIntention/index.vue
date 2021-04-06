@@ -3,6 +3,12 @@
     <el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools">
+          <el-select size="mini" style="margin-right:20px">
+            <el-option label="2021届"></el-option>
+            <el-option label="2020届"></el-option>
+            <el-option label="2022届"></el-option>
+            <el-option label="2023届"></el-option>
+          </el-select>
           <el-cascader
             size="mini"
             v-model="value"
