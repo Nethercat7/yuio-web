@@ -61,7 +61,11 @@
     <el-row>
       <el-card>
         <el-col :span="12">
-          <bar id="bar-1" :data="unemploylmentPeople" :name="intend" title="未就业人数打算" horizontal></bar> 
+          <bar id="bar-1" :data="unemploylmentPeople" :name="intend" title="未就业的学生接下来的打算" horizontal></bar> 
+        </el-col>
+        <el-col :span="12">
+          <p>xxx中未就业的学生一共有xxx名</p>
+          <p>x%的学生接下来打算xxx</p>
         </el-col>
       </el-card>
     </el-row>
