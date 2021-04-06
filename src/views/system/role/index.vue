@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import Pager from "@/components/Pager";
+import Pager from "@/components/pager";
 import api from "../../../api/api";
 
 export default {
