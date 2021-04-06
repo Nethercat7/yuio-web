@@ -62,7 +62,7 @@ export default {
         }, */
         radar: {
           // shape: 'circle',
-          name: {
+          axisName: {
             textStyle: {
               color: "#fff",
               backgroundColor: "#999",
