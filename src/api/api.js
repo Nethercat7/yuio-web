@@ -14,7 +14,7 @@ let api={
         return http.get(`${request}/college/del?id=`+params)
     },
     updCollege(params){
-        return http.post(`${request}/school/college/upd`,params)
+        return http.post(`${request}/college/upd`,params)
     },
     //专业管理
     getMajors(params){
