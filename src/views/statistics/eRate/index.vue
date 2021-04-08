@@ -1,5 +1,19 @@
 <template>
   <div>
+    <el-row class="mb-20">
+      <el-col :span="24" style="text-align: right">
+        <el-card class="top-tools">
+          <el-select size="mini" style="margin-right:20px">
+            <el-option label="2021届"></el-option>
+            <el-option label="2020届"></el-option>
+            <el-option label="2022届"></el-option>
+            <el-option label="2023届"></el-option>
+          </el-select>
+          <el-button size="mini" type="success">切换</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
+        </el-card>
+      </el-col>
+    </el-row>
       <el-row class="mb-20" :gutter="24">
         <el-col :span="6">
           <el-card class="text-center">

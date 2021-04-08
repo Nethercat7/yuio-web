@@ -152,6 +152,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
+        console.log('add');
         api.addCollege(this.form).then((resp) => {
           this.$message({
             message: resp.msg,

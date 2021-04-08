@@ -67,4 +67,8 @@ body {
   display: block;
   text-align: center;
 }
+
+.top-tools .el-card__body {
+  padding: 10px !important;
+}
 </style>

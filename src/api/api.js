@@ -1,14 +1,14 @@
 import http from '../utils/http'
 
-let request = ''
+let request = 'http://192.168.1.108:8081'
 
 let api={
     //院系管理
+    addCollege(params){
+        return http.post(`${request}/college/add`,params)
+    },
     getColleges(params){
         return http.get(`${request}/school/college/get`,params)
-    },
-    addCollege(params){
-        return http.post(`${request}/school/college/add`,params)
     },
     updCollege(params){
         return http.post(`${request}/school/college/upd`,params)

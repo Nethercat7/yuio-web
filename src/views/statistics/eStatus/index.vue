@@ -182,7 +182,5 @@ export default {
 </script>
 
 <style>
-.top-tools .el-card__body {
-  padding: 10px !important;
-}
+
 </style>
