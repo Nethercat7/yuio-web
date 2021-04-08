@@ -8,13 +8,13 @@ let api={
         return http.post(`${request}/college/add`,params)
     },
     getColleges(params){
-        return http.get(`${request}/school/college/get`,params)
+        return http.get(`${request}/college/get`,params)
+    },
+    delCollege(params){
+        return http.get(`${request}/college/del?id=`+params)
     },
     updCollege(params){
         return http.post(`${request}/school/college/upd`,params)
-    },
-    delCollege(params){
-        return http.get(`${request}/school/college/del`,params)
     },
     //专业管理
     getMajors(params){
