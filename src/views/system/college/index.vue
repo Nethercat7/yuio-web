@@ -196,7 +196,7 @@ export default {
     getData() {
       api.getColleges().then((resp) => {
         this.tableDataBak = resp.obj;
-        this.total = resp.total;
+        this.total = resp.obj.length;
         let data = resp.obj;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].college_name;
@@ -237,6 +237,7 @@ export default {
     },
     resetResult() {
       this.tableData = this.tableDataBak;
+      this.total=this.tableData.length;
       this.keyword = "";
     },
   },
