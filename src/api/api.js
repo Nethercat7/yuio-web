@@ -3,6 +3,19 @@ import http from '../utils/http'
 let request = 'http://192.168.1.108:8081'
 
 let api={
+    //组织管理
+    addOrg(params){
+        return http.post(`${request}/org/add`,params)
+    },
+    getOrg(params){
+        return http.get(`${request}/org/get`,params)
+    },
+    delOrg(params){
+        return http.get(`${request}/org/del?id=`+params)
+    },
+    updOrg(params){
+        return http.post(`${request}/org/upd`,params)
+    },
     //院系管理
     addCollege(params){
         return http.post(`${request}/college/add`,params)
