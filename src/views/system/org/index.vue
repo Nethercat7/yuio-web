@@ -38,10 +38,8 @@
               currentPage * pageSize
             )
           "
-          :row-class-name="tableRowClassName"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           row-key="org_id"
-          default-expand-all
         >
           <el-table-column label="组织名称" prop="org_name" sortable>
           </el-table-column>
@@ -159,12 +157,11 @@ export default {
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
+        console.log(this.form);
       }
     },
     submitDialog() {
       //选择数组最后一位的组织ID
-      if (this.form.org_pid != null)
-        this.form.org_pid = this.form.org_pid[this.form.org_pid.length - 1];
       if (this.type == "add") {
         api.addOrg(this.form).then((resp) => {
           this.$message({
@@ -174,7 +171,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updOrg(this.form).then((resp) => {
+      api.updOrg(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -193,11 +190,6 @@ export default {
         })
         .catch(() => {});
     },
-    tableRowClassName({ row }) {
-      if (row.org_status == 1) {
-        return "warning-row";
-      }
-    },
     deleteRow(id) {
       api.delOrg(id).then((resp) => {
         this.$message({
@@ -212,7 +204,6 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
           //将状态码转换为文本
           if (data[i].org_status === 0) {
