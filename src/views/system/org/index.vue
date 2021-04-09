@@ -116,6 +116,7 @@
             :props="cascaderProps"
             filterable
             clearable
+            ref="cascader"
           ></el-cascader>
         </el-form-item>
       </el-form>
@@ -157,11 +158,16 @@ export default {
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
-        console.log(this.form);
       }
     },
     submitDialog() {
-      //选择数组最后一位的组织ID
+      //添加级联选择器选中的Pid
+      let node = this.$refs.cascader.getCheckedNodes();
+      if (node.length != 0) {
+        this.form.org_pid = node[0].value;
+      } else {
+        this.form.org_pid = "0";
+      }
       if (this.type == "add") {
         api.addOrg(this.form).then((resp) => {
           this.$message({
@@ -171,7 +177,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-      api.updOrg(this.form).then((resp) => {
+        api.updOrg(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -254,18 +260,4 @@ export default {
 </script>
 
 <style>
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
 </style>

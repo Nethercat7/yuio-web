@@ -71,4 +71,12 @@ body {
 .top-tools .el-card__body {
   padding: 10px !important;
 }
+
+.card {
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+}
 </style>
