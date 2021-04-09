@@ -96,13 +96,17 @@
     >
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
-          <el-input v-model="form.class_name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="所属专业">
-
+          <el-cascader
+            v-model="form.container"
+            :options="colleges"
+            :props="cascaderProps"
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="所属年级">
-          <el-select v-model="form.class_grade" placeholder="请选择">
+          <el-select v-model="form.grade" placeholder="请选择">
             <el-option
               v-for="item in grade"
               :key="item"
@@ -113,13 +117,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.class_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">启用</el-radio>
             <el-radio :label="1">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.class_desciption"></el-input>
+          <el-input type="textarea" v-model="form.desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -146,28 +150,27 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      majors: [],
+      colleges: [],
       grade: [],
+      cascaderProps: {
+        value: "id",
+        label: "name",
+      },
     };
   },
   methods: {
-    getData(params) {
-      api.getClasses(params).then((resp) => {
+    getData() {
+      api.getColleges().then((resp) => {
+        this.colleges = resp.obj;
+      });
+      /*       api.getClasses(params).then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
-        for (let i = 0; i < data.length; i++) {
-          data[i].value = data[i].class_name;
-          if (data[i].class_status == 0) {
-            data[i].class_status_display = "正常";
-          } else {
-            data[i].class_status_display = "禁用";
-          }
-        }
         this.tableData = data;
-      });
+      }); */
       //获取年级
-      this.getGrade()
+      this.getGrade();
     },
     openDialog(type, row) {
       this.dialogVisible = true;
@@ -180,7 +183,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addClass(this.form).then((resp) => {
+        api.addCls(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -188,7 +191,6 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        console.log(this.colleges);
         api.updClass(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
@@ -275,7 +277,7 @@ export default {
     },
   },
   mounted() {
-    
+    this.getData();
   },
 };
 </script>

@@ -47,7 +47,7 @@
           </el-table-column>
           <el-table-column label="毕业生数量" prop="org_students" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="org_status_display" sortable>
+          <el-table-column label="状态" prop="org_status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">

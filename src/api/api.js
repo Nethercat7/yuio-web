@@ -43,11 +43,11 @@ let api={
         return http.post(`${request}/major/upd`,params)
     },
     //班级管理
+    addCls(params){
+        return http.post(`${request}/cls/add`,params)
+    },
     getClasses(params){
         return http.post(`${request}/school/class/get`,params)
-    },
-    addClass(params){
-        return http.post(`${request}/school/class/add`,params)
     },
     delClass(params){
         return http.get(`${request}/school/class/del`,params)
