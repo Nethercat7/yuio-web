@@ -117,6 +117,7 @@
             filterable
             clearable
             ref="cascader"
+            :show-all-levels="false"
           ></el-cascader>
         </el-form-item>
       </el-form>
@@ -147,6 +148,7 @@ export default {
         value: "org_id",
         label: "org_name",
         checkStrictly: true,
+        emitPath:false
       },
     };
   },
@@ -161,13 +163,6 @@ export default {
       }
     },
     submitDialog() {
-      //添加级联选择器选中的Pid
-      let node = this.$refs.cascader.getCheckedNodes();
-      if (node.length != 0) {
-        this.form.org_pid = node[0].value;
-      } else {
-        this.form.org_pid = "0";
-      }
       if (this.type == "add") {
         api.addOrg(this.form).then((resp) => {
           this.$message({
@@ -210,14 +205,6 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
-        for (let i = 0; i < data.length; i++) {
-          //将状态码转换为文本
-          if (data[i].org_status === 0) {
-            data[i].org_status_display = "正常";
-          } else {
-            data[i].org_status_display = "禁用";
-          }
-        }
         this.tableData = data;
       });
     },
