@@ -2,30 +2,31 @@
   <div>
     <el-row class="card">
       <!-- 选项卡 -->
-      <el-col :span="12">
-        <el-button size="mini" @click="openDialog('add')" type="success"
-          >添加</el-button
-        >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning">导出</el-button>
-      </el-col>
-      <el-col :span="12" style="text-align: right">
-        <el-autocomplete
-          v-model="keyword"
-          placeholder="请输入内容"
-          size="mini"
-          style="margin-right: 10px"
-          :trigger-on-focus="false"
-          :fetch-suggestions="searchSuggestions"
-        ></el-autocomplete>
-        <el-button size="mini" type="success" @click="handleSearch"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="resetResult"
-          >重置</el-button
-        >
-      </el-col>
+        <el-col :span="12">
+          <el-button size="mini" @click="openDialog('add')" type="success"
+            >添加</el-button
+          >
+          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="warning">导出</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <el-autocomplete
+            v-model="keyword"
+            placeholder="请输入内容"
+            size="mini"
+            style="margin-right: 10px"
+            :trigger-on-focus="false"
+            :fetch-suggestions="searchSuggestions"
+          ></el-autocomplete>
+          <el-button size="mini" type="success" @click="handleSearch"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="resetResult"
+            >重置</el-button
+          >
+        </el-col>
     </el-row>
+    
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
@@ -185,13 +186,13 @@ export default {
       }
     },
     deleteRow(id) {
-      api.delCollege(id).then(resp=>{
+      api.delCollege(id).then((resp) => {
         this.$message({
-          message:resp.msg,
-          type:resp.type
-        })
-        if(resp.code===0) this.getData();
-      })
+          message: resp.msg,
+          type: resp.type,
+        });
+        if (resp.code === 0) this.getData();
+      });
     },
     getData() {
       api.getColleges().then((resp) => {
@@ -237,7 +238,7 @@ export default {
     },
     resetResult() {
       this.tableData = this.tableDataBak;
-      this.total=this.tableData.length;
+      this.total = this.tableData.length;
       this.keyword = "";
     },
   },

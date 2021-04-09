@@ -17,6 +17,7 @@
           style="margin-right: 10px"
           :trigger-on-focus="false"
           :fetch-suggestions="searchSuggestions"
+          value-key="major_name"
         ></el-autocomplete>
         <el-button size="mini" type="success" @click="handleSearch"
           >搜索</el-button
@@ -208,7 +209,6 @@ export default {
         this.total = resp.obj.length;
         let data = resp.obj;
         for (let i = 0; i < data.length; i++) {
-          data[i].value = data[i].major_name;
           //状态转文字
           if (data[i].major_status == 0) {
             data[i].major_status_display = "正常";
