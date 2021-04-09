@@ -164,7 +164,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getMajors();
+          if (resp.code === 0) this.getMajors();
         });
       } else {
         api.updMajor(this.form).then((resp) => {
@@ -172,7 +172,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getMajors();
+          if (resp.code === 0) this.getMajors();
         });
       }
       this.form = {};
@@ -193,7 +193,7 @@ export default {
     },
     delMajor(id) {
       api.delMajor(id).then((resp) => {
-        if (resp.code === 1) {
+        if (resp.code === 0) {
           this.getMajors();
         }
         this.$message({
@@ -204,9 +204,9 @@ export default {
     },
     getMajors() {
       api.getMajors().then((resp) => {
-        this.tableDataBak = resp.data;
-        this.total = resp.total;
-        let data = resp.data;
+        this.tableDataBak = resp.obj;
+        this.total = resp.obj.length;
+        let data = resp.obj;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].major_name;
           //状态转文字
@@ -217,6 +217,10 @@ export default {
           }
         }
         this.tableData = data;
+      });
+      //获取院系信息
+      api.getColleges().then((resp) => {
+        this.colleges = resp.obj;
       });
     },
     //页面切换控制器
@@ -247,11 +251,7 @@ export default {
     resetResult() {
       this.tableData = this.tableDataBak;
       this.keyword = "";
-    },
-    getColleges() {
-      api.getColleges().then((resp) => {
-        this.colleges = resp.data;
-      });
+      this.total=this.tableData.length;
     },
     handelChange(){
       let college=this.colleges.filter(data=>data.college_id.includes(this.form.major_college_id));
@@ -260,7 +260,6 @@ export default {
   },
   mounted() {
     this.getMajors();
-    this.getColleges();
   },
 };
 </script>

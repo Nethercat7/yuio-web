@@ -30,17 +30,17 @@ let api={
         return http.post(`${request}/college/upd`,params)
     },
     //专业管理
-    getMajors(params){
-        return http.get(`${request}/school/major/get`,params)
-    },
     addMajor(params){
-        return http.post(`${request}/school/major/add`,params)
+        return http.post(`${request}/major/add`,params)
+    },
+    getMajors(params){
+        return http.get(`${request}/major/get`,params)
     },
     delMajor(params){
-        return http.get(`${request}/school/major/del`,params)
+        return http.get(`${request}/major/del?id=`+params)
     },
     updMajor(params){
-        return http.post(`${request}/school/major/upd`,params)
+        return http.post(`${request}/major/upd`,params)
     },
     //班级管理
     getClasses(params){
