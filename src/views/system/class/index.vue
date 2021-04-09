@@ -41,8 +41,6 @@
         >
           <el-table-column label="班级名称" prop="class_name" sortable>
           </el-table-column>
-          <el-table-column label="班级编号" prop="class_code" sortable>
-          </el-table-column>
           <el-table-column label="毕业生数量" prop="class_students" sortable>
           </el-table-column>
           <el-table-column label="所属院系" prop="class_college_name" sortable>
@@ -100,38 +98,8 @@
         <el-form-item label="名称">
           <el-input v-model="form.class_name"></el-input>
         </el-form-item>
-        <el-form-item label="编号">
-          <el-input v-model="form.class_code"></el-input>
-        </el-form-item>
-        <el-form-item label="所属院系">
-          <el-select
-            v-model="form.class_college_id"
-            placeholder="请选择"
-            @change="handleChange(form.class_college_id)"
-          >
-            <el-option
-              v-for="item in colleges"
-              :key="item.college_id"
-              :label="item.college_name"
-              :value="item.college_id"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="所属专业">
-          <el-select
-            v-model="form.class_major_id"
-            placeholder="请选择"
-            @change="handleChange(form.class_major_id)"
-          >
-            <el-option
-              v-for="item in majors"
-              :key="item.major_id"
-              :label="item.major_name"
-              :value="item.major_id"
-            >
-            </el-option>
-          </el-select>
+
         </el-form-item>
         <el-form-item label="所属年级">
           <el-select v-model="form.class_grade" placeholder="请选择">
@@ -178,29 +146,16 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      colleges: [],
       majors: [],
       grade: [],
     };
   },
   methods: {
-    getColleges() {
-      api.getColleges().then((resp) => {
-        this.colleges = resp.data;
-      });
-    },
-    getMajors() {
-      api.getMajors().then((resp) => {
-        this.majors = resp.data;
-        //对接后台API后删除
-        this.getClasses(this.majors);
-      });
-    },
-    getClasses(params) {
+    getData(params) {
       api.getClasses(params).then((resp) => {
-        this.tableDataBak = resp.data;
-        this.total = resp.total;
-        let data = resp.data;
+        this.tableDataBak = resp.obj;
+        this.total = resp.obj.length;
+        let data = resp.obj;
         for (let i = 0; i < data.length; i++) {
           data[i].value = data[i].class_name;
           if (data[i].class_status == 0) {
@@ -211,6 +166,8 @@ export default {
         }
         this.tableData = data;
       });
+      //获取年级
+      this.getGrade()
     },
     openDialog(type, row) {
       this.dialogVisible = true;
@@ -228,7 +185,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getClasses();
+          if (resp.code === 0) this.getData();
         });
       } else {
         console.log(this.colleges);
@@ -237,7 +194,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getClasses();
+          if (resp.code === 0) this.getData();
         });
       }
       this.form = {};
@@ -258,8 +215,8 @@ export default {
     },
     handleDelete(id) {
       api.delClass(id).then((resp) => {
-        if (resp.code === 1) {
-          this.getClasses();
+        if (resp.code === 0) {
+          this.getData();
         }
         this.$message({
           message: resp.msg,
@@ -318,9 +275,7 @@ export default {
     },
   },
   mounted() {
-    this.getColleges();
-    this.getMajors();
-    this.getGrade();
+    
   },
 };
 </script>
