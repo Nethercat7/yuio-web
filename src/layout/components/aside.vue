@@ -20,9 +20,9 @@
           <i class="el-icon-location"></i>
           <span>系统管理</span>
         </template>
-         <el-menu-item index="2-0" @click="$router.push('/system/org')"
+<!--          <el-menu-item index="2-0" @click="$router.push('/system/org')"
           >组织管理</el-menu-item
-        >
+        > -->
         <el-menu-item index="2-1" @click="$router.push('/system/college')"
           >院系管理</el-menu-item
         >

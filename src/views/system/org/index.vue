@@ -17,6 +17,7 @@
           style="margin-right: 10px"
           :trigger-on-focus="false"
           :fetch-suggestions="searchSuggestions"
+          value-key="org_name"
         ></el-autocomplete>
         <el-button size="mini" type="success" @click="handleSearch"
           >搜索</el-button
@@ -38,6 +39,9 @@
             )
           "
           :row-class-name="tableRowClassName"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          row-key="org_id"
+          default-expand-all
         >
           <el-table-column label="组织名称" prop="org_name" sortable>
           </el-table-column>
@@ -83,6 +87,7 @@
         </el-pagination>
       </el-col>
     </el-row>
+
     <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加院系' : '修改院系'"
@@ -104,10 +109,16 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input
-            type="textarea"
-            v-model="form.org_description"
-          ></el-input>
+          <el-input type="textarea" v-model="form.org_description"></el-input>
+        </el-form-item>
+        <el-form-item label="上级组织">
+          <el-cascader
+            v-model="form.org_pid"
+            :options="tableData"
+            :props="cascaderProps"
+            filterable
+            clearable
+          ></el-cascader>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -128,12 +139,16 @@ export default {
       tableDataBak: [],
       dialogVisible: false,
       type: "",
-      form: {
-      },
+      form: {},
       currentPage: 1,
       pageSize: 10,
       total: 0,
       keyword: "",
+      cascaderProps: {
+        value: "org_id",
+        label: "org_name",
+        checkStrictly: true,
+      },
     };
   },
   methods: {
@@ -147,6 +162,9 @@ export default {
       }
     },
     submitDialog() {
+      //选择数组最后一位的组织ID
+      if (this.form.org_pid != null)
+        this.form.org_pid = this.form.org_pid[this.form.org_pid.length - 1];
       if (this.type == "add") {
         api.addOrg(this.form).then((resp) => {
           this.$message({
@@ -181,21 +199,21 @@ export default {
       }
     },
     deleteRow(id) {
-      api.delOrg(id).then(resp=>{
+      api.delOrg(id).then((resp) => {
         this.$message({
-          message:resp.msg,
-          type:resp.type
-        })
-        if(resp.code===0) this.getData();
-      })
+          message: resp.msg,
+          type: resp.type,
+        });
+        if (resp.code === 0) this.getData();
+      });
     },
     getData() {
       api.getOrg().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
+        console.log(data);
         for (let i = 0; i < data.length; i++) {
-          data[i].value = data[i].org_name;
           //将状态码转换为文本
           if (data[i].org_status === 0) {
             data[i].org_status_display = "正常";
@@ -219,6 +237,7 @@ export default {
         ? restaurants.filter(this.createFilter())
         : restaurants;
       // 调用 callback 返回建议列表的数据
+      console.log(results);
       cb(results);
     },
     handleSearch() {
@@ -233,7 +252,7 @@ export default {
     },
     resetResult() {
       this.tableData = this.tableDataBak;
-      this.total=this.tableData.length;
+      this.total = this.tableData.length;
       this.keyword = "";
     },
   },
