@@ -39,17 +39,17 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="班级名称" prop="class_name" sortable>
+          <el-table-column label="班级名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="class_students" sortable>
+          <el-table-column label="毕业生数量" prop="students" sortable>
           </el-table-column>
-          <el-table-column label="所属院系" prop="class_college_name" sortable>
+          <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
-          <el-table-column label="所属专业" prop="class_major_name" sortable>
+          <el-table-column label="所属专业" prop="major_name" sortable>
           </el-table-column>
-          <el-table-column label="所属年级" prop="class_grade" sortable>
+          <el-table-column label="所属年级" prop="grade" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="class_status_display" sortable>
+          <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -160,15 +160,17 @@ export default {
   },
   methods: {
     getData() {
-      api.getColleges().then((resp) => {
-        this.colleges = resp.obj;
-      });
-      /*       api.getClasses(params).then((resp) => {
+      //获取班级
+      api.getClasses().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
         this.tableData = data;
-      }); */
+      });
+      //获取学院
+      api.getColleges().then((resp) => {
+        this.colleges = resp.obj;
+      });
       //获取年级
       this.getGrade();
     },

@@ -47,7 +47,7 @@ let api={
         return http.post(`${request}/cls/add`,params)
     },
     getClasses(params){
-        return http.post(`${request}/school/class/get`,params)
+        return http.get(`${request}/cls/get`,params)
     },
     delClass(params){
         return http.get(`${request}/school/class/del`,params)
