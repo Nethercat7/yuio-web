@@ -64,7 +64,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.class_id)"
+                @confirm="handleDelete(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -123,7 +123,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.desciption"></el-input>
+          <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -161,7 +161,7 @@ export default {
   methods: {
     getData() {
       //获取班级
-      api.getClasses().then((resp) => {
+      api.getCls().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
@@ -193,7 +193,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updClass(this.form).then((resp) => {
+        api.updCls(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -218,7 +218,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delClass(id).then((resp) => {
+      api.delCls(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }

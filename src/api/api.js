@@ -46,14 +46,14 @@ let api={
     addCls(params){
         return http.post(`${request}/cls/add`,params)
     },
-    getClasses(params){
+    getCls(params){
         return http.get(`${request}/cls/get`,params)
     },
-    delClass(params){
-        return http.get(`${request}/school/class/del`,params)
+    delCls(params){
+        return http.get(`${request}/cls/del?id=`+params)
     },
-    updClass(params){
-        return http.post(`${request}/school/class/upd`,params)
+    updCls(params){
+        return http.post(`${request}/cls/upd`,params)
     },
     //学生管理
     addStudent(params){
