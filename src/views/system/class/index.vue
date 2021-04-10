@@ -37,7 +37,6 @@
               currentPage * pageSize
             )
           "
-          :row-class-name="tableRowClassName"
         >
           <el-table-column label="班级名称" prop="name" sortable>
           </el-table-column>
@@ -212,11 +211,6 @@ export default {
         })
         .catch(() => {});
     },
-    tableRowClassName({ row }) {
-      if (row.class_status == 1) {
-        return "warning-row";
-      }
-    },
     handleDelete(id) {
       api.delCls(id).then((resp) => {
         if (resp.code === 0) {
@@ -250,23 +244,12 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.class_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.class_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.ccode.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;
       this.keyword = "";
-    },
-    handleChange(val) {
-      let college = this.colleges.filter((data) =>
-        data.college_id.includes(val)
-      );
-      let major = this.majors.filter((data) => data.major_id.includes(val));
-      if (college.length === 0) {
-        this.form.class_major_name = major[0].major_name;
-      } else {
-        this.form.class_college_name = college[0].college_name;
-      }
     },
     getGrade() {
       let date = new Date().getFullYear();

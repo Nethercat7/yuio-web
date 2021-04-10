@@ -2,31 +2,31 @@
   <div>
     <el-row class="card">
       <!-- 选项卡 -->
-        <el-col :span="12">
-          <el-button size="mini" @click="openDialog('add')" type="success"
-            >添加</el-button
-          >
-          <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning">导出</el-button>
-        </el-col>
-        <el-col :span="12" style="text-align: right">
-          <el-autocomplete
-            v-model="keyword"
-            placeholder="请输入内容"
-            size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-            :fetch-suggestions="searchSuggestions"
-          ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="resetResult"
-            >重置</el-button
-          >
-        </el-col>
+      <el-col :span="12">
+        <el-button size="mini" @click="openDialog('add')" type="success"
+          >添加</el-button
+        >
+        <el-button size="mini" type="primary">导入</el-button>
+        <el-button size="mini" type="warning">导出</el-button>
+      </el-col>
+      <el-col :span="12" style="text-align: right">
+        <el-autocomplete
+          v-model="keyword"
+          placeholder="请输入内容"
+          size="mini"
+          style="margin-right: 10px"
+          :trigger-on-focus="false"
+          :fetch-suggestions="searchSuggestions"
+        ></el-autocomplete>
+        <el-button size="mini" type="success" @click="handleSearch"
+          >搜索</el-button
+        >
+        <el-button size="mini" type="danger" @click="resetResult"
+          >重置</el-button
+        >
+      </el-col>
     </el-row>
-    
+
     <el-row class="card">
       <!-- 表格 -->
       <el-col :span="24">
@@ -40,13 +40,13 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="院系名称" prop="college_name" sortable>
+          <el-table-column label="院系名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="院系编号" prop="college_code" sortable>
+          <el-table-column label="院系编号" prop="code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="college_students" sortable>
+          <el-table-column label="毕业生数量" prop="students" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="college_status_display" sortable>
+          <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -61,7 +61,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="deleteRow(scope.row.college_id)"
+                @confirm="deleteRow(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -93,22 +93,19 @@
     >
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
-          <el-input v-model="form.college_name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="编号">
-          <el-input v-model="form.college_code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.college_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">启用</el-radio>
             <el-radio :label="1">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input
-            type="textarea"
-            v-model="form.college_description"
-          ></el-input>
+          <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -129,12 +126,7 @@ export default {
       tableDataBak: [],
       dialogVisible: false,
       type: "",
-      form: {
-        college_name: "",
-        college_code: "",
-        college_status: "",
-        college_description: "",
-      },
+      form: {},
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -181,7 +173,7 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.college_status == 1) {
+      if (row.status == 1) {
         return "warning-row";
       }
     },
@@ -199,15 +191,6 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
-        for (let i = 0; i < data.length; i++) {
-          data[i].value = data[i].college_name;
-          //将状态码转换为文本
-          if (data[i].college_status === 0) {
-            data[i].college_status_display = "正常";
-          } else {
-            data[i].college_status_display = "禁用";
-          }
-        }
         this.tableData = data;
       });
     },
@@ -233,8 +216,8 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.college_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.college_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;

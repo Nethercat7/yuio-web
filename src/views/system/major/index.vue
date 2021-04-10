@@ -17,7 +17,7 @@
           style="margin-right: 10px"
           :trigger-on-focus="false"
           :fetch-suggestions="searchSuggestions"
-          value-key="major_name"
+          value-key="name"
         ></el-autocomplete>
         <el-button size="mini" type="success" @click="handleSearch"
           >搜索</el-button
@@ -40,15 +40,15 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="专业名称" prop="major_name" sortable>
+          <el-table-column label="专业名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="专业编号" prop="major_code" sortable>
+          <el-table-column label="专业编号" prop="code" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="major_students" sortable>
+          <el-table-column label="毕业生数量" prop="students" sortable>
           </el-table-column>
-          <el-table-column label="所属院系" prop="major_college_name" sortable>
+          <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="major_status_display" sortable>
+          <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -63,7 +63,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="delMajor(scope.row.major_id)"
+                @confirm="delMajor(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -95,30 +95,30 @@
     >
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
-          <el-input v-model="form.major_name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="编号">
-          <el-input v-model="form.major_code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
-          <el-select v-model="form.major_college_id" placeholder="请选择" @change="handelChange">
+          <el-select v-model="form.college_id" placeholder="请选择" @change="handelChange">
             <el-option
               v-for="item in colleges"
-              :key="item.college_id"
-              :label="item.college_name"
-              :value="item.college_id"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.major_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">启用</el-radio>
             <el-radio :label="1">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.major_desciption"></el-input>
+          <el-input type="textarea" v-model="form.desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -188,7 +188,7 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.major_status == 1) {
+      if (row.status == 1) {
         return "warning-row";
       }
     },
@@ -208,14 +208,6 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
-        for (let i = 0; i < data.length; i++) {
-          //状态转文字
-          if (data[i].major_status == 0) {
-            data[i].major_status_display = "正常";
-          } else {
-            data[i].major_status_display = "禁用";
-          }
-        }
         this.tableData = data;
       });
       //获取院系信息
@@ -245,8 +237,8 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.major_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.major_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;
@@ -254,8 +246,8 @@ export default {
       this.total=this.tableData.length;
     },
     handelChange(){
-      let college=this.colleges.filter(data=>data.college_id.includes(this.form.major_college_id));
-      this.form.major_college_name=college[0].college_name;
+      let college=this.colleges.filter(data=>data.college_id.includes(this.form.college_id));
+      this.form.college_name=college[0].college_name;
     }
   },
   mounted() {

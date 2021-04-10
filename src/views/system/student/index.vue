@@ -447,12 +447,6 @@ export default {
     },
   },
   mounted() {
-    this.getColleges();
-    this.getMajors();
-    this.getGrade();
-    this.getClasses();
-    this.getStudents();
-    console.log(this.$route)
   },
 };
 </script>
