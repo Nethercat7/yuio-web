@@ -17,7 +17,7 @@
           style="margin-right: 10px"
           :trigger-on-focus="false"
           :fetch-suggestions="searchSuggestions"
-          value-key="student_name"
+          value-key="name"
         ></el-autocomplete>
         <el-button size="mini" type="success" @click="handleSearch"
           >搜索</el-button
@@ -50,59 +50,59 @@
                 class="demo-table-expand"
               >
                 <el-form-item label="姓名">
-                  <span>{{ props.row.student_name }}</span>
+                  <span>{{ props.row.name }}</span>
                 </el-form-item>
                 <el-form-item label="学号">
-                  <span>{{ props.row.student_code }}</span>
+                  <span>{{ props.row.code }}</span>
                 </el-form-item>
                 <el-form-item label="性别">
-                  <span>{{ props.row.student_gender_display }}</span>
+                  <span>{{ props.row.gender }}</span>
                 </el-form-item>
                 <el-form-item label="电话号码">
-                  <span>{{ props.row.student_phone }}</span>
+                  <span>{{ props.row.phone }}</span>
                 </el-form-item>
                 <el-form-item label="所属院系">
-                  <span>{{ props.row.student_college_name }}</span>
+                  <span>{{ props.row.college_name }}</span>
                 </el-form-item>
                 <el-form-item label="所属专业">
-                  <span>{{ props.row.student_major_name }}</span>
+                  <span>{{ props.row.major_name }}</span>
                 </el-form-item>
                 <el-form-item label="所属年级">
-                  <span>{{ props.row.student_grade }}</span>
+                  <span>{{ props.row.grade }}</span>
                 </el-form-item>
                 <el-form-item label="状态">
-                  <span>{{ props.row.student_status_display }}</span>
+                  <span>{{ props.row.status }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column
             label="姓名"
-            prop="student_name"
+            prop="name"
             sortable
             width="100px"
           >
           </el-table-column>
-          <el-table-column label="学号" prop="student_code" sortable>
+          <el-table-column label="学号" prop="code" sortable>
           </el-table-column>
           <el-table-column
             label="所属院系"
-            prop="student_college_name"
+            prop="college_name"
             sortable
           >
           </el-table-column>
-          <el-table-column label="所属专业" prop="student_major_name" sortable>
+          <el-table-column label="所属专业" prop="major_name" sortable>
           </el-table-column>
           <el-table-column
             label="所属年级"
-            prop="student_grade"
+            prop="grade"
             sortable
             width="150  px"
           >
           </el-table-column>
-          <el-table-column label="所属班级" prop="student_class_name" sortable>
+          <el-table-column label="所属班级" prop="class_name" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="student_status_display" sortable>
+          <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
@@ -117,7 +117,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.student_id)"
+                @confirm="handleDelete(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -162,52 +162,22 @@
         label-width="90px"
       >
         <el-form-item label="姓名">
-          <el-input v-model="form.student_name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="学号">
-          <el-input v-model="form.student_code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-radio-group v-model="form.student_gender">
+          <el-radio-group v-model="form.gender">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="电话号码">
-          <el-input v-model="form.student_phone"></el-input>
-        </el-form-item>
-        <el-form-item label="所属院系">
-          <el-select
-            v-model="form.student_college_id"
-            placeholder="请选择"
-            @change="handleChange(form.student_college_id, 'college')"
-          >
-            <el-option
-              v-for="item in colleges"
-              :key="item.college_id"
-              :label="item.college_name"
-              :value="item.college_id"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属专业">
-          <el-select
-            v-model="form.student_major_id"
-            placeholder="请选择"
-            @change="handleChange(form.student_major_id, 'major')"
-          >
-            <el-option
-              v-for="item in majors"
-              :key="item.major_id"
-              :label="item.major_name"
-              :value="item.major_id"
-            >
-            </el-option>
-          </el-select>
+          <el-input v-model="form.phone"></el-input>
         </el-form-item>
         <el-form-item label="所属年级">
-          <el-select v-model="form.student_grade" placeholder="请选择">
+          <el-select v-model="form.grade" placeholder="请选择">
             <el-option
               v-for="item in grade"
               :key="item"
@@ -218,22 +188,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所属班级">
-          <el-select
-            v-model="form.student_class_id"
-            placeholder="请选择"
-            @change="handleChange(form.student_class_id, 'class')"
-          >
-            <el-option
-              v-for="item in classes"
-              :key="item.class_id"
-              :label="item.class_name"
-              :value="item.class_id"
-            >
-            </el-option>
+          <el-select v-model="form.class_id" placeholder="请选择">
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.student_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">正常</el-radio>
             <el-radio :label="1">休学</el-radio>
             <el-radio :label="2">退学</el-radio>
@@ -242,7 +201,7 @@
         <el-form-item label="备注">
           <el-input
             type="textarea"
-            v-model="form.student_desciption"
+            v-model="form.desciption"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -271,47 +230,14 @@ export default {
       pageSize: 10,
       total: 0,
       colleges: [],
-      majors: [],
       grade: [],
-      classes: [],
     };
   },
   methods: {
-    getColleges() {
-      api.getColleges().then((resp) => {
-        this.colleges = resp.data;
-      });
-    },
-    getMajors() {
-      api.getMajors().then((resp) => {
-        this.majors = resp.data;
-      });
-    },
-    getClasses() {
-      api.getClasses().then((resp) => {
-        this.classes = resp.data;
-      });
-    },
     getStudents() {
       api.getStudents().then((resp) => {
         let data = resp.data;
         this.total = resp.data.length;
-        //状态码转文字
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].student_gender === 0) {
-            data[i].student_gender_display = "男";
-          } else if (data[i].student_gender === 1) {
-            data[i].student_gender_display = "女";
-          }
-
-          if (data[i].student_status === 0) {
-            data[i].student_status_display = "正常";
-          } else if (data[i].student_status === 1) {
-            data[i].student_status_display = "休学";
-          } else if (data[i].student_status === 2) {
-            data[i].student_status_display = "退学";
-          }
-        }
         this.tableDataBak = data;
         this.tableData = data;
       });
@@ -355,7 +281,7 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.student_status != 0) {
+      if (row.status != 0) {
         return "warning-row";
       }
     },
@@ -393,29 +319,13 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.student_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.student_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;
       this.total = this.tableData.length;
       this.keyword = "";
-    },
-    handleChange(val, type) {
-      if (type === "college") {
-        let college = this.colleges.filter((data) =>
-          data.college_id.includes(val)
-        )[0];
-        this.form.student_college_name = college.college_name;
-      } else if (type === "major") {
-        let major = this.majors.filter((data) =>
-          data.major_id.includes(val)
-        )[0];
-        this.form.student_major_name = major.major_name;
-      } else if (type === "class") {
-        let cls = this.classes.filter((data) => data.class_id.includes(val))[0];
-        this.form.student_class_name = cls.class_name;
-      }
     },
     getGrade() {
       let date = new Date().getFullYear();
@@ -446,8 +356,7 @@ export default {
         });
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 
