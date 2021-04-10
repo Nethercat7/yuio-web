@@ -70,26 +70,19 @@
                 <el-form-item label="所属年级">
                   <span>{{ props.row.grade }}</span>
                 </el-form-item>
+                <el-form-item label="所属班级">
+                  <span>{{ props.row.cls_name }}</span>
+                </el-form-item>
                 <el-form-item label="状态">
                   <span>{{ props.row.status }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column
-            label="姓名"
-            prop="name"
-            sortable
-            width="100px"
-          >
+          <el-table-column label="姓名" prop="name" sortable width="100px">
           </el-table-column>
-          <el-table-column label="学号" prop="code" sortable>
-          </el-table-column>
-          <el-table-column
-            label="所属院系"
-            prop="college_name"
-            sortable
-          >
+          <el-table-column label="学号" prop="code" sortable> </el-table-column>
+          <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
           <el-table-column label="所属专业" prop="major_name" sortable>
           </el-table-column>
@@ -100,7 +93,7 @@
             width="150  px"
           >
           </el-table-column>
-          <el-table-column label="所属班级" prop="class_name" sortable>
+          <el-table-column label="所属班级" prop="cls_name" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
@@ -173,9 +166,6 @@
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="电话号码">
-          <el-input v-model="form.phone"></el-input>
-        </el-form-item>
         <el-form-item label="所属年级">
           <el-select v-model="form.grade" placeholder="请选择">
             <el-option
@@ -188,8 +178,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所属班级">
-          <el-select v-model="form.class_id" placeholder="请选择">
-          </el-select>
+          <el-cascader
+            v-model="form.container"
+            :options="cascaderData"
+            :props="cascaderProps"
+          >
+          </el-cascader>
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -199,10 +193,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input
-            type="textarea"
-            v-model="form.desciption"
-          ></el-input>
+          <el-input type="textarea" v-model="form.desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -229,17 +220,27 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      colleges: [],
+      cascaderData: [],
       grade: [],
+      cascaderProps: {
+        value: "id",
+        label: "name",
+      },
     };
   },
   methods: {
-    getStudents() {
+    getData() {
+      //获取学生信息
       api.getStudents().then((resp) => {
-        let data = resp.data;
-        this.total = resp.data.length;
-        this.tableDataBak = data;
-        this.tableData = data;
+        this.total = resp.obj.length;
+        this.tableDataBak = resp.obj;
+        this.tableData = resp.obj;
+      });
+      //获取年级信息
+      this.getGrade();
+      //获取院系、专业和班级信息
+      api.getColleges().then((resp) => {
+        this.cascaderData = resp.obj;
       });
     },
     openDialog(type, row) {
@@ -258,7 +259,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getStudents();
+          if (resp.code === 0) this.getData();
         });
       } else {
         api.updStudent(this.form).then((resp) => {
@@ -266,7 +267,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getStudents();
+          if (resp.code === 0) this.getData();
         });
       }
       this.form = {};
@@ -281,14 +282,14 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.status != 0) {
-        return "warning-row";
+      if (row.status === 1) {
+        return "aberrant-row";
       }
     },
     handleDelete(id) {
       api.delStudent(id).then((resp) => {
-        if (resp.code === 1) {
-          this.getStudents();
+        if (resp.code === 0) {
+          this.getData();
         }
         this.$message({
           message: resp.msg,
@@ -356,7 +357,9 @@ export default {
         });
     },
   },
-  mounted() {},
+  mounted() {
+    this.getData();
+  },
 };
 </script>
 

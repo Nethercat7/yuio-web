@@ -63,7 +63,7 @@ let api={
         return http.get(`${request}/student/get`,params)
     },
     delStudent(params){
-        return http.get(`${request}/student/del`,params)
+        return http.get(`${request}/student/del?id=`+params)
     },
     updStudent(params){
         return http.post(`${request}/student/upd`,params)

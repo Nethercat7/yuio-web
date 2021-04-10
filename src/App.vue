@@ -51,18 +51,6 @@ body {
   text-align: right;
 }
 
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
-
-.mb-20 {
-  margin-bottom: 20px;
-}
-
 .text-center{
   display: block;
   text-align: center;
@@ -78,5 +66,13 @@ body {
   margin-bottom: 10px;
   padding: 10px;
   background-color: #fff;
+}
+
+/* 
+表格行颜色样式
+aberrant-row：状态为禁用或者停用时使用
+ */
+ .el-table .aberrant-row {
+  background-color: oldlace;
 }
 </style>
