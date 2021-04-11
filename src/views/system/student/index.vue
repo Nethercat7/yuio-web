@@ -120,7 +120,7 @@
                 <el-button size="mini" type="primary">更多</el-button>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>
-                    <span @click="resetPwd()">重置密码</span>
+                    <span @click="resetPwd(scope.row.id)">重置密码</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -226,6 +226,7 @@ export default {
         value: "id",
         label: "name",
       },
+      reset:{}
     };
   },
   methods: {
@@ -337,23 +338,26 @@ export default {
       }
       this.grade = dateArr;
     },
-    resetPwd() {
+    resetPwd(id) {
       this.$confirm("此操作将会重置的登录密码, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "成功重置",
+          this.reset={
+            type:1,
+            key:id
+          }
+          api.resetPwd(this.reset).then((resp) => {
+            this.$message({
+              type: resp.type,
+              message: resp.msg,
+            });
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消",
-          });
+          return null;
         });
     },
   },
