@@ -6,6 +6,7 @@
     @current-change="handlePageChange"
     @size-change="handleSizeChange"
     style="margin-top: 10px; text-align: center"
+    :hide-on-single-page="true"
   >
   </el-pagination>
 </template>

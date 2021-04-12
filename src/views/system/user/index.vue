@@ -211,7 +211,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getData();
+          if (resp.code === 0) this.getData();
         });
       } else {
         api.updUser(this.form).then((resp) => {
@@ -219,7 +219,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getData();
+          if (resp.code === 0) this.getData();
         });
       }
       this.form = {};

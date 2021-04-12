@@ -73,7 +73,7 @@ let api={
         return http.post(`${request}/usr/add`,params)
     },
     getUsers(params){
-        return http.get(`${request}/user/get`,params)
+        return http.get(`${request}/usr/get`,params)
     },
     delUser(params){
         return http.get(`${request}/user/del`,params)
