@@ -79,7 +79,7 @@ let api={
         return http.get(`${request}/usr/del?id=`+params)
     },
     updUser(params){
-        return http.post(`${request}/user/upd`,params)
+        return http.post(`${request}/usr/upd`,params)
     },
     //角色管理
     getRoles(params){
