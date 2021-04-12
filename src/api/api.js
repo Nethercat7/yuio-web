@@ -113,6 +113,9 @@ let api={
     resetPwd(params){
         return http.post(`${request}/sys/resetPwd`,params)
     },
+    login(params){
+        return http.post(`${request}/sys/login`,params)
+    }
 }
 
 export default api

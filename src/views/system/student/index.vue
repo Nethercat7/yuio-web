@@ -346,7 +346,7 @@ export default {
       })
         .then(() => {
           this.reset={
-            type:1,
+            isUser:false,
             key:id
           }
           api.resetPwd(this.reset).then((resp) => {

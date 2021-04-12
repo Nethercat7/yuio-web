@@ -5,10 +5,11 @@ Vue.use(Router)
 
 //Layout
 import Layout from '@/layout/'
+import Login from '@/layout/login'
 
 //各模块路由
 import system from './modules/system'
-import statistics from  './modules/statistics'
+import statistics from './modules/statistics'
 import compare from './modules/compare'
 
 // 解决路由重复控制台报错
@@ -21,6 +22,10 @@ const constantRoutes = [
     {
         path: '/',
         component: Layout
+    },
+    {
+        path: '/login',
+        component: Login
     },
     system,
     statistics,
