@@ -240,7 +240,7 @@ export default {
     },
     handleDelete(id) {
       api.delUser(id).then((resp) => {
-        if (resp.code === 1) {
+        if (resp.code === 0) {
           this.getData();
         }
         this.$message({

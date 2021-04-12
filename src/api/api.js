@@ -76,7 +76,7 @@ let api={
         return http.get(`${request}/usr/get`,params)
     },
     delUser(params){
-        return http.get(`${request}/user/del`,params)
+        return http.get(`${request}/usr/del?id=`+params)
     },
     updUser(params){
         return http.post(`${request}/user/upd`,params)
