@@ -69,11 +69,11 @@ let api={
         return http.post(`${request}/student/upd`,params)
     },
     //用户管理
+    addUser(params){
+        return http.post(`${request}/usr/add`,params)
+    },
     getUsers(params){
         return http.get(`${request}/user/get`,params)
-    },
-    addUser(params){
-        return http.post(`${request}/user/add`,params)
     },
     delUser(params){
         return http.get(`${request}/user/del`,params)

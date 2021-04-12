@@ -14,7 +14,7 @@
           size="mini"
           style="margin-right: 10px"
           :trigger-on-focus="false"
-          value-key="user_name"
+          value-key="name"
           v-model="keyword"
           :fetch-suggestions="searchSuggestions"
         ></el-autocomplete>
@@ -39,16 +39,16 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="姓名" prop="user_name"></el-table-column>
-          <el-table-column label="账号" prop="user_account"></el-table-column>
+          <el-table-column label="姓名" prop="name"></el-table-column>
+          <el-table-column label="账号" prop="account"></el-table-column>
           <el-table-column
             label="性别"
-            prop="user_gender_display"
+            prop="gender"
           ></el-table-column>
-          <el-table-column label="电话号码" prop="user_phone"></el-table-column>
+          <el-table-column label="电话号码" prop="phone"></el-table-column>
           <el-table-column
             label="状态"
-            prop="user_status_display"
+            prop="status"
           ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
@@ -63,7 +63,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.user_id)"
+                @confirm="handleDelete(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -98,31 +98,31 @@
         label-width="90px"
       >
         <el-form-item label="姓名">
-          <el-input v-model="form.user_name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="form.user_account"></el-input>
+          <el-input v-model="form.account"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-radio-group v-model="form.user_gender">
+          <el-radio-group v-model="form.gender">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="电话号码">
-          <el-input v-model="form.user_phone"></el-input>
+          <el-input v-model="form.phone"></el-input>
         </el-form-item>
         <el-form-item label="电子邮箱">
-          <el-input v-model="form.user_email"></el-input>
+          <el-input v-model="form.email"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.user_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">正常</el-radio>
             <el-radio :label="1">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="角色">
-          <el-select v-model="form.user_role" multiple filterable placeholder="请选择">
+          <el-select v-model="form.role" multiple filterable placeholder="请选择">
             <el-option
               v-for="item in roles"
               :key="item.role_id"
@@ -133,7 +133,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.user_desciption"></el-input>
+          <el-input type="textarea" v-model="form.desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -168,29 +168,10 @@ export default {
   methods: {
     getData() {
       api.getUsers().then((resp) => {
-        let data = resp.data;
-        //将性别和状态数据字典转换为文字
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].user_gender === 0) {
-            data[i].user_gender_display = "男";
-          } else {
-            data[i].user_gender_display = "女";
-          }
-
-          if (data[i].user_status === 0) {
-            data[i].user_status_display = "正常";
-          } else {
-            data[i].user_status_display = "停用";
-          }
-        }
-        this.tableData = data;
-        this.tableDataBak = data;
-        this.total = data.length;
+        this.tableData = resp.obj;
+        this.tableDataBak = resp.obj;
+        this.total = resp.obj.length;
       });
-      //获取角色
-      api.getRoles().then(resp=>{
-        this.roles=resp.data;
-      })
     },
     searchSuggestions(queryString, cb) {
       let restaurants = this.tableDataBak;
@@ -207,8 +188,8 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.user_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.user_account.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.account.toLowerCase().includes(this.keyword.toLowerCase());
     },
     handleReset() {
       this.tableData = this.tableDataBak;
@@ -253,7 +234,7 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.user_status != 0) {
+      if (row.status != 0) {
         return "warning-row";
       }
     },
