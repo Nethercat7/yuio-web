@@ -82,11 +82,11 @@ let api={
         return http.post(`${request}/usr/upd`,params)
     },
     //角色管理
-    getRoles(params){
-        return http.get(`${request}/role/get`,params)
-    },
     addRole(params){
         return http.post(`${request}/role/add`,params)
+    },
+    getRoles(params){
+        return http.get(`${request}/role/get`,params)
     },
     updRole(params){
         return http.post(`${request}/role/upd`,params)

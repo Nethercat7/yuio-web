@@ -14,7 +14,7 @@
           size="mini"
           style="margin-right: 10px"
           :trigger-on-focus="false"
-          value-key="role_name"
+          value-key="name"
           v-model="keyword"
           :fetch-suggestions="searchSuggestions"
         ></el-autocomplete>
@@ -39,15 +39,14 @@
           "
           :row-class-name="tableRowClassName"
         >
-          <el-table-column label="名称" prop="role_name"></el-table-column>
-          <el-table-column label="代号" prop="role_code"></el-table-column>
+          <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column
             label="创建时间"
-            prop="role_create_time"
+            prop="create_time"
           ></el-table-column>
           <el-table-column
             label="状态"
-            prop="role_status_display"
+            prop="status"
           ></el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -62,7 +61,7 @@
                 style="padding: 7px 15px"
                 icon="el-icon-info"
                 icon-color="red"
-                @confirm="handleDelete(scope.row.role_id)"
+                @confirm="handleDelete(scope.row.id)"
               >
                 <el-button slot="reference" size="mini" type="danger"
                   >删除</el-button
@@ -97,13 +96,10 @@
         label-width="90px"
       >
         <el-form-item label="名称">
-          <el-input v-model="form.role_name"></el-input>
-        </el-form-item>
-        <el-form-item label="代号">
-          <el-input v-model="form.role_code"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.role_status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="0">正常</el-radio>
             <el-radio :label="1">停用</el-radio>
           </el-radio-group>
@@ -125,7 +121,7 @@
           ></el-tree>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.role_desciption"></el-input>
+          <el-input type="textarea" v-model="form.desciption"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -153,7 +149,7 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: { role_perms: 1 },
+      form: { perms: 1 },
       customize: false,
       value: 0,
       defaultProps: {
@@ -166,22 +162,9 @@ export default {
   methods: {
     getData() {
       api.getRoles().then((resp) => {
-        let data = resp.data;
-        //状态数据字典转换为文字
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].role_status === 0) {
-            data[i].role_status_display = "正常";
-          } else {
-            data[i].role_status_display = "停用";
-          }
-        }
-        this.tableData = data;
-        this.tableDataBak = data;
-        this.total = data.length;
-      });
-      //获取权限
-      api.getPerms().then((resp) => {
-        this.perms = resp.data;
+        this.tableData = resp.obj;
+        this.tableDataBak = resp.obj;
+        this.total = resp.obj.length;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -199,8 +182,8 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.role_name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.role_code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
+        data.code.toLowerCase().includes(this.keyword.toLowerCase());
     },
     handleReset() {
       this.tableData = this.tableDataBak;
@@ -222,7 +205,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getData();
+          if (resp.code === 0) this.getData();
         });
       } else {
         api.updRole(this.form).then((resp) => {
@@ -230,7 +213,7 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 1) this.getData();
+          if (resp.code === 0) this.getData();
         });
       }
       this.form = {};
@@ -245,13 +228,13 @@ export default {
         .catch(() => {});
     },
     tableRowClassName({ row }) {
-      if (row.role_status != 0) {
+      if (row.status != 0) {
         return "warning-row";
       }
     },
     handleDelete(id) {
       api.delRole(id).then((resp) => {
-        if (resp.code === 1) {
+        if (resp.code === 0) {
           this.getData();
         }
         this.$message({
@@ -261,15 +244,15 @@ export default {
       });
     },
     handleNodeClick() {
-      this.form.role_perms = this.$refs.tree.getCheckedKeys();
+      this.form.perms = this.$refs.tree.getCheckedKeys();
     },
     handlePermsSelect() {
       if (this.value === 1) {
         this.customize = true;
-        this.form.role_perms = [];
+        this.form.perms = [];
       } else {
         this.customize = false;
-        this.form.role_perms = 1;
+        this.form.perms = 1;
       }
     },
   },
