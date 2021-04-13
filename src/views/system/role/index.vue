@@ -37,7 +37,6 @@
               currentPage * pageSize
             )
           "
-          :row-class-name="tableRowClassName"
         >
           <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column
@@ -226,11 +225,6 @@ export default {
           this.form = {};
         })
         .catch(() => {});
-    },
-    tableRowClassName({ row }) {
-      if (row.status != 0) {
-        return "warning-row";
-      }
     },
     handleDelete(id) {
       api.delRole(id).then((resp) => {
