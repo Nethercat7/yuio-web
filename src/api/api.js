@@ -88,11 +88,11 @@ let api={
     getRoles(params){
         return http.get(`${request}/role/get`,params)
     },
+    delRole(params){
+        return http.get(`${request}/role/del?id=`+params)
+    },
     updRole(params){
         return http.post(`${request}/role/upd`,params)
-    },
-    delRole(params){
-        return http.get(`${request}/role/del`,params)
     },
     //权限管理
     getPerms(params){
