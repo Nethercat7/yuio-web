@@ -41,15 +41,9 @@
         >
           <el-table-column label="姓名" prop="name"></el-table-column>
           <el-table-column label="账号" prop="account"></el-table-column>
-          <el-table-column
-            label="性别"
-            prop="gender"
-          ></el-table-column>
+          <el-table-column label="性别" prop="gender"></el-table-column>
           <el-table-column label="电话号码" prop="phone"></el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-          ></el-table-column>
+          <el-table-column label="状态" prop="status"></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -130,12 +124,17 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="角色">
-          <el-select v-model="form.role" multiple filterable placeholder="请选择">
+          <el-select
+            v-model="form.roles"
+            multiple
+            filterable
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in roles"
-              :key="item.role_id"
-              :label="item.role_name"
-              :value="item.role_id"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -170,7 +169,7 @@ export default {
       dialogVisible: false,
       type: "",
       form: {},
-      roles:[]
+      roles: [],
     };
   },
   methods: {
@@ -179,6 +178,9 @@ export default {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
+      });
+      api.getRoles().then((resp) => {
+        this.roles = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -264,10 +266,10 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.reset={
-            isUser:true,
-            key:id
-          }
+          this.reset = {
+            isUser: true,
+            key: id,
+          };
           api.resetPwd(this.reset).then((resp) => {
             this.$message({
               type: resp.type,
