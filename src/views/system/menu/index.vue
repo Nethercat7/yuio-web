@@ -225,7 +225,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delUser(id).then((resp) => {
+      api.delMenu(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }

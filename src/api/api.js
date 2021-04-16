@@ -122,6 +122,9 @@ let api = {
     },
     getMenu(params){
         return http.get(`${request}/menu/get`,params)
+    },
+    delMenu(params){
+        return http.get(`${request}/menu/del?id=`+params)
     }
 }
 
