@@ -43,10 +43,7 @@
             label="创建时间"
             prop="create_time"
           ></el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-          ></el-table-column>
+          <el-table-column label="状态" prop="status"></el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button
@@ -115,7 +112,7 @@
             show-checkbox
             default-expand-all
             ref="tree"
-            node-key="perms_id"
+            node-key="id"
             @check-change="handleNodeClick"
           ></el-tree>
         </el-form-item>
@@ -153,7 +150,7 @@ export default {
       value: 0,
       defaultProps: {
         children: "children",
-        label: "perms_name",
+        label: "name",
       },
       perms: [],
     };
@@ -164,6 +161,9 @@ export default {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
+      });
+      api.getMenu().then((resp) => {
+        this.perms = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -190,11 +190,20 @@ export default {
     },
     openDialog(type, row) {
       this.dialogVisible = true;
+      this.value=0;
+      this.customize=false;
       if (type == "add") {
         this.type = type;
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
+        if (row.perms.length > 0) {
+          this.value = 1;
+          this.customize = true;
+          this.$nextTick(() => {
+            this.$refs.tree.setCheckedKeys(row.perms);
+          });
+        }
       }
     },
     submitDialog() {
