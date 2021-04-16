@@ -125,6 +125,9 @@ let api = {
     },
     delMenu(params){
         return http.get(`${request}/menu/del?id=`+params)
+    },
+    updMenu(params){
+        return http.post(`${request}/menu/upd`,params)
     }
 }
 

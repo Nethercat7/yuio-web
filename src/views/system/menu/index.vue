@@ -200,7 +200,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updUser(this.form).then((resp) => {
+        api.updMenu(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
