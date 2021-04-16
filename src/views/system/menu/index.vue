@@ -45,6 +45,7 @@
           <el-table-column label="请求地址" prop="url"></el-table-column>
           <el-table-column label="图标" prop="icon"></el-table-column>
           <el-table-column label="状态" prop="status"></el-table-column>
+          <el-table-column label="创建时间" prop="create_time"></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -64,14 +65,6 @@
                   >删除</el-button
                 >
               </el-popconfirm>
-              <el-dropdown>
-                <el-button size="mini" type="primary">更多</el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <span @click="resetPwd(scope.row.id)">重置密码</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
@@ -160,13 +153,10 @@ export default {
   },
   methods: {
     getData() {
-      api.getUsers().then((resp) => {
+      api.getMenu().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
-      });
-      api.getRoles().then((resp) => {
-        this.roles = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {

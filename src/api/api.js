@@ -119,6 +119,9 @@ let api = {
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
+    },
+    getMenu(params){
+        return http.get(`${request}/menu/get`,params)
     }
 }
 
