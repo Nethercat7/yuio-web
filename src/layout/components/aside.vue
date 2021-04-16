@@ -41,6 +41,9 @@
         <el-menu-item index="2-6" @click="$router.push('/system/role')"
           >角色管理</el-menu-item
         >
+        <el-menu-item index="2-7" @click="$router.push('/system/menu')"
+          >菜单管理</el-menu-item
+        >
       </el-submenu>
 
       <el-submenu index="3">

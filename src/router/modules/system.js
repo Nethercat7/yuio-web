@@ -42,6 +42,11 @@ const system = {
         component: () => import('@/views/system/role/'),
         name: 'RoleManagement',
         meta: { title: '角色管理' }
+    }, {
+        path: 'menu',
+        component: () => import('@/views/system/menu/'),
+        name: 'MenuManagement',
+        meta: { title: '菜单管理' }
     }]
 }
 
