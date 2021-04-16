@@ -39,6 +39,8 @@
             )
           "
           :row-class-name="tableRowClassName"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          row-key="id"
         >
           <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column label="标识" prop="mark"></el-table-column>
@@ -121,6 +123,17 @@
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
+        <el-form-item label="上级菜单">
+          <el-cascader
+            v-model="form.pid"
+            :options="tableData"
+            :props="cascaderProps"
+            filterable
+            clearable
+            ref="cascader"
+            :show-all-levels="false"
+          ></el-cascader>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog()">取 消</el-button>
@@ -148,7 +161,12 @@ export default {
       dialogVisible: false,
       type: "",
       form: {},
-      roles: [],
+      cascaderProps: {
+        value: "id",
+        label: "name",
+        checkStrictly: true,
+        emitPath:false
+      },
     };
   },
   methods: {
