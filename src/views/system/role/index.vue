@@ -181,8 +181,7 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase())
     },
     handleReset() {
       this.tableData = this.tableDataBak;
