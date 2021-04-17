@@ -5,8 +5,9 @@ Vue.use(Router)
 
 //Layout
 import Layout from '@/layout/'
-import Login from '@/layout/login'
+import UserLogin from '@/layout/login'
 import Container from '@/container/'
+import StudentLogin from '@/container/login'
 
 //各模块路由
 import system from './modules/system'
@@ -26,12 +27,16 @@ const constantRoutes = [
         component:Container
     },
     {
+        path:'/login',
+        component:StudentLogin
+    },
+    {
         path: '/admin',
         component: Layout
     },
     {
         path: '/admin/login',
-        component: Login
+        component: UserLogin
     },
     system,
     statistics,

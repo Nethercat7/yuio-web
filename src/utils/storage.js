@@ -1,12 +1,26 @@
-let storage={
-    set(k,v){
-        localStorage.setItem(k,JSON.stringify(v))
+import jwt from 'jsonwebtoken'
+
+let storage = {
+    set(k, v) {
+        localStorage.setItem(k, JSON.stringify(v))
     },
-    get(k){
+    get(k) {
         return localStorage.getItem(k)
     },
-    remove(k){
+    remove(k) {
         localStorage.removeItem(k)
+    },
+    parse(k) {
+        return jwt.decode(localStorage.getItem(k))
+    },
+    setUser(v) {
+        localStorage.setItem('token', JSON.stringify(v))
+    },
+    getUser() {
+        return jwt.decode(localStorage.getItem('token'))
+    },
+    removeUser() {
+        localStorage.removeItem('token')
     }
 }
 

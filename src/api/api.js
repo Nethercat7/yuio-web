@@ -116,6 +116,9 @@ let api = {
     login(params) {
         return http.post(`${request}/sys/login`, params)
     },
+    studentLogin(params){
+        return http.post(`${request}/sys/studentLogin`,params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
