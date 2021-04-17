@@ -29,7 +29,7 @@
         <el-menu-item index="2-2" @click="$router.push('/system/major')"
           >专业管理</el-menu-item
         >
-        <el-menu-item index="2-3" @click="$router.push('/system/class')"
+        <el-menu-item index="2-3" @click="$router.push('/system/cls')"
           >班级管理</el-menu-item
         >
         <el-menu-item index="2-4" @click="$router.push('/system/student')"

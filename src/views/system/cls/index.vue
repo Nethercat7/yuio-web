@@ -40,8 +40,6 @@
         >
           <el-table-column label="班级名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="毕业生数量" prop="students" sortable>
-          </el-table-column>
           <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
           <el-table-column label="所属专业" prop="major_name" sortable>
@@ -169,6 +167,7 @@ export default {
       //获取学院
       api.getColleges().then((resp) => {
         this.colleges = resp.obj;
+        console.log(resp.obj);
       });
       //获取年级
       this.getGrade();

@@ -23,9 +23,9 @@ const system = {
         meta: { title: '专业管理' }
     },
     {
-        path: 'class',
-        component: () => import('@/views/system/class/'),
-        name: "ClassManagement",
+        path: 'cls',
+        component: () => import('@/views/system/cls/'),
+        name: "ClsManagement",
         meta: { title: '班级管理' }
     }, {
         path: 'student',
