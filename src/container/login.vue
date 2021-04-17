@@ -43,10 +43,15 @@ export default {
   methods: {
     login() {
       api.studentLogin(this.form).then((resp) => {
-        storage.set("token",resp.obj)
-        console.log(storage.get('token'));
+        if (resp.code === 0) {
+          storage.set("token", resp.obj);
+          this.$router.push("/collect/eStatus");
+        }
       });
     },
+  },
+  mounted() {
+    
   },
 };
 </script>

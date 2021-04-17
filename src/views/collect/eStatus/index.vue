@@ -4,8 +4,8 @@
       <el-col :span="24">
         <el-form ref="form" v-model="form" label-suffix=":">
           <div>
-            <span>姓名:xxx</span>
-            <span style="padding-left: 20px">学号:xxx</span>
+            <span>姓名:{{subject.name}}</span>
+            <span style="padding-left: 20px">学号:{{subject.code}}</span>
           </div>
 
           <el-divider></el-divider>
@@ -95,6 +95,7 @@
 import cityies from "@/data/cityies";
 import plan from "@/data/plan";
 import job from "@/data/job";
+import storage from '@/utils/storage'
 
 export default {
   name: "EStatusCollect",
@@ -118,12 +119,16 @@ export default {
         children: "children",
         emitPath:false,
       },
+      subject:{}
     };
   },
   methods:{
       submit(){
           console.log(this.form);
       }
+  },
+  mounted(){
+    this.subject=storage.getSubject();
   }
 };
 </script>

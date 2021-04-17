@@ -5,7 +5,7 @@ let storage = {
         localStorage.setItem(k, JSON.stringify(v))
     },
     get(k) {
-        return localStorage.getItem(k)
+        return localStorage.getItem(k).split('"').join("")
     },
     remove(k) {
         localStorage.removeItem(k)
@@ -13,13 +13,13 @@ let storage = {
     parse(k) {
         return jwt.decode(localStorage.getItem(k))
     },
-    setUser(v) {
+    setSubject(v) {
         localStorage.setItem('token', JSON.stringify(v))
     },
-    getUser() {
-        return jwt.decode(localStorage.getItem('token'))
+    getSubject() {
+        return jwt.verify(this.get('token'),"*******")
     },
-    removeUser() {
+    removeSubject() {
         localStorage.removeItem('token')
     }
 }
