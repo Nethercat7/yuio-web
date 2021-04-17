@@ -1,0 +1,47 @@
+let plan=[
+    {
+        value:0,
+        label:'继续找工作'
+    },
+    {
+        value:1,
+        label:'考公务员'
+    },
+    {
+        value:2,
+        label:'考研'
+    },
+    {
+        value:3,
+        label:'研究生复试'
+    },
+    {
+        value:4,
+        label:'考三支一扶'
+    },
+    {
+        value:5,
+        label:'考西部计划志愿者'
+    },
+    {
+        value:6,
+        label:'考选调生'
+    },{
+        value:7,
+        label:'二战考研'
+    },{
+        value:8,
+        label:'二战考研并继续找工作'
+    },{
+        value:9,
+        label:'参军'
+    },{
+        value:10,
+        label:'不想工作'
+    },{
+        value:11,
+        label:'其他'
+    }
+]
+
+export default plan

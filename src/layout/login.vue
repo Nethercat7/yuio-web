@@ -4,17 +4,11 @@
       <el-col :span="7" class="login">
         <div class="login-form">
           <el-form label-suffix=":">
-            <el-form-item :label="form.isUser ? '账号' : '学号'">
+            <el-form-item label="账号">
               <el-input v-model="form.key"></el-input>
             </el-form-item>
             <el-form-item label="密码">
               <el-input v-model="form.pwd" type="password"></el-input>
-            </el-form-item>
-            <el-form-item label="类型">
-              <el-radio-group v-model="form.isUser">
-                <el-radio :label="true">管理员</el-radio>
-                <el-radio :label="false">学生</el-radio>
-              </el-radio-group>
             </el-form-item>
             <el-form-item>
               <el-row>
