@@ -42,10 +42,6 @@
         >
           <el-table-column label="院系名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="院系编号" prop="code" sortable>
-          </el-table-column>
-          <el-table-column label="毕业生数量" prop="students" sortable>
-          </el-table-column>
           <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
@@ -94,9 +90,6 @@
       <el-form ref="form" :model="form">
         <el-form-item label="名称">
           <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="编号">
-          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
