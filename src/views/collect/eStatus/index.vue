@@ -136,17 +136,23 @@ export default {
   },
   methods: {
     submit() {
-      api.saveEmploymentStatus(this.form).then(resp=>{
+      api.saveEmploymentStatus(this.form).then((resp) => {
         this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
-      })
+          message: resp.msg,
+          type: resp.type,
+        });
+      });
+    },
+    getData() {
+      api.getEStatus(this.subject.id).then((resp) => {
+        this.form = resp.obj;
+      });
     },
   },
   mounted() {
     this.subject = storage.getSubject();
     this.form.student_id = this.subject.id;
+    this.getData();
   },
 };
 </script>

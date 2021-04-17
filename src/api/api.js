@@ -118,6 +118,9 @@ let api = {
     saveEmploymentStatus(params){
         return http.post(`${request}/sys/saveEmploymentStatus`,params)
     },
+    getEStatus(params){
+        return http.get(`${request}/sys/getEStatus?id=`+params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
