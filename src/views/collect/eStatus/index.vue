@@ -69,18 +69,16 @@
               </el-select>
             </el-form-item>
           </template>
-          <template v-if="!form.employment">
-            <el-form-item label="接下来规划">
-              <el-select v-model="form.plan">
-                <el-option
-                  v-for="item in planList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </template>
+          <el-form-item label="接下来规划">
+            <el-select v-model="form.plan">
+              <el-option
+                v-for="item in planList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-button type="primary" @click="submit()">提交</el-button>
         </el-form>
       </el-col>
