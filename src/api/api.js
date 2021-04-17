@@ -105,10 +105,6 @@ let api = {
     getERateTotal(params) {
         return http.get(`${request}/eRate/getTotal`, params)
     },
-    //城市API
-    getCityies(params) {
-        return http.get(`${request}/cityies/get`, params);
-    },
     //系统功能
     resetPwd(params) {
         return http.post(`${request}/sys/resetPwd`, params)
@@ -118,6 +114,9 @@ let api = {
     },
     studentLogin(params){
         return http.post(`${request}/sys/studentLogin`,params)
+    },
+    saveEmploymentStatus(params){
+        return http.post(`${request}/sys/saveEmploymentStatus`,params)
     },
     //菜单管理
     addMenu(params) {

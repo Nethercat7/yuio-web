@@ -4,8 +4,8 @@
       <el-col :span="24">
         <el-form ref="form" v-model="form" label-suffix=":">
           <div>
-            <span>姓名:{{subject.name}}</span>
-            <span style="padding-left: 20px">学号:{{subject.code}}</span>
+            <span>姓名:{{ subject.name }}</span>
+            <span style="padding-left: 20px">学号:{{ subject.code }}</span>
           </div>
 
           <el-divider></el-divider>
@@ -21,7 +21,7 @@
           </el-form-item>
           <el-form-item label="意向岗位">
             <el-cascader
-              v-model="form.intention_post"
+              v-model="form.intention_work"
               :options="jobList"
               :props="jProps"
               filterable
@@ -38,7 +38,7 @@
           </el-form-item>
           <template v-if="form.employment">
             <el-form-item label="单位名称">
-              <el-input></el-input>
+              <el-input v-model="form.company"></el-input>
             </el-form-item>
             <el-form-item label="所在城市">
               <el-cascader
@@ -51,7 +51,7 @@
             </el-form-item>
             <el-form-item label="岗位类型">
               <el-cascader
-                v-model="form.post"
+                v-model="form.work_type"
                 :options="jobList"
                 :props="jProps"
                 filterable
@@ -60,15 +60,12 @@
             </el-form-item>
             <el-form-item label="目前状态">
               <el-select v-model="form.status">
-                  <el-option :value="0">
-                      已签约未交三方
-                  </el-option>
-                  <el-option :value="1">
-                      未签约未交三方
-                  </el-option>
-                  <el-option :value="2">
-                      已签约已交三方
-                  </el-option>
+                <el-option
+                  v-for="item in status"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
               </el-select>
             </el-form-item>
           </template>
@@ -95,7 +92,8 @@
 import cityies from "@/data/cityies";
 import plan from "@/data/plan";
 import job from "@/data/job";
-import storage from '@/utils/storage'
+import storage from "@/utils/storage";
+import api from "@/api/api";
 
 export default {
   name: "EStatusCollect",
@@ -109,7 +107,7 @@ export default {
         value: "name",
         label: "name",
         children: "cityList",
-        emitPath:false,
+        emitPath: false,
       },
       planList: plan,
       jobList: job,
@@ -117,19 +115,39 @@ export default {
         value: "name",
         label: "name",
         children: "children",
-        emitPath:false,
+        emitPath: false,
       },
-      subject:{}
+      subject: {},
+      status: [
+        {
+          value: 0,
+          label: "已签约未交三方",
+        },
+        {
+          value: 1,
+          label: "未签约未交三方",
+        },
+        {
+          value: 2,
+          label: "已签约已交三方",
+        },
+      ],
     };
   },
-  methods:{
-      submit(){
-          console.log(this.form);
-      }
+  methods: {
+    submit() {
+      api.saveEmploymentStatus(this.form).then(resp=>{
+        this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+      })
+    },
   },
-  mounted(){
-    this.subject=storage.getSubject();
-  }
+  mounted() {
+    this.subject = storage.getSubject();
+    this.form.student_id = this.subject.id;
+  },
 };
 </script>
 
