@@ -124,6 +124,9 @@ let api = {
     getCollegeAndMajor(params){
         return http.get(`${request}/sys/getCollegeAndMajor`,params)
     },
+    getFullOrg(params){
+        return http.get(`${request}/sys/getFullOrg`,params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)

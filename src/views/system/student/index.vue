@@ -240,7 +240,7 @@ export default {
       //获取年级信息
       this.getGrade();
       //获取院系、专业和班级信息
-      api.getColleges().then((resp) => {
+      api.getFullOrg().then((resp) => {
         this.cascaderData = resp.obj;
       });
     },
