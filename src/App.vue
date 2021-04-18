@@ -68,6 +68,10 @@ body {
   background-color: #fff;
 }
 
+.mb-20{
+  margin-bottom: 20px;
+}
+
 /* 
 表格行颜色样式
 aberrant-row：状态为禁用或者停用时使用
