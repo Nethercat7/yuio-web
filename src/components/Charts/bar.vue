@@ -68,28 +68,6 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      yAxis: {
-        type: "value",
-        axisLabel: {
-          show: true,
-          interval: "auto",
-          //formatter: this.showPercentage ? "{value}%" : "{value}",
-          formatter: "{value}" + this.suffix,
-        },
-      },
-      xAxis: {
-        show: this.showName,
-        type: "category",
-        data: this.name,
-        axisLabel: {
-          interval: this.interval,
-          rotate: this.rotate,
-        },
-      },
-    };
-  },
   methods: {
     inital() {
       var chartDom = document.getElementById(this.id);
@@ -103,12 +81,45 @@ export default {
           subtext: this.subTitle,
           left: "center",
         },
-        xAxis: this.horizontal ? this.yAxis : this.xAxis,
-        yAxis: this.horizontal ? this.xAxis : this.yAxis,
+        xAxis: this.horizontal
+          ? {
+              type: "value",
+              axisLabel: {
+                show: this.showName,
+                interval: "auto",
+                formatter: "{value}" + this.suffix,
+              },
+            }
+          : {
+              show: this.showName,
+              type: "category",
+              data: this.name,
+              axisLabel: {
+                interval: this.interval,
+                rotate: this.rotate,
+              },
+            },
+        yAxis: this.horizontal
+          ? {
+              show: this.showName,
+              type: "category",
+              data: this.name,
+              axisLabel: {
+                interval: this.interval,
+                rotate: this.rotate,
+              },
+            }
+          : {
+              type: "value",
+              axisLabel: {
+                show: this.showName,
+                interval: "auto",
+                formatter: "{value}" + this.suffix,
+              },
+            },
         tooltip: {
           show: this.showTooltip,
           trigger: "axis",
-          //formatter: this.showPercentage ? "{b}:{c}%" : "{b}:{c}",
           formatter: "{b}： {c}" + this.suffix,
         },
         series: [

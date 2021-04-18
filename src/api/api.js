@@ -130,6 +130,9 @@ let api = {
     getTotalEmploymentInfo(params){
         return http.get(`${request}/sys/getTotalEmploymentInfo`,params)
     },
+    getCollegeEmploymentInfo(params){
+        return http.get(`${request}/sys/getCollegeEmploymentInfo`,params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)

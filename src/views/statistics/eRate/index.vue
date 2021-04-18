@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row class="mb-20">
+<!--     <el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools" shadow="never">
           <el-select size="mini" style="margin-right: 20px">
@@ -13,7 +13,7 @@
           <el-button size="mini" type="danger">重置</el-button>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
 
     <el-row class="mb-20" :gutter="24">
       <el-col :span="6">
@@ -53,36 +53,33 @@
     <el-row class="mb-20">
       <el-card shadow="never">
         <el-col :span="12">
-          <erate
+          <Bar
             id="e-rate"
-            :data="data"
-            :name="name"
-            showPercentage
+            :data="collegeEmploymentRate"
+            :name="collegeName"
             title="各学院就业率"
             subTitle="2021届"
-            :showName="true"
             width="100%"
             suffix="%"
             :rotate="-15"
-          ></erate>
+          ></Bar>
         </el-col>
         <el-col :span="12">
-          <erate
+          <Bar
             id="e-people"
-            :data="data1"
-            :name="name"
+            :data="collegeEmploymentPeople"
+            :name="collegeName"
             title="各学院就业人数"
             subTitle="2021届"
-            :showName="true"
             width="100%"
             suffix="人"
             :rotate="-15"
-          ></erate>
+          ></Bar>
         </el-col>
       </el-card>
     </el-row>
 
-    <el-row>
+    <!-- <el-row>
       <el-card shadow="never">
         <el-col :span="24">
           <el-table :data="tableData">
@@ -127,26 +124,36 @@
           </el-table>
         </el-col>
       </el-card>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
 <script>
-import erate from "@/components/charts/bar";
+import Bar from "@/components/charts/bar";
 import api from "../../../api/api";
 
 export default {
   name: "EmploymentRate",
-  components: { erate },
+  components: { Bar },
   data() {
     return {
       total: {},
+      collegeName: [],
+      collegeEmploymentRate: [],
+      collegeEmploymentPeople: [],
     };
   },
   methods: {
     getData() {
+      //学校总就业信息
       api.getTotalEmploymentInfo().then((resp) => {
         this.total = resp.obj;
+      });
+      //各院系总就业信息
+      api.getCollegeEmploymentInfo().then((resp) => {
+        this.collegeName = resp.obj.college_name;
+        this.collegeEmploymentRate = resp.obj.college_employment_rate;
+        this.collegeEmploymentPeople = resp.obj.college_employment_people;
       });
     },
     formatterRate(row) {
