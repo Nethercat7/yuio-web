@@ -121,6 +121,9 @@ let api = {
     getEStatus(params){
         return http.get(`${request}/sys/getEStatus?id=`+params)
     },
+    getCollegeAndMajor(params){
+        return http.get(`${request}/sys/getCollegeAndMajor`,params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)

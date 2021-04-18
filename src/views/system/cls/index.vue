@@ -164,10 +164,9 @@ export default {
         let data = resp.obj;
         this.tableData = data;
       });
-      //获取学院
-      api.getColleges().then((resp) => {
+      //获取学院和专业
+      api.getCollegeAndMajor().then((resp) => {
         this.colleges = resp.obj;
-        console.log(resp.obj);
       });
       //获取年级
       this.getGrade();
