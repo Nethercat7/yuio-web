@@ -149,6 +149,9 @@ let api = {
     },
     getEmploymentCityInfo(params){
         return http.get(`${request}/statistics/getEmploymentCityInfo`,params)
+    },
+    getEmploymentWorkInfo(params){
+        return http.get(`${request}/statistics/getEmploymentWorkInfo`,params)
     }
 }
 

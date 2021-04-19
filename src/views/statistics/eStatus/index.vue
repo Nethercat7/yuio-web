@@ -39,32 +39,23 @@
           ></Bar>
         </el-col>
         <el-col :span="12">
-          <p>xxx就业人数一共有:{{totalPeople}}人</p>
-          <p>大多数人选择的前三位城市是：</p>
-          <ol>
-            <li>{{workCityName[0]}}</li>
-            <li>{{workCityName[1]}}</li>
-            <li>{{workCityName[2]}}</li>
-          </ol>
         </el-col>
       </el-card>
     </el-row>
 
-<!--     <el-row class="mb-20">
+    <el-row class="mb-20">
       <el-card>
         <el-col :span="12">
-          <radar
+          <Radar
             id="job"
-            :data="jobPeople"
-            :indicator="jobName"
+            :data="workTypePeople"
+            :indicator="workTypeName"
             title="工作岗位"
-          ></radar>
+          ></Radar>
         </el-col>
-        <el-col :span="12">
-          <p>xxx中大部分人选择从事的岗位是：xxx，有x%的人选择了该岗位</p> 
-        </el-col>
+        <el-col :span="12"> </el-col>
       </el-card>
-    </el-row> -->
+    </el-row>
 
     <!-- <el-row>
       <el-card>
@@ -88,40 +79,61 @@
 
 <script>
 import Bar from "@/components/charts/bar";
-//import radar from "@/components/charts/radar";
+import Radar from "@/components/charts/radar";
 import api from "@/api/api";
 
 export default {
   name: "EmploymentStatus",
-  components: { Bar},
+  components: { Bar, Radar },
   data() {
     return {
-      workCityPeople:[],
-      workCityName:[],
-      totalPeople:0
-    }
+      workCityPeople: [],
+      workCityName: [],
+      totalPeople: 0,
+      workTypePeople: [],
+      workTypeName: [],
+      workName: "",
+      rateList: [],
+    };
   },
   methods: {
-    getData(){
-      api.getEmploymentCityInfo().then(resp=>{
-        let data=resp.obj;
-        data.forEach(element => {
+    getData() {
+      api.getEmploymentCityInfo().then((resp) => {
+        let data = resp.obj;
+        data.forEach((element) => {
           this.workCityPeople.push(element.people);
           this.workCityName.push(element.city);
-          this.totalPeople+=element.people
+          this.totalPeople += element.people;
         });
-      })
+      });
+      api.getEmploymentWorkInfo().then((resp) => {
+        let data = resp.obj;
+        let values = [];
+        data.forEach((element) => {
+          values.push(element.people);
+          //计算选择率
+          this.rateList.push(
+            (
+              ((this.totalPeople - (this.totalPeople - element.people)) /
+                this.totalPeople) *
+              100
+            ).toFixed(2)
+          );
+          this.workTypeName.push({ name: element.type, max: data[0].people });
+        });
+        this.workTypePeople.push({ value: values, name: "就业岗位统计" });
+        this.workName = this.workTypeName[0].name;
+      });
     },
     handleChange() {
       console.log(this.$refs.cascader.getCheckedNodes(true));
     },
   },
-  mounted(){
+  mounted() {
     this.getData();
-  }
+  },
 };
 </script>
 
 <style>
-
 </style>

@@ -74,7 +74,7 @@ export default {
         },
         series: [
           {
-            /*             name: "预算 vs 开销（Budget vs spending）", */
+            /* name: "预算 vs 开销（Budget vs spending)", */
             type: "radar",
             // areaStyle: {normal: {}},
             data: this.data,
@@ -83,6 +83,11 @@ export default {
       };
 
       option && myChart.setOption(option);
+    },
+  },
+  watch: {
+    data() {
+      this.initial();
     },
   },
   mounted() {
