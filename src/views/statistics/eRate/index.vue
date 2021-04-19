@@ -79,7 +79,7 @@
       </el-card>
     </el-row>
 
-    <!-- <el-row>
+     <el-row>
       <el-card shadow="never">
         <el-col :span="24">
           <el-table :data="tableData">
@@ -124,7 +124,7 @@
           </el-table>
         </el-col>
       </el-card>
-    </el-row> -->
+    </el-row>
   </div>
 </template>
 
@@ -141,6 +141,7 @@ export default {
       collegeName: [],
       collegeEmploymentRate: [],
       collegeEmploymentPeople: [],
+      tableData:[]
     };
   },
   methods: {
@@ -154,6 +155,7 @@ export default {
         this.collegeName = resp.obj.college_name;
         this.collegeEmploymentRate = resp.obj.college_employment_rate;
         this.collegeEmploymentPeople = resp.obj.college_employment_people;
+        this.tableData=resp.obj.data
       });
     },
     formatterRate(row) {

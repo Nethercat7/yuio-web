@@ -127,12 +127,6 @@ let api = {
     getFullOrg(params){
         return http.get(`${request}/sys/getFullOrg`,params)
     },
-    getTotalEmploymentInfo(params){
-        return http.get(`${request}/sys/getTotalEmploymentInfo`,params)
-    },
-    getCollegeEmploymentInfo(params){
-        return http.get(`${request}/sys/getCollegeEmploymentInfo`,params)
-    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
@@ -145,7 +139,14 @@ let api = {
     },
     updMenu(params){
         return http.post(`${request}/menu/upd`,params)
-    }
+    },
+    //数据统计模块
+    getTotalEmploymentInfo(params){
+        return http.get(`${request}/statistics/getTotalEmploymentInfo`,params)
+    },
+    getCollegeEmploymentInfo(params){
+        return http.get(`${request}/statistics/getCollegeEmploymentInfo`,params)
+    },
 }
 
 export default api
