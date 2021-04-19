@@ -147,6 +147,9 @@ let api = {
     getCollegeEmploymentInfo(params){
         return http.get(`${request}/statistics/getCollegeEmploymentInfo`,params)
     },
+    getEmploymentCityInfo(params){
+        return http.get(`${request}/statistics/getEmploymentCityInfo`,params)
+    }
 }
 
 export default api
