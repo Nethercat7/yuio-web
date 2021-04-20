@@ -148,7 +148,7 @@ let api = {
         return http.get(`${request}/statistics/getCollegeEmploymentInfo?grade=` + params)
     },
     getEmploymentCityInfo(params) {
-        return http.get(`${request}/statistics/getEmploymentCityInfo`, params)
+        return http.post(`${request}/statistics/getEmploymentCityInfo`, params)
     },
     getEmploymentWorkInfo(params) {
         return http.get(`${request}/statistics/getEmploymentWorkInfo`, params)

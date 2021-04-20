@@ -1,31 +1,38 @@
 <template>
   <div>
-    <!-- <el-row class="mb-20">
+    <el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools">
-          <el-select size="mini" style="margin-right:20px">
-            <el-option label="2021届"></el-option>
-            <el-option label="2020届"></el-option>
-            <el-option label="2022届"></el-option>
-            <el-option label="2023届"></el-option>
+          <el-select
+            size="mini"
+            style="margin-right: 20px"
+            v-model="form.grade"
+          >
+            <el-option
+              v-for="item in gradeList"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            ></el-option>
           </el-select>
           <el-cascader
             size="mini"
-            v-model="value"
-            :options="options"
+            v-model="form.id"
+            :options="orgList"
             clearable
-            @change="handleChange"
             :props="cascaderProps"
             style="margin-right: 20px"
             filterable
             :show-all-levels="false"
             ref="cascader"
           ></el-cascader>
-          <el-button size="mini" type="success">切换</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+          <el-button size="mini" type="success" @click="getData()"
+            >切换</el-button
+          >
+          <el-button size="mini" type="danger" @click="getData(true)">重置</el-button>
         </el-card>
       </el-col>
-    </el-row> -->
+    </el-row>
 
     <el-row class="mb-20">
       <el-card>
@@ -38,8 +45,7 @@
             suffix="人"
           ></Bar>
         </el-col>
-        <el-col :span="12">
-        </el-col>
+        <el-col :span="12"> </el-col>
       </el-card>
     </el-row>
 
@@ -68,8 +74,7 @@
             horizontal
           ></Bar>
         </el-col>
-        <el-col :span="12">
-        </el-col>
+        <el-col :span="12"> </el-col>
       </el-card>
     </el-row>
   </div>
@@ -92,13 +97,27 @@ export default {
       workTypeName: [],
       workName: "",
       rateList: [],
-      planList:[],
-      unEmploymentPeople:[]
+      planList: [],
+      unEmploymentPeople: [],
+      gradeList: [],
+      orgList: [],
+      cascaderProps: {
+        label: "name",
+        value: "id",
+        checkStrictly: true,
+        emitPath: false,
+      },
+      form: {
+        id: "500291302093488128",
+      },
     };
   },
   methods: {
-    getData() {
-      api.getEmploymentCityInfo().then((resp) => {
+    getData(r) {
+      if(r) this.reset(true);
+      let date = new Date();
+      this.form.grade = date.getFullYear() - 4;
+      api.getEmploymentCityInfo(this.form).then((resp) => {
         let data = resp.obj;
         data.forEach((element) => {
           this.workCityPeople.push(element.people);
@@ -106,7 +125,7 @@ export default {
           this.totalPeople += element.people;
         });
       });
-      api.getEmploymentWorkInfo().then((resp) => {
+      api.getEmploymentWorkInfo(this.form).then((resp) => {
         let data = resp.obj;
         let values = [];
         data.forEach((element) => {
@@ -124,15 +143,32 @@ export default {
         this.workTypePeople.push({ value: values, name: "就业岗位统计" });
         this.workName = this.workTypeName[0].name;
       });
-      api.getUnEmploymentStudentPlan().then(resp=>{
-        resp.obj.forEach(element => {
-          this.planList.push(element.plan)
-          this.unEmploymentPeople.push(element.people)
+      api.getUnEmploymentStudentPlan(this.grade).then((resp) => {
+        resp.obj.forEach((element) => {
+          this.planList.push(element.plan);
+          this.unEmploymentPeople.push(element.people);
         });
-      })
+      });
+      //获取年级信息
+      api.getGrade().then((resp) => {
+        this.gradeList = resp.obj;
+      });
+      //获取学院信息
+      api.getFullOrg().then((resp) => {
+        this.orgList = resp.obj;
+      });
     },
-    handleChange() {
-      console.log(this.$refs.cascader.getCheckedNodes(true));
+    reset(r) {
+      this.workCityPeople = [];
+      this.workCityName = [];
+      this.totalPeople = 0;
+      this.workTypePeople = [];
+      this.workTypeName = [];
+      this.workName = "";
+      this.rateList = [];
+      this.planList = [];
+      this.unEmploymentPeople = [];
+      if(r) this.form.id=null;
     },
   },
   mounted() {
