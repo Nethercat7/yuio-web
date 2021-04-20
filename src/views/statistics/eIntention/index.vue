@@ -46,9 +46,9 @@
       <el-card>
         <el-col :span="12">
           <Radar
-            id="job"
-            :data="jobPeople"
-            :indicator="jobName"
+            id="work"
+            :data="workIntentionPeople"
+            :indicator="workList"
             title="意向工作岗位统计"
           ></Radar>
         </el-col>
@@ -72,6 +72,8 @@ export default {
     return {
       cityList: [],
       cityIntentionPeople: [],
+      workList:[],
+      workIntentionPeople:[]
     };
   },
   methods: {
@@ -82,6 +84,14 @@ export default {
           this.cityIntentionPeople.push(element.people);
         });
       });
+      api.getIntentionWorkInfo().then(resp=>{
+        let data=[];
+        resp.obj.forEach(element => {
+          this.workList.push({name:element.work,max:resp.obj[0].people})
+          data.push(element.people);
+        });
+        this.workIntentionPeople.push({value:data,name:'意向工作岗位统计'})
+      })
     },
     handleChange() {
       console.log(this.$refs.cascader.getCheckedNodes(true));

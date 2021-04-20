@@ -158,6 +158,9 @@ let api = {
     },
     getIntentionCityInfo(params){
         return http.get(`${request}/statistics/getIntentionCityInfo`,params)
+    },
+    getIntentionWorkInfo(params){
+        return http.get(`${request}/statistics/getIntentionWorkInfo`,params)
     }
 }
 
