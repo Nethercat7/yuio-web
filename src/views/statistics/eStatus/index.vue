@@ -29,7 +29,9 @@
           <el-button size="mini" type="success" @click="getData()"
             >切换</el-button
           >
-          <el-button size="mini" type="danger" @click="getData(true)">重置</el-button>
+          <el-button size="mini" type="danger" @click="getData(true)"
+            >重置</el-button
+          >
         </el-card>
       </el-col>
     </el-row>
@@ -107,14 +109,12 @@ export default {
         checkStrictly: true,
         emitPath: false,
       },
-      form: {
-        id: "500291302093488128",
-      },
+      form: {},
     };
   },
   methods: {
     getData(r) {
-      if(r) this.reset(true);
+      this.reset(r);
       let date = new Date();
       this.form.grade = date.getFullYear() - 4;
       api.getEmploymentCityInfo(this.form).then((resp) => {
@@ -143,7 +143,7 @@ export default {
         this.workTypePeople.push({ value: values, name: "就业岗位统计" });
         this.workName = this.workTypeName[0].name;
       });
-      api.getUnEmploymentStudentPlan(this.grade).then((resp) => {
+      api.getUnEmploymentStudentPlan(this.form).then((resp) => {
         resp.obj.forEach((element) => {
           this.planList.push(element.plan);
           this.unEmploymentPeople.push(element.people);
@@ -168,7 +168,7 @@ export default {
       this.rateList = [];
       this.planList = [];
       this.unEmploymentPeople = [];
-      if(r) this.form.id=null;
+      if (r) this.form.id = null;
     },
   },
   mounted() {
