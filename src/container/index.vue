@@ -34,7 +34,7 @@ export default {
   methods:{
     add(){
       this.cityList.forEach(element => {
-        api.addCity(element);
+        api.cityInitial(element);
       });
     },
     get(){
@@ -44,7 +44,6 @@ export default {
     }
   },
   mounted(){
-    this.get();
   }
 };
 </script>

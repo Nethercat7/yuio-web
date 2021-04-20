@@ -168,6 +168,9 @@ let api = {
     },
     getCities(params){
         return http.get(`${request}/city/get`,params)
+    },
+    cityInitial(params){
+        return http.post(`${request}/city/initial`,params)
     }
 }
 

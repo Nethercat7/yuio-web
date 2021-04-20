@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import cityies from "@/data/cityies";
 import plan from "@/data/plan";
 import job from "@/data/job";
 import storage from "@/utils/storage";
@@ -100,11 +99,10 @@ export default {
       form: {
         employment: true,
       },
-      cityiesList: cityies,
+      cityiesList: [],
       cProps: {
-        value: "name",
+        value: "id",
         label: "name",
-        children: "cityList",
         emitPath: false,
       },
       planList: plan,
@@ -145,6 +143,9 @@ export default {
       api.getEStatus(this.subject.id).then((resp) => {
         this.form = resp.obj;
       });
+      api.getCities().then(resp=>{
+        this.cityiesList=resp.obj;
+      })
     },
   },
   mounted() {
