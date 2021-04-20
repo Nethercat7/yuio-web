@@ -52,6 +52,11 @@ const system = {
         component: () => import('@/views/system/city/'),
         name: 'CityManagement',
         meta: { title: '城市管理' }
+    }, {
+        path: 'work',
+        component: () => import('@/views/system/work/'),
+        name: 'WorkManagement',
+        meta: { title: '岗位管理' }
     }]
 }
 

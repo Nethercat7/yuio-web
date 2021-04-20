@@ -112,71 +112,87 @@ let api = {
     login(params) {
         return http.post(`${request}/sys/login`, params)
     },
-    studentLogin(params){
-        return http.post(`${request}/sys/studentLogin`,params)
+    studentLogin(params) {
+        return http.post(`${request}/sys/studentLogin`, params)
     },
-    saveEmploymentStatus(params){
-        return http.post(`${request}/sys/saveEmploymentStatus`,params)
+    saveEmploymentStatus(params) {
+        return http.post(`${request}/sys/saveEmploymentStatus`, params)
     },
-    getEStatus(params){
-        return http.get(`${request}/sys/getEStatus?id=`+params)
+    getEStatus(params) {
+        return http.get(`${request}/sys/getEStatus?id=` + params)
     },
-    getCollegeAndMajor(params){
-        return http.get(`${request}/sys/getCollegeAndMajor`,params)
+    getCollegeAndMajor(params) {
+        return http.get(`${request}/sys/getCollegeAndMajor`, params)
     },
-    getFullOrg(params){
-        return http.get(`${request}/sys/getFullOrg`,params)
+    getFullOrg(params) {
+        return http.get(`${request}/sys/getFullOrg`, params)
     },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
     },
-    getMenu(params){
-        return http.get(`${request}/menu/get`,params)
+    getMenu(params) {
+        return http.get(`${request}/menu/get`, params)
     },
-    delMenu(params){
-        return http.get(`${request}/menu/del?id=`+params)
+    delMenu(params) {
+        return http.get(`${request}/menu/del?id=` + params)
     },
-    updMenu(params){
-        return http.post(`${request}/menu/upd`,params)
+    updMenu(params) {
+        return http.post(`${request}/menu/upd`, params)
     },
     //数据统计模块
-    getTotalEmploymentInfo(params){
-        return http.get(`${request}/statistics/getTotalEmploymentInfo`,params)
+    getTotalEmploymentInfo(params) {
+        return http.get(`${request}/statistics/getTotalEmploymentInfo`, params)
     },
-    getCollegeEmploymentInfo(params){
-        return http.get(`${request}/statistics/getCollegeEmploymentInfo`,params)
+    getCollegeEmploymentInfo(params) {
+        return http.get(`${request}/statistics/getCollegeEmploymentInfo`, params)
     },
-    getEmploymentCityInfo(params){
-        return http.get(`${request}/statistics/getEmploymentCityInfo`,params)
+    getEmploymentCityInfo(params) {
+        return http.get(`${request}/statistics/getEmploymentCityInfo`, params)
     },
-    getEmploymentWorkInfo(params){
-        return http.get(`${request}/statistics/getEmploymentWorkInfo`,params)
+    getEmploymentWorkInfo(params) {
+        return http.get(`${request}/statistics/getEmploymentWorkInfo`, params)
     },
-    getUnEmploymentStudentPlan(params){
-        return http.get(`${request}/statistics/getUnEmploymentStudentPlan`,params)
+    getUnEmploymentStudentPlan(params) {
+        return http.get(`${request}/statistics/getUnEmploymentStudentPlan`, params)
     },
-    getIntentionCityInfo(params){
-        return http.get(`${request}/statistics/getIntentionCityInfo`,params)
+    getIntentionCityInfo(params) {
+        return http.get(`${request}/statistics/getIntentionCityInfo`, params)
     },
-    getIntentionWorkInfo(params){
-        return http.get(`${request}/statistics/getIntentionWorkInfo`,params)
+    getIntentionWorkInfo(params) {
+        return http.get(`${request}/statistics/getIntentionWorkInfo`, params)
     },
     //城市管理
-    addCity(params){
-        return http.post(`${request}/city/add`,params)
+    addCity(params) {
+        return http.post(`${request}/city/add`, params)
     },
-    getCities(params){
-        return http.get(`${request}/city/get`,params)
+    getCities(params) {
+        return http.get(`${request}/city/get`, params)
     },
-    delCity(params){
-        return http.get(`${request}/city/del?id=`+params)
+    delCity(params) {
+        return http.get(`${request}/city/del?id=` + params)
     },
-    updCity(params){
-        return http.post(`${request}/city/upd`,params)
+    updCity(params) {
+        return http.post(`${request}/city/upd`, params)
     },
-    cityInitial(params){
-        return http.post(`${request}/city/initial`,params)
+    cityInitial(params) {
+        return http.post(`${request}/city/initial`, params)
+    },
+    //岗位管理
+    addWork(params) {
+        return http.post(`${request}/work/add`, params)
+    },
+    getWorks(params) {
+        return http.get(`${request}/work/get`, params)
+    },
+    delWork(params) {
+        return http.get(`${request}/work/del?id=` + params)
+    },
+    updWork(params) {
+        return http.post(`${request}/work/upd`, params)
+    },
+    workInitial(params) {
+        return http.post(`${request}/work/initial`, params)
     }
 }
 

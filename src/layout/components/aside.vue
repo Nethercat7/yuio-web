@@ -45,6 +45,7 @@
           >菜单管理</el-menu-item
         >
         <el-menu-item index="2-8" @click="$router.push('/system/city')">城市管理</el-menu-item>
+        <el-menu-item index="2-9" @click="$router.push('/system/work')">岗位管理</el-menu-item>
       </el-submenu>
 
       <el-submenu index="3">
