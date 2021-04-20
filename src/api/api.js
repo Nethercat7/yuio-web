@@ -155,6 +155,9 @@ let api = {
     },
     getUnEmploymentStudentPlan(params){
         return http.get(`${request}/statistics/getUnEmploymentStudentPlan`,params)
+    },
+    getIntentionCityInfo(params){
+        return http.get(`${request}/statistics/getIntentionCityInfo`,params)
     }
 }
 
