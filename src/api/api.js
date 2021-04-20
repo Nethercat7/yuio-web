@@ -157,10 +157,10 @@ let api = {
         return http.post(`${request}/statistics/getUnEmploymentStudentPlan`, params)
     },
     getIntentionCityInfo(params) {
-        return http.get(`${request}/statistics/getIntentionCityInfo`, params)
+        return http.post(`${request}/statistics/getIntentionCityInfo`, params)
     },
     getIntentionWorkInfo(params) {
-        return http.get(`${request}/statistics/getIntentionWorkInfo`, params)
+        return http.post(`${request}/statistics/getIntentionWorkInfo`, params)
     },
     getGrade(params) {
         return http.get(`${request}/statistics/getGrade`, params)

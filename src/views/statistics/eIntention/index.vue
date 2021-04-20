@@ -1,31 +1,40 @@
 <template>
   <div>
-    <!-- <el-row class="mb-20">
+    <el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools">
-          <el-select size="mini" style="margin-right:20px">
-            <el-option label="2021届"></el-option>
-            <el-option label="2020届"></el-option>
-            <el-option label="2022届"></el-option>
-            <el-option label="2023届"></el-option>
+          <el-select
+            size="mini"
+            style="margin-right: 20px"
+            v-model="form.grade"
+          >
+            <el-option
+              v-for="item in gradeList"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            ></el-option>
           </el-select>
           <el-cascader
             size="mini"
-            v-model="value"
-            :options="options"
+            v-model="form.id"
+            :options="orgList"
             clearable
-            @change="handleChange"
             :props="cascaderProps"
             style="margin-right: 20px"
             filterable
             :show-all-levels="false"
             ref="cascader"
           ></el-cascader>
-          <el-button size="mini" type="success">切换</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+          <el-button size="mini" type="success" @click="getData()"
+            >切换</el-button
+          >
+          <el-button size="mini" type="danger" @click="getData(true)"
+            >重置</el-button
+          >
         </el-card>
       </el-col>
-    </el-row> -->
+    </el-row>
 
     <el-row class="mb-20">
       <el-card>
@@ -52,9 +61,7 @@
             title="意向工作岗位统计"
           ></Radar>
         </el-col>
-        <el-col :span="12">
-          
-        </el-col>
+        <el-col :span="12"> </el-col>
       </el-card>
     </el-row>
   </div>
@@ -72,34 +79,61 @@ export default {
     return {
       cityList: [],
       cityIntentionPeople: [],
-      workList:[],
-      workIntentionPeople:[]
+      workList: [],
+      workIntentionPeople: [],
+      gradeList: [],
+      orgList: [],
+      cascaderProps: {
+        label: "name",
+        value: "id",
+        checkStrictly: true,
+        emitPath: false,
+      },
+      form: {},
     };
   },
   methods: {
-    getData() {
-      api.getIntentionCityInfo().then((resp) => {
+    getData(r) {
+      this.reset(r);
+      let date = new Date();
+      this.form.grade = date.getFullYear() - 4;
+      api.getIntentionCityInfo(this.form).then((resp) => {
         resp.obj.forEach((element) => {
           this.cityList.push(element.city);
           this.cityIntentionPeople.push(element.people);
         });
       });
-      api.getIntentionWorkInfo().then(resp=>{
-        let data=[];
-        resp.obj.forEach(element => {
-          this.workList.push({name:element.type,max:resp.obj[0].people})
+      api.getIntentionWorkInfo(this.form).then((resp) => {
+        let data = [];
+        resp.obj.forEach((element) => {
+          this.workList.push({ name: element.type, max: resp.obj[0].people });
           data.push(element.people);
         });
-        this.workIntentionPeople.push({value:data,name:'意向工作岗位统计'})
-      })
+        this.workIntentionPeople.push({
+          value: data,
+          name: "意向工作岗位统计",
+        });
+      });
+      //获取年级信息
+      api.getGrade().then((resp) => {
+        this.gradeList = resp.obj;
+      });
+      //获取学院信息
+      api.getFullOrg().then((resp) => {
+        this.orgList = resp.obj;
+      });
     },
-    handleChange() {
-      console.log(this.$refs.cascader.getCheckedNodes(true));
+    reset(r) {
+      if (r) this.form.id = null;
+      this.cityList = [];
+      this.cityIntentionPeople = [];
+      this.workList = [];
+      this.workIntentionPeople = [];
     },
   },
-  mounted(){
+  mounted() {
     this.getData();
-  }
+  },
 };
 </script>
 
