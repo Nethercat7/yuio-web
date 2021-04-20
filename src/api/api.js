@@ -161,6 +161,13 @@ let api = {
     },
     getIntentionWorkInfo(params){
         return http.get(`${request}/statistics/getIntentionWorkInfo`,params)
+    },
+    //城市管理
+    addCity(params){
+        return http.post(`${request}/city/add`,params)
+    },
+    getCities(params){
+        return http.get(`${request}/city/get`,params)
     }
 }
 

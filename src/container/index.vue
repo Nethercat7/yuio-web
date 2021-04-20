@@ -21,8 +21,31 @@
 </template>
 
 <script>
+import cityes from "@/data/json"
+import api from "@/api/api"
+
 export default {
   name: "Container",
+  data(){
+    return{
+      cityList:cityes
+    }
+  },
+  methods:{
+    add(){
+      this.cityList.forEach(element => {
+        api.addCity(element);
+      });
+    },
+    get(){
+      api.getCities().then(resp=>{
+        console.log(resp);
+      })
+    }
+  },
+  mounted(){
+    this.get();
+  }
 };
 </script>
 
