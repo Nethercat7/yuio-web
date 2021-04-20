@@ -47,6 +47,11 @@ const system = {
         component: () => import('@/views/system/menu/'),
         name: 'MenuManagement',
         meta: { title: '菜单管理' }
+    }, {
+        path: 'city',
+        component: () => import('@/views/system/city/'),
+        name: 'CityManagement',
+        meta: { title: '城市管理' }
     }]
 }
 

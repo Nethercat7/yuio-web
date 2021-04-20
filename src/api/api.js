@@ -169,6 +169,12 @@ let api = {
     getCities(params){
         return http.get(`${request}/city/get`,params)
     },
+    delCity(params){
+        return http.get(`${request}/city/del?id=`+params)
+    },
+    updCity(params){
+        return http.post(`${request}/city/upd`,params)
+    },
     cityInitial(params){
         return http.post(`${request}/city/initial`,params)
     }
