@@ -1,10 +1,15 @@
 <template>
   <div>
-<el-row class="mb-20">
+    <el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools" shadow="never">
           <el-select size="mini" style="margin-right: 20px" v-model="grade">
-            <el-option v-for="item in gradeList" :key="item.value" :value="item.value" :label="item.label"></el-option>
+            <el-option
+              v-for="item in gradeList"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            ></el-option>
           </el-select>
           <el-button size="mini" type="success">切换</el-button>
           <el-button size="mini" type="danger">重置</el-button>
@@ -74,7 +79,7 @@
       </el-card>
     </el-row>
 
-     <el-row>
+    <el-row>
       <el-card shadow="never">
         <el-col :span="24">
           <el-table :data="tableData">
@@ -136,28 +141,30 @@ export default {
       collegeName: [],
       collegeEmploymentRate: [],
       collegeEmploymentPeople: [],
-      tableData:[],
-      gradeList:[],
-      grade:2017
+      tableData: [],
+      gradeList: [],
+      grade: 0,
     };
   },
   methods: {
     getData() {
+      let date = new Date();
+      this.grade = date.getFullYear() - 4;
       //学校总就业信息
-      api.getTotalEmploymentInfo().then((resp) => {
+      api.getTotalEmploymentInfo(this.grade).then((resp) => {
         this.total = resp.obj;
       });
       //各院系总就业信息
-      api.getCollegeEmploymentInfo().then((resp) => {
+      api.getCollegeEmploymentInfo(this.grade).then((resp) => {
         this.collegeName = resp.obj.college_name;
         this.collegeEmploymentRate = resp.obj.college_employment_rate;
         this.collegeEmploymentPeople = resp.obj.college_employment_people;
-        this.tableData=resp.obj.data
+        this.tableData = resp.obj.data;
       });
       //获取年级信息
-      api.getGrade().then(resp=>{
-        this.gradeList=resp.obj;
-      })
+      api.getGrade().then((resp) => {
+        this.gradeList = resp.obj;
+      });
     },
     formatterRate(row) {
       return row.employment_rate + "%";

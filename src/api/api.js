@@ -142,10 +142,10 @@ let api = {
     },
     //数据统计模块
     getTotalEmploymentInfo(params) {
-        return http.get(`${request}/statistics/getTotalEmploymentInfo`, params)
+        return http.get(`${request}/statistics/getTotalEmploymentInfo?grade=` + params)
     },
     getCollegeEmploymentInfo(params) {
-        return http.get(`${request}/statistics/getCollegeEmploymentInfo`, params)
+        return http.get(`${request}/statistics/getCollegeEmploymentInfo?grade=` + params)
     },
     getEmploymentCityInfo(params) {
         return http.get(`${request}/statistics/getEmploymentCityInfo`, params)
@@ -162,7 +162,7 @@ let api = {
     getIntentionWorkInfo(params) {
         return http.get(`${request}/statistics/getIntentionWorkInfo`, params)
     },
-    getGrade(params){
+    getGrade(params) {
         return http.get(`${request}/statistics/getGrade`, params)
     },
     //城市管理
