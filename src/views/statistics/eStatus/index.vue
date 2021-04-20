@@ -57,23 +57,21 @@
       </el-card>
     </el-row>
 
-    <!-- <el-row>
+    <el-row>
       <el-card>
         <el-col :span="12">
-          <bar
+          <Bar
             id="bar-1"
-            :data="unemploylmentPeople"
-            :name="intend"
+            :data="unEmploymentPeople"
+            :name="planList"
             title="未就业的学生接下来的打算"
             horizontal
-          ></bar>
+          ></Bar>
         </el-col>
         <el-col :span="12">
-          <p>xxx中未就业的学生一共有xxx名</p>
-          <p>x%的学生接下来打算xxx</p>
         </el-col>
       </el-card>
-    </el-row> -->
+    </el-row>
   </div>
 </template>
 
@@ -94,6 +92,8 @@ export default {
       workTypeName: [],
       workName: "",
       rateList: [],
+      planList:[],
+      unEmploymentPeople:[]
     };
   },
   methods: {
@@ -124,6 +124,12 @@ export default {
         this.workTypePeople.push({ value: values, name: "就业岗位统计" });
         this.workName = this.workTypeName[0].name;
       });
+      api.getUnEmploymentStudentPlan().then(resp=>{
+        resp.obj.forEach(element => {
+          this.planList.push(element.plan)
+          this.unEmploymentPeople.push(element.people)
+        });
+      })
     },
     handleChange() {
       console.log(this.$refs.cascader.getCheckedNodes(true));

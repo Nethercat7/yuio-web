@@ -152,6 +152,9 @@ let api = {
     },
     getEmploymentWorkInfo(params){
         return http.get(`${request}/statistics/getEmploymentWorkInfo`,params)
+    },
+    getUnEmploymentStudentPlan(params){
+        return http.get(`${request}/statistics/getUnEmploymentStudentPlan`,params)
     }
 }
 
