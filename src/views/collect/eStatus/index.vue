@@ -22,8 +22,8 @@
           <el-form-item label="意向岗位">
             <el-cascader
               v-model="form.intention_work"
-              :options="jobList"
-              :props="jProps"
+              :options="workList"
+              :props="wProps"
               filterable
               clearable
             ></el-cascader>
@@ -52,8 +52,8 @@
             <el-form-item label="岗位类型">
               <el-cascader
                 v-model="form.work_type"
-                :options="jobList"
-                :props="jProps"
+                :options="workList"
+                :props="wProps"
                 filterable
                 clearable
               ></el-cascader>
@@ -88,7 +88,6 @@
 
 <script>
 import plan from "@/data/plan";
-import job from "@/data/job";
 import storage from "@/utils/storage";
 import api from "@/api/api";
 
@@ -106,11 +105,10 @@ export default {
         emitPath: false,
       },
       planList: plan,
-      jobList: job,
-      jProps: {
-        value: "name",
+      workList: [],
+      wProps: {
+        value: "id",
         label: "name",
-        children: "children",
         emitPath: false,
       },
       subject: {},
@@ -145,6 +143,9 @@ export default {
       });
       api.getCities().then(resp=>{
         this.cityiesList=resp.obj;
+      })
+      api.getWorks().then(resp=>{
+        this.workList=resp.obj
       })
     },
   },
