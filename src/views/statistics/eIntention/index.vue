@@ -87,7 +87,7 @@ export default {
       api.getIntentionWorkInfo().then(resp=>{
         let data=[];
         resp.obj.forEach(element => {
-          this.workList.push({name:element.work,max:resp.obj[0].people})
+          this.workList.push({name:element.type,max:resp.obj[0].people})
           data.push(element.people);
         });
         this.workIntentionPeople.push({value:data,name:'意向工作岗位统计'})

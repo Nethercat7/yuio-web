@@ -162,6 +162,9 @@ let api = {
     getIntentionWorkInfo(params) {
         return http.get(`${request}/statistics/getIntentionWorkInfo`, params)
     },
+    getGrade(params){
+        return http.get(`${request}/statistics/getGrade`, params)
+    },
     //城市管理
     addCity(params) {
         return http.post(`${request}/city/add`, params)

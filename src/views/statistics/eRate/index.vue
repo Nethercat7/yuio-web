@@ -1,19 +1,16 @@
 <template>
   <div>
-<!--     <el-row class="mb-20">
+<el-row class="mb-20">
       <el-col :span="24" style="text-align: right">
         <el-card class="top-tools" shadow="never">
-          <el-select size="mini" style="margin-right: 20px">
-            <el-option label="2021届"></el-option>
-            <el-option label="2020届"></el-option>
-            <el-option label="2022届"></el-option>
-            <el-option label="2023届"></el-option>
+          <el-select size="mini" style="margin-right: 20px" v-model="grade">
+            <el-option v-for="item in gradeList" :key="item.value" :value="item.value" :label="item.label"></el-option>
           </el-select>
           <el-button size="mini" type="success">切换</el-button>
           <el-button size="mini" type="danger">重置</el-button>
         </el-card>
       </el-col>
-    </el-row> -->
+    </el-row>
 
     <el-row class="mb-20" :gutter="24">
       <el-col :span="6">
@@ -58,7 +55,6 @@
             :data="collegeEmploymentRate"
             :name="collegeName"
             title="各学院就业率"
-            subTitle="2021届"
             width="100%"
             suffix="%"
             :rotate="-15"
@@ -70,7 +66,6 @@
             :data="collegeEmploymentPeople"
             :name="collegeName"
             title="各学院就业人数"
-            subTitle="2021届"
             width="100%"
             suffix="人"
             :rotate="-15"
@@ -141,7 +136,9 @@ export default {
       collegeName: [],
       collegeEmploymentRate: [],
       collegeEmploymentPeople: [],
-      tableData:[]
+      tableData:[],
+      gradeList:[],
+      grade:2017
     };
   },
   methods: {
@@ -157,6 +154,10 @@ export default {
         this.collegeEmploymentPeople = resp.obj.college_employment_people;
         this.tableData=resp.obj.data
       });
+      //获取年级信息
+      api.getGrade().then(resp=>{
+        this.gradeList=resp.obj;
+      })
     },
     formatterRate(row) {
       return row.employment_rate + "%";
