@@ -89,14 +89,15 @@ export default {
         checkStrictly: true,
         emitPath: false,
       },
-      form: {},
+      form: {
+        grade: new Date().getFullYear() - 4,
+      },
     };
   },
   methods: {
     getData(r) {
       this.reset(r);
-      let date = new Date();
-      this.form.grade = date.getFullYear() - 4;
+      if (r) this.form.grade = new Date().getFullYear() - 4;
       api.getIntentionCityInfo(this.form).then((resp) => {
         resp.obj.forEach((element) => {
           this.cityList.push(element.city);

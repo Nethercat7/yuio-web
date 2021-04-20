@@ -109,14 +109,15 @@ export default {
         checkStrictly: true,
         emitPath: false,
       },
-      form: {},
+      form: {
+        grade: new Date().getFullYear() - 4,
+      },
     };
   },
   methods: {
     getData(r) {
       this.reset(r);
-      let date = new Date();
-      this.form.grade = date.getFullYear() - 4;
+      if (r) this.form.grade = new Date().getFullYear() - 4;
       api.getEmploymentCityInfo(this.form).then((resp) => {
         let data = resp.obj;
         data.forEach((element) => {
