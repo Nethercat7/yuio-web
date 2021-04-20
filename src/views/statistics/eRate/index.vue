@@ -11,8 +11,12 @@
               :label="item.label"
             ></el-option>
           </el-select>
-          <el-button size="mini" type="success">切换</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+          <el-button size="mini" type="success" @click="getData()"
+            >切换</el-button
+          >
+          <el-button size="mini" type="danger" @click="getData(true)"
+            >重置</el-button
+          >
         </el-card>
       </el-col>
     </el-row>
@@ -143,13 +147,14 @@ export default {
       collegeEmploymentPeople: [],
       tableData: [],
       gradeList: [],
-      grade: 0,
+      grade: new Date().getFullYear()-4,
     };
   },
   methods: {
-    getData() {
+    getData(r) {
+      this.reset(r);
       let date = new Date();
-      this.grade = date.getFullYear() - 4;
+      if(r) this.grade = date.getFullYear() - 4;
       //学校总就业信息
       api.getTotalEmploymentInfo(this.grade).then((resp) => {
         this.total = resp.obj;
@@ -168,6 +173,13 @@ export default {
     },
     formatterRate(row) {
       return row.employment_rate + "%";
+    },
+    reset() {
+      this.total = {};
+      this.collegeName = [];
+      this.collegeEmploymentRate = [];
+      this.collegeEmploymentPeople = [];
+      this.tableData = [];
     },
   },
   mounted() {
