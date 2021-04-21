@@ -7,6 +7,7 @@
             size="mini"
             style="margin-right: 20px"
             v-model="params.grade"
+            @change="getOrg"
           >
             <el-option
               v-for="item in gradeList"
@@ -148,9 +149,7 @@ export default {
         this.gradeList = resp.obj;
       });
       //获取学院信息
-      api.getFullOrg().then((resp) => {
-        this.orgList = resp.obj;
-      });
+      this.getOrg()
     },
     reset(r) {
       this.workCityPeople = [];
@@ -172,6 +171,11 @@ export default {
       this.params.college_id = arr[0];
       this.params.major_id = arr[1];
       this.params.cls_id = arr[2];
+    },
+    getOrg() {
+      api.getFullOrg({grade:this.params.grade}).then((resp) => {
+        this.orgList = resp.obj;
+      });
     },
   },
   mounted() {
