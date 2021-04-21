@@ -68,6 +68,12 @@ let api = {
     updStudent(params) {
         return http.post(`${request}/student/upd`, params)
     },
+    getWithEStatusInfo(params){
+        return http.post(`${request}/student/getWithEStatusInfo`, params)
+    },
+    getStudentGrade(params) {
+        return http.get(`${request}/student/getStudentGrade`, params)
+    },
     //用户管理
     addUser(params) {
         return http.post(`${request}/usr/add`, params)

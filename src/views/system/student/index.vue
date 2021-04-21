@@ -1,15 +1,48 @@
 <template>
   <div>
     <el-row class="card">
-      <!-- 选项卡 -->
-      <el-col :span="12">
-        <el-button size="mini" @click="openDialog('add')" type="success"
-          >添加</el-button
+      <!-- 搜索框 -->
+      <el-col :span="24">
+        <span>年级</span>
+        <el-select size="mini" v-model="params.grade">
+          <el-option
+            v-for="item in gradeList"
+            :key="item.value"
+            :value="item.value"
+            :label="item.label"
+          ></el-option>
+        </el-select>
+        <span>专业</span>
+        <el-cascader
+          size="mini"
+          v-model="params.id"
+          :options="cascaderData"
+          clearable
+          :props="orgProps"
+          filterable
+          :show-all-levels="false"
+          ref="cascader"
+          @change="setParams"
+        ></el-cascader>
+        <span>就业情况</span>
+        <el-select v-model="params.employment" size="mini">
+          <el-option :value="0" label="未就业"></el-option>
+          <el-option :value="1" label="已就业"></el-option>
+        </el-select>
+        <span>姓名</span>
+        <el-input
+          v-model="params.name"
+          style="width: 200px"
+          size="mini"
+        ></el-input>
+        <el-button size="mini" type="success" @click="getData()"
+          >搜索</el-button
         >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning">导出</el-button>
+        <el-button size="mini" type="danger" @click="getData(true)"
+          >重置</el-button
+        >
       </el-col>
-      <el-col :span="12" style="text-align: right">
+      <!-- <el-col :span="6" style="text-align: right">
         <el-autocomplete
           v-model="keyword"
           placeholder="请输入内容"
@@ -24,6 +57,15 @@
         >
         <el-button size="mini" type="danger" @click="resetResult"
           >重置</el-button
+        >
+      </el-col> -->
+      <el-col :span="24">
+        <el-button size="mini" @click="openDialog('add')" type="success"
+          >添加</el-button
+        >
+        <el-button size="mini" type="primary">导入</el-button>
+        <el-button size="mini" type="warning" style="margin-right: 20px"
+          >导出</el-button
         >
       </el-col>
     </el-row>
@@ -79,24 +121,28 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="姓名" prop="name" sortable width="100px">
-          </el-table-column>
+          <el-table-column label="姓名" prop="name" sortable> </el-table-column>
           <el-table-column label="学号" prop="code" sortable> </el-table-column>
           <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
           <el-table-column label="所属专业" prop="major_name" sortable>
           </el-table-column>
-          <el-table-column
-            label="所属年级"
-            prop="grade"
-            sortable
-            width="150  px"
-          >
+          <el-table-column label="所属年级" prop="grade" sortable>
           </el-table-column>
           <el-table-column label="所属班级" prop="cls_name" sortable>
           </el-table-column>
           <el-table-column label="状态" prop="status" sortable>
           </el-table-column>
+          <el-table-column
+            label="就业信息填写"
+            prop="write"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            label="就业情况"
+            prop="employment"
+            sortable
+          ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -162,8 +208,8 @@
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="form.gender">
-            <el-radio :label="0">男</el-radio>
-            <el-radio :label="1">女</el-radio>
+            <el-radio :label="0">女</el-radio>
+            <el-radio :label="1">男</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="所属年级">
@@ -226,13 +272,31 @@ export default {
         value: "id",
         label: "name",
       },
-      reset:{}
+      reset: {},
+      //选择框数据
+      gradeList: [],
+      orgList: [],
+      orgProps: {
+        label: "name",
+        value: "id",
+        checkStrictly: true,
+        //emitPath: false,
+      },
+      params: {
+        grade: new Date().getFullYear() - 4,
+      },
     };
   },
   methods: {
-    getData() {
+    getData(r) {
+      if (r) {
+        this.params = {};
+        this.params.grade = new Date().getFullYear() - 4;
+      }
+      this.keyword = "";
+      this.currentPage = 1;
       //获取学生信息
-      api.getStudents().then((resp) => {
+      api.getWithEStatusInfo(this.params).then((resp) => {
         this.total = resp.obj.length;
         this.tableDataBak = resp.obj;
         this.tableData = resp.obj;
@@ -242,6 +306,9 @@ export default {
       //获取院系、专业和班级信息
       api.getFullOrg().then((resp) => {
         this.cascaderData = resp.obj;
+      });
+      api.getStudentGrade().then((resp) => {
+        this.gradeList = resp.obj;
       });
     },
     openDialog(type, row) {
@@ -345,11 +412,11 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.reset={
-            isUser:false,
-            key:id
-          }
-          api.resetPwd(this.reset).then((resp) => {
+          let reset = {
+            isUser: false,
+            key: id,
+          };
+          api.resetPwd(reset).then((resp) => {
             this.$message({
               type: resp.type,
               message: resp.msg,
@@ -359,6 +426,13 @@ export default {
         .catch(() => {
           return null;
         });
+    },
+    //设置级联选择器选择的院系、专业和班级ID
+    setParams() {
+      let arr = this.$refs.cascader.getCheckedNodes()[0].path;
+      this.params.college_id = arr[0];
+      this.params.major_id = arr[1];
+      this.params.cls_id = arr[2];
     },
   },
   mounted() {
