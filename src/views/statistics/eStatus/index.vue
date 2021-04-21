@@ -6,7 +6,7 @@
           <el-select
             size="mini"
             style="margin-right: 20px"
-            v-model="form.grade"
+            v-model="params.grade"
           >
             <el-option
               v-for="item in gradeList"
@@ -16,8 +16,8 @@
             ></el-option>
           </el-select>
           <el-cascader
+            v-model="params.temp"
             size="mini"
-            v-model="form.id"
             :options="orgList"
             clearable
             :props="cascaderProps"
@@ -25,6 +25,7 @@
             filterable
             :show-all-levels="false"
             ref="cascader"
+            @change="setParams"
           ></el-cascader>
           <el-button size="mini" type="success" @click="getData()"
             >切换</el-button
@@ -97,8 +98,6 @@ export default {
       totalPeople: 0,
       workTypePeople: [],
       workTypeName: [],
-      workName: "",
-      rateList: [],
       planList: [],
       unEmploymentPeople: [],
       gradeList: [],
@@ -107,9 +106,8 @@ export default {
         label: "name",
         value: "id",
         checkStrictly: true,
-        emitPath: false,
       },
-      form: {
+      params: {
         grade: new Date().getFullYear() - 4,
       },
     };
@@ -117,34 +115,29 @@ export default {
   methods: {
     getData(r) {
       this.reset(r);
-      if (r) this.form.grade = new Date().getFullYear() - 4;
-      api.getEmploymentCityInfo(this.form).then((resp) => {
+      //获取就业城市选择信息
+      api.getEmploymentCityInfo(this.params).then((resp) => {
         let data = resp.obj;
+        //转换为适用于柱状图的数据格式
         data.forEach((element) => {
           this.workCityPeople.push(element.people);
           this.workCityName.push(element.city);
           this.totalPeople += element.people;
         });
       });
-      api.getEmploymentWorkInfo(this.form).then((resp) => {
+      //获取就业岗位选择信息
+      api.getEmploymentWorkInfo(this.params).then((resp) => {
         let data = resp.obj;
         let values = [];
+        //转换为适用于雷达图的数据格式
         data.forEach((element) => {
           values.push(element.people);
-          //计算选择率
-          this.rateList.push(
-            (
-              ((this.totalPeople - (this.totalPeople - element.people)) /
-                this.totalPeople) *
-              100
-            ).toFixed(2)
-          );
           this.workTypeName.push({ name: element.type, max: data[0].people });
         });
         this.workTypePeople.push({ value: values, name: "就业岗位统计" });
-        this.workName = this.workTypeName[0].name;
       });
-      api.getUnEmploymentStudentPlan(this.form).then((resp) => {
+      //获取未就业学生计划信息
+      api.getUnEmploymentStudentPlan(this.params).then((resp) => {
         resp.obj.forEach((element) => {
           this.planList.push(element.plan);
           this.unEmploymentPeople.push(element.people);
@@ -169,7 +162,16 @@ export default {
       this.rateList = [];
       this.planList = [];
       this.unEmploymentPeople = [];
-      if (r) this.form.id = null;
+      if (r) {
+        this.params = {};
+        this.params.grade = new Date().getFullYear() - 4;
+      }
+    },
+    setParams() {
+      let arr = this.$refs.cascader.getCheckedNodes()[0].path;
+      this.params.college_id = arr[0];
+      this.params.major_id = arr[1];
+      this.params.cls_id = arr[2];
     },
   },
   mounted() {
