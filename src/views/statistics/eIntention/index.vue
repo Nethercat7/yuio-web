@@ -6,7 +6,7 @@
           <el-select
             size="mini"
             style="margin-right: 20px"
-            v-model="form.grade"
+            v-model="params.grade"
           >
             <el-option
               v-for="item in gradeList"
@@ -17,7 +17,7 @@
           </el-select>
           <el-cascader
             size="mini"
-            v-model="form.id"
+            v-model="params.temp"
             :options="orgList"
             clearable
             :props="cascaderProps"
@@ -25,6 +25,7 @@
             filterable
             :show-all-levels="false"
             ref="cascader"
+            @change="setParams"
           ></el-cascader>
           <el-button size="mini" type="success" @click="getData()"
             >切换</el-button
@@ -87,9 +88,8 @@ export default {
         label: "name",
         value: "id",
         checkStrictly: true,
-        emitPath: false,
       },
-      form: {
+      params: {
         grade: new Date().getFullYear() - 4,
       },
     };
@@ -97,14 +97,15 @@ export default {
   methods: {
     getData(r) {
       this.reset(r);
-      if (r) this.form.grade = new Date().getFullYear() - 4;
-      api.getIntentionCityInfo(this.form).then((resp) => {
+      //获取意向城市选择信息
+      api.getIntentionCityInfo(this.params).then((resp) => {
         resp.obj.forEach((element) => {
           this.cityList.push(element.city);
           this.cityIntentionPeople.push(element.people);
         });
       });
-      api.getIntentionWorkInfo(this.form).then((resp) => {
+      //获取意向岗位选择信息
+      api.getIntentionWorkInfo(this.params).then((resp) => {
         let data = [];
         resp.obj.forEach((element) => {
           this.workList.push({ name: element.type, max: resp.obj[0].people });
@@ -125,12 +126,21 @@ export default {
       });
     },
     reset(r) {
-      if (r) this.form.id = null;
+      if (r) {
+        this.params = {};
+        this.params.grade = new Date().getFullYear() - 4;
+      }
       this.cityList = [];
       this.cityIntentionPeople = [];
       this.workList = [];
       this.workIntentionPeople = [];
     },
+    setParams(){
+      let arr=this.$refs.cascader.getCheckedNodes()[0].path;
+      this.params.college_id=arr[0];
+      this.params.major_id=arr[1];
+      this.params.cls_id=arr[2];
+    }
   },
   mounted() {
     this.getData();
