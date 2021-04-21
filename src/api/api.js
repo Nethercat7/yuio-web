@@ -171,9 +171,6 @@ let api = {
     getGrade(params) {
         return http.get(`${request}/statistics/getGrade`, params)
     },
-    getEStatusStudentInfo(params){
-        return http.post(`${request}/statistics/getEStatusStudentInfo`, params)
-    },
     //城市管理
     addCity(params) {
         return http.post(`${request}/city/add`, params)
