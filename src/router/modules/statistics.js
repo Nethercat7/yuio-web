@@ -23,12 +23,6 @@ const statistics = {
             name: 'Employment Intention',
             component: () => import('@/views/statistics/eIntention/'),
             meta: { title: '就业意向统计' }
-        },
-        {
-            path: 'detail',
-            name: 'Employment Rate Detail',
-            component: () => import('@/views/statistics/eRate/components/detail'),
-            meta: { title: '详细信息' }
         }
     ]
 }

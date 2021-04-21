@@ -114,17 +114,6 @@
               label="就业率"
               :formatter="formatterRate"
             ></el-table-column>
-            <el-table-column label="操作">
-              <template slot="header">
-                <el-button size="mini" type="success">导出</el-button>
-              </template>
-              <el-button
-                size="mini"
-                type="info"
-                @click="$router.push('/statistics/detail')"
-                >查看详情</el-button
-              >
-            </el-table-column>
           </el-table>
         </el-col>
       </el-card>
@@ -147,14 +136,14 @@ export default {
       collegeEmploymentPeople: [],
       tableData: [],
       gradeList: [],
-      grade: new Date().getFullYear()-4,
+      grade: new Date().getFullYear() - 4,
     };
   },
   methods: {
     getData(r) {
       this.reset(r);
       let date = new Date();
-      if(r) this.grade = date.getFullYear() - 4;
+      if (r) this.grade = date.getFullYear() - 4;
       //学校总就业信息
       api.getTotalEmploymentInfo(this.grade).then((resp) => {
         this.total = resp.obj;
