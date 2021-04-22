@@ -41,9 +41,13 @@
         >
           <el-table-column label="姓名" prop="name"></el-table-column>
           <el-table-column label="账号" prop="account"></el-table-column>
-          <el-table-column label="性别" prop="gender"></el-table-column>
+          <el-table-column
+            label="性别"
+            prop="gender"
+            :formatter="genderFormatter"
+          ></el-table-column>
           <el-table-column label="电话号码" prop="phone"></el-table-column>
-          <el-table-column label="状态" prop="status"></el-table-column>
+          <el-table-column label="状态" prop="status" :formatter="statusFormatter"></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -88,7 +92,7 @@
 
     <!-- 表单 -->
     <el-dialog
-      :title="type == 'add' ? '添加学生信息' : '修改学生信息'"
+      :title="type == 'add' ? '添加用户' : '修改用户'"
       :visible.sync="dialogVisible"
       :before-close="closeDialog"
     >
@@ -107,8 +111,12 @@
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="form.gender">
-            <el-radio :label="0">男</el-radio>
-            <el-radio :label="1">女</el-radio>
+            <el-radio
+              v-for="item in genderOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="电话号码">
@@ -119,8 +127,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="角色">
@@ -170,6 +182,8 @@ export default {
       type: "",
       form: {},
       roles: [],
+      genderOptions: [],
+      statusOptions: [],
     };
   },
   methods: {
@@ -181,6 +195,13 @@ export default {
       });
       api.getRoles().then((resp) => {
         this.roles = resp.obj;
+      });
+      //获取字典数据
+      this.getDictData("sys_user_gender").then((resp) => {
+        this.genderOptions = resp.obj;
+      });
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -280,6 +301,12 @@ export default {
         .catch(() => {
           return null;
         });
+    },
+    genderFormatter(row) {
+      return this.selectDictLabel(this.genderOptions, row.status);
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
   },
   mounted() {
