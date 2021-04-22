@@ -133,6 +133,9 @@ let api = {
     getFullOrg(params) {
         return http.get(`${request}/sys/getFullOrg`, params)
     },
+    getGrade(params) {
+        return http.get(`${request}/sys/getGrade`, params)
+    },
     //菜单管理
     addMenu(params) {
         return http.post(`${request}/menu/add`, params)
@@ -167,9 +170,6 @@ let api = {
     },
     getIntentionWorkInfo(params) {
         return http.post(`${request}/statistics/getIntentionWorkInfo`, params)
-    },
-    getGrade(params) {
-        return http.get(`${request}/statistics/getGrade`, params)
     },
     //城市管理
     addCity(params) {

@@ -4,7 +4,7 @@
       <!-- 搜索框 -->
       <el-col :span="24">
         <span>年级</span>
-        <el-select size="mini" v-model="params.grade" @change="getOrg">
+        <el-select size="mini" v-model="params.grade" @change="getOrg(true)">
           <el-option
             v-for="item in gradeList"
             :key="item.value"
@@ -42,23 +42,6 @@
           >重置</el-button
         >
       </el-col>
-      <!-- <el-col :span="6" style="text-align: right">
-        <el-autocomplete
-          v-model="keyword"
-          placeholder="请输入内容"
-          size="mini"
-          style="margin-right: 10px"
-          :trigger-on-focus="false"
-          :fetch-suggestions="searchSuggestions"
-          value-key="name"
-        ></el-autocomplete>
-        <el-button size="mini" type="success" @click="handleSearch"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="resetResult"
-          >重置</el-button
-        >
-      </el-col> -->
       <el-col :span="24">
         <el-button size="mini" @click="openDialog('add')" type="success"
           >添加</el-button
@@ -213,12 +196,16 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="所属年级">
-          <el-select v-model="form.grade" placeholder="请选择">
+          <el-select
+            v-model="form.grade"
+            placeholder="请选择"
+            @change="getOrg(false)"
+          >
             <el-option
-              v-for="item in grade"
+              v-for="item in gradeList2"
               :key="item"
-              :label="item"
-              :value="item"
+              :label="item.label"
+              :value="item.value"
             >
             </el-option>
           </el-select>
@@ -262,18 +249,20 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {},
+      form: {
+        grade: new Date().getFullYear() - 4,
+      },
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      grade: [],
       cascaderProps: {
         value: "id",
         label: "name",
       },
       reset: {},
       //选择框数据
-      gradeList: [],
+      gradeList: [], //搜索用
+      gradeList2: [], //添加数据用
       orgList: [],
       orgProps: {
         label: "name",
@@ -288,10 +277,13 @@ export default {
   },
   methods: {
     getData(r) {
+      let grade = new Date().getFullYear() - 4;
       if (r) {
         this.params = {};
-        this.params.grade = new Date().getFullYear() - 4;
+        this.params.grade = grade;
       }
+      this.form = {};
+      this.form.grade = grade;
       this.keyword = "";
       this.currentPage = 1;
       //获取学生信息
@@ -300,12 +292,11 @@ export default {
         this.tableDataBak = resp.obj;
         this.tableData = resp.obj;
       });
-      //获取年级信息
-      this.getGrade();
       //获取院系、专业和班级信息
       this.getOrg();
-      api.getStudentGrade().then((resp) => {
+      api.getGrade().then((resp) => {
         this.gradeList = resp.obj;
+        this.gradeList2 = resp.obj;
       });
     },
     openDialog(type, row) {
@@ -335,7 +326,6 @@ export default {
           if (resp.code === 0) this.getData();
         });
       }
-      this.form = {};
       this.dialogVisible = false;
     },
     closeDialog() {
@@ -369,39 +359,6 @@ export default {
     changeSize(val) {
       this.pageSize = val;
     },
-    searchSuggestions(queryString, cb) {
-      var restaurants = this.tableDataBak;
-      var results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSearch() {
-      //搜索前先恢复备份的完整数据，然后在进行搜索。防止在当前搜索结果中进行第二次搜索找不到数据。
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.code.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    resetResult() {
-      this.tableData = this.tableDataBak;
-      this.total = this.tableData.length;
-      this.keyword = "";
-    },
-    getGrade() {
-      let date = new Date().getFullYear();
-      let dateArr = []; //用于存放今年往后十年的年份
-      for (let i = 0; i < 10; i++) {
-        dateArr.push(date);
-        date--;
-      }
-      this.grade = dateArr;
-    },
     resetPwd(id) {
       this.$confirm("此操作将会重置的登录密码, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -431,10 +388,12 @@ export default {
       this.params.major_id = arr[1];
       this.params.cls_id = arr[2];
     },
-    getOrg() {
-      api.getFullOrg({ grade: this.params.grade }).then((resp) => {
-        this.orgList = resp.obj;
-      });
+    getOrg(query) {
+      api
+        .getFullOrg({ grade: query ? this.params.grade : this.form.grade })
+        .then((resp) => {
+          this.orgList = resp.obj;
+        });
     },
   },
   mounted() {
