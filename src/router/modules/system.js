@@ -62,6 +62,11 @@ const system = {
         component: () => import('@/views/system/dict/'),
         name: 'DictType',
         meta: { title: '字典管理' }
+    }, {
+        path: 'dict/data',
+        component: () => import('@/views/system/dict/data'),
+        name: 'DictData',
+        meta: { title: '字典数据' }
     }]
 }
 

@@ -12,7 +12,7 @@
 
     <!-- 表单 -->
     <el-dialog
-      :title="type === 0 ? '添加字典类型' : '修改字典类型'"
+      :title="type === 0 ? '添加字典数据' : '修改字典数据'"
       :visible.sync="dialogVisible"
       :before-close="closeDialog"
     >
@@ -23,11 +23,11 @@
         label-suffix=":"
         label-width="90px"
       >
-        <el-form-item label="名称">
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="标签">
+          <el-input v-model="form.label"></el-input>
         </el-form-item>
-        <el-form-item label="类型">
-          <el-input v-model="form.type"></el-input>
+        <el-form-item label="键值">
+          <el-input v-model="form.value"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -57,8 +57,9 @@
               )
             "
           >
-            <el-table-column label="名称" prop="name"></el-table-column>
+            <el-table-column label="标签" prop="label"></el-table-column>
             <el-table-column label="类型" prop="type"></el-table-column>
+            <el-table-column label="键值" prop="value"></el-table-column>
             <el-table-column label="状态" prop="status"></el-table-column>
             <el-table-column label="备注" prop="remark"></el-table-column>
             <el-table-column label="操作">
@@ -80,7 +81,6 @@
                     >删除</el-button
                   >
                 </el-popconfirm>
-                <el-button type="info" size="mini" @click="$router.push({name:'DictData',query:{type:scope.row.type}})">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -99,19 +99,21 @@
 
 <script>
 import {
-  addDictType,
-  getDict,
-  delDict,
-  updDictType,
-} from "@/api/system/dict/type";
+  addDictData,
+  getDictData,
+  delDictData,
+  updDictData,
+} from "@/api/system/dict/data";
 import Pager from "@/components/pager";
 
 export default {
-  name: "DictType",
+  name: "DictData",
   components: { Pager },
   data() {
     return {
-      form: {},
+      form: {
+        type: this.$route.query.type,
+      },
       dialogVisible: false,
       type: null,
       tableData: [],
@@ -119,6 +121,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
+      dictType: null,
     };
   },
   methods: {
@@ -133,7 +136,7 @@ export default {
     },
     submitDialog() {
       if (this.type === 0) {
-        addDictType(this.form).then((resp) => {
+        addDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
           this.$message({
             message: resp.msg,
@@ -141,7 +144,7 @@ export default {
           });
         });
       } else {
-        updDictType(this.form).then((resp) => {
+        updDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
           this.$message({
             message: resp.msg,
@@ -151,6 +154,7 @@ export default {
         this.dialogVisible = false;
       }
       this.form = {};
+      this.form.type = this.$route.query.type;
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -161,13 +165,13 @@ export default {
         .catch(() => {});
     },
     getData() {
-      getDict().then((resp) => {
+      getDictData(this.dictType).then((resp) => {
         this.tableData = resp.obj;
         this.total = resp.obj.length;
       });
     },
     deleteData(id) {
-      delDict(id).then((resp) => {
+      delDictData(id).then((resp) => {
         if (resp.code === 0) this.getData();
         this.$message({
           message: resp.msg,
@@ -177,6 +181,7 @@ export default {
     },
   },
   mounted() {
+    this.dictType = this.$route.query.type;
     this.getData();
   },
 };
