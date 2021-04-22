@@ -1,46 +1,63 @@
 <template>
   <div>
-    <el-row class="card">
-      <!-- 搜索框 -->
+    <el-row class="card search-bar">
       <el-col :span="24">
-        <span>年级</span>
-        <el-select size="mini" v-model="params.grade" @change="getOrg(true)">
-          <el-option
-            v-for="item in gradeList"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          ></el-option>
-        </el-select>
-        <span>专业</span>
-        <el-cascader
-          size="mini"
-          v-model="params.temp"
-          :options="orgList"
-          clearable
-          :props="orgProps"
-          filterable
-          :show-all-levels="false"
-          ref="cascader"
-          @change="setParams"
-        ></el-cascader>
-        <span>就业情况</span>
-        <el-select v-model="params.employment" size="mini">
-          <el-option :value="0" label="未就业"></el-option>
-          <el-option :value="1" label="已就业"></el-option>
-        </el-select>
-        <span>姓名</span>
-        <el-input
-          v-model="params.name"
-          style="width: 200px"
-          size="mini"
-        ></el-input>
-        <el-button size="mini" type="success" @click="getData()"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="getData(true)"
-          >重置</el-button
-        >
+        <div>
+          <span class="label">年级</span>
+          <el-select size="mini" v-model="params.grade" @change="getOrg(true)">
+            <el-option
+              v-for="item in gradeList"
+              :key="item.value"
+              :value="item.value"
+              :label="item.label"
+            ></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span class="label">专业</span>
+          <el-cascader
+            size="mini"
+            v-model="params.temp"
+            :options="orgList"
+            clearable
+            :props="orgProps"
+            filterable
+            :show-all-levels="false"
+            ref="cascader"
+            @change="setParams"
+          ></el-cascader>
+        </div>
+        <div>
+          <span class="label">就业情况</span>
+          <el-select v-model="params.employment" size="mini">
+            <el-option value="0" label="未就业"></el-option>
+            <el-option value="1" label="已就业"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span class="label">填写情况</span>
+          <el-select v-model="params.write" size="mini">
+            <el-option value="0" label="未填写"></el-option>
+            <el-option value="1" label="已填写"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span class="label"> 姓名</span>
+          <el-input
+            v-model="params.name"
+            style="width: 200px"
+            size="mini"
+          ></el-input>
+        </div>
+        <!-- 按钮 -->
+        <div>
+          <el-button size="mini" type="success" @click="getData()"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="getData(true)"
+            >重置</el-button
+          >
+        </div>
       </el-col>
       <el-col :span="24">
         <el-button size="mini" @click="openDialog('add')" type="success"
@@ -52,8 +69,9 @@
         >
       </el-col>
     </el-row>
+
+    <!-- 表格 -->
     <el-row class="card">
-      <!-- 表格 -->
       <el-col :span="24">
         <el-table
           ref="table"
@@ -170,6 +188,7 @@
         </el-pagination>
       </el-col>
     </el-row>
+
     <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加学生信息' : '修改学生信息'"
@@ -203,7 +222,7 @@
           >
             <el-option
               v-for="item in gradeList2"
-              :key="item"
+              :key="item.value"
               :label="item.label"
               :value="item.value"
             >
@@ -403,16 +422,14 @@ export default {
 </script>
 
 <style>
-.demo-table-expand {
-  font-size: 0;
+.search-bar div {
+  display: inline-block;
+  margin-right:10px;
+  margin-bottom: 5px;
 }
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
+.search-bar .label {
+  font-size: 14px;
+  color: #303133;
+  margin-right:10px;
 }
 </style>
