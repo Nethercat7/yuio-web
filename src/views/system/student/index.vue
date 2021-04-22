@@ -19,24 +19,25 @@
             size="mini"
             v-model="params.temp"
             :options="orgList"
-            clearable
             :props="orgProps"
             filterable
             :show-all-levels="false"
             ref="cascader"
             @change="setParams"
+            clearable
+            @remove-tag="test"
           ></el-cascader>
         </div>
         <div>
           <span class="label">就业情况</span>
-          <el-select v-model="params.employment" size="mini">
+          <el-select v-model="params.employment" size="mini" clearable>
             <el-option value="0" label="未就业"></el-option>
             <el-option value="1" label="已就业"></el-option>
           </el-select>
         </div>
         <div>
           <span class="label">填写情况</span>
-          <el-select v-model="params.write" size="mini">
+          <el-select v-model="params.write" size="mini" clearable>
             <el-option value="0" label="未填写"></el-option>
             <el-option value="1" label="已填写"></el-option>
           </el-select>
@@ -402,10 +403,17 @@ export default {
     },
     //设置级联选择器选择的院系、专业和班级ID
     setParams() {
-      let arr = this.$refs.cascader.getCheckedNodes()[0].path;
-      this.params.college_id = arr[0];
-      this.params.major_id = arr[1];
-      this.params.cls_id = arr[2];
+      //判断是选择还是清空
+      if (this.$refs.cascader.getCheckedNodes().length != 0) {
+        let arr = this.$refs.cascader.getCheckedNodes()[0].path;
+        this.params.college_id = arr[0];
+        this.params.major_id = arr[1];
+        this.params.cls_id = arr[2];
+      } else {
+        this.params.college_id = null;
+        this.params.major_id = null;
+        this.params.cls_id = null;
+      }
     },
     getOrg(query) {
       api
@@ -413,6 +421,9 @@ export default {
         .then((resp) => {
           this.orgList = resp.obj;
         });
+    },
+    test() {
+      console.log(1);
     },
   },
   mounted() {
@@ -424,12 +435,12 @@ export default {
 <style>
 .search-bar div {
   display: inline-block;
-  margin-right:10px;
+  margin-right: 10px;
   margin-bottom: 5px;
 }
 .search-bar .label {
   font-size: 14px;
   color: #303133;
-  margin-right:10px;
+  margin-right: 10px;
 }
 </style>
