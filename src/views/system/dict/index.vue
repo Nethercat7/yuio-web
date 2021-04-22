@@ -1,10 +1,12 @@
 <template>
   <div>
-    <el-row class="card">
+    <el-row class="mb-20">
       <el-col :span="24">
-        <el-button type="success" size="mini" @click="openDialog(0)"
-          >添加</el-button
-        >
+        <el-card :shadow="shadow" class="top-tools">
+          <el-button type="success" size="mini" @click="openDialog(0)"
+            >添加</el-button
+          >
+        </el-card>
       </el-col>
     </el-row>
 
@@ -44,34 +46,54 @@
     </el-dialog>
 
     <!-- 表格 -->
-    <el-table :data="tableData">
-      <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="类型" prop="type"></el-table-column>
-      <el-table-column label="状态" prop="status"></el-table-column>
-      <el-table-column label="备注" prop="remark"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="mini"
-            @click="openDialog('upd', scope.row)"
-            >编辑</el-button
+    <el-row>
+      <el-col :span="24">
+        <el-card :shadow="shadow">
+          <el-table
+            :data="
+              tableData.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize
+              )
+            "
           >
-          <el-popconfirm
-            title="删除后将无法恢复，确定删除吗？"
-            style="padding: 7px 15px"
-            icon="el-icon-info"
-            icon-color="red"
-            @confirm="deleteData(scope.row.id)"
-          >
-            <el-button type="danger" size="mini" slot="reference"
-              >删除</el-button
-            >
-          </el-popconfirm>
-          <el-button type="info" size="mini">查看</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+            <el-table-column label="名称" prop="name"></el-table-column>
+            <el-table-column label="类型" prop="type"></el-table-column>
+            <el-table-column label="状态" prop="status"></el-table-column>
+            <el-table-column label="备注" prop="remark"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  size="mini"
+                  @click="openDialog('upd', scope.row)"
+                  >编辑</el-button
+                >
+                <el-popconfirm
+                  title="删除后将无法恢复，确定删除吗？"
+                  style="padding: 7px 15px"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="deleteData(scope.row.id)"
+                >
+                  <el-button type="danger" size="mini" slot="reference"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+                <el-button type="info" size="mini">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 分页器 -->
+          <Pager
+            :total="total"
+            :currentPage="currentPage"
+            :page.sync="currentPage"
+            :size.sync="pageSize"
+          ></Pager>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -82,15 +104,21 @@ import {
   delDict,
   updDictType,
 } from "@/api/system/dict/type";
+import Pager from "@/components/pager";
 
 export default {
   name: "DictType",
+  components: { Pager },
   data() {
     return {
       form: {},
       dialogVisible: false,
       type: null,
       tableData: [],
+      shadow: "never",
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
     };
   },
   methods: {
@@ -135,6 +163,7 @@ export default {
     getData() {
       getDict().then((resp) => {
         this.tableData = resp.obj;
+        this.total = resp.obj.length;
       });
     },
     deleteData(id) {
