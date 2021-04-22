@@ -50,16 +50,26 @@
       <el-table-column label="状态" prop="status"></el-table-column>
       <el-table-column label="备注" prop="remark"></el-table-column>
       <el-table-column label="操作">
-        <el-button type="primary" size="mini">编辑</el-button>
-        <el-button type="danger" size="mini">删除</el-button>
-        <el-button type="info" size="mini">查看</el-button>
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini">编辑</el-button>
+          <el-popconfirm
+            title="删除后将无法恢复，确定删除吗？"
+            style="padding: 7px 15px"
+            icon="el-icon-info"
+            icon-color="red"
+            @confirm="deleteData(scope.row.id)"
+          >
+            <el-button type="danger" size="mini" slot="reference">删除</el-button>
+          </el-popconfirm>
+          <el-button type="info" size="mini">查看</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-import { addDictType,getDict } from "@/api/system/dict/type";
+import { addDictType, getDict, delDict } from "@/api/system/dict/type";
 
 export default {
   name: "DictType",
@@ -68,7 +78,7 @@ export default {
       form: {},
       dialogVisible: false,
       type: null,
-      tableData:[]
+      tableData: [],
     };
   },
   methods: {
@@ -90,7 +100,7 @@ export default {
             type: resp.type,
           });
         });
-        this.form={};
+        this.form = {};
       } else {
         //do se
       }
@@ -103,15 +113,24 @@ export default {
         })
         .catch(() => {});
     },
-    getData(){
-      getDict().then(resp=>{
-        this.tableData=resp.obj;
-      })
-    }
+    getData() {
+      getDict().then((resp) => {
+        this.tableData = resp.obj;
+      });
+    },
+    deleteData(id) {
+      delDict(id).then((resp) => {
+        if (resp.code === 0) this.getData();
+        this.$message({
+          message: resp.msg,
+          type: resp.type,
+        });
+      });
+    },
   },
-  mounted(){
+  mounted() {
     this.getData();
-  }
+  },
 };
 </script>
 

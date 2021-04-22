@@ -14,3 +14,10 @@ export function getDict(){
         method:'get'
     })
 }
+
+export function delDict(id){
+    return request({
+        url:'sys/dict/type/del?id='+id,
+        method:'delete'
+    })
+}
