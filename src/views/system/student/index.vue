@@ -4,7 +4,7 @@
       <!-- 搜索框 -->
       <el-col :span="24">
         <span>年级</span>
-        <el-select size="mini" v-model="params.grade">
+        <el-select size="mini" v-model="params.grade" @change="getOrg">
           <el-option
             v-for="item in gradeList"
             :key="item.value"
@@ -15,8 +15,8 @@
         <span>专业</span>
         <el-cascader
           size="mini"
-          v-model="params.id"
-          :options="cascaderData"
+          v-model="params.temp"
+          :options="orgList"
           clearable
           :props="orgProps"
           filterable
@@ -226,7 +226,7 @@
         <el-form-item label="所属班级">
           <el-cascader
             v-model="form.container"
-            :options="cascaderData"
+            :options="orgList"
             :props="cascaderProps"
           >
           </el-cascader>
@@ -266,7 +266,6 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      cascaderData: [],
       grade: [],
       cascaderProps: {
         value: "id",
@@ -304,9 +303,7 @@ export default {
       //获取年级信息
       this.getGrade();
       //获取院系、专业和班级信息
-      api.getFullOrg().then((resp) => {
-        this.cascaderData = resp.obj;
-      });
+      this.getOrg();
       api.getStudentGrade().then((resp) => {
         this.gradeList = resp.obj;
       });
@@ -433,6 +430,11 @@ export default {
       this.params.college_id = arr[0];
       this.params.major_id = arr[1];
       this.params.cls_id = arr[2];
+    },
+    getOrg() {
+      api.getFullOrg({ grade: this.params.grade }).then((resp) => {
+        this.orgList = resp.obj;
+      });
     },
   },
   mounted() {
