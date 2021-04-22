@@ -21,3 +21,11 @@ export function delDict(id){
         method:'delete'
     })
 }
+
+export function updDictType(data){
+    return request({
+        url:'sys/dict/type/upd',
+        method:'put',
+        data:data
+    })
+}

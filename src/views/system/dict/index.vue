@@ -51,7 +51,12 @@
       <el-table-column label="备注" prop="remark"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini">编辑</el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="openDialog('upd', scope.row)"
+            >编辑</el-button
+          >
           <el-popconfirm
             title="删除后将无法恢复，确定删除吗？"
             style="padding: 7px 15px"
@@ -59,7 +64,9 @@
             icon-color="red"
             @confirm="deleteData(scope.row.id)"
           >
-            <el-button type="danger" size="mini" slot="reference">删除</el-button>
+            <el-button type="danger" size="mini" slot="reference"
+              >删除</el-button
+            >
           </el-popconfirm>
           <el-button type="info" size="mini">查看</el-button>
         </template>
@@ -69,7 +76,12 @@
 </template>
 
 <script>
-import { addDictType, getDict, delDict } from "@/api/system/dict/type";
+import {
+  addDictType,
+  getDict,
+  delDict,
+  updDictType,
+} from "@/api/system/dict/type";
 
 export default {
   name: "DictType",
@@ -94,16 +106,23 @@ export default {
     submitDialog() {
       if (this.type === 0) {
         addDictType(this.form).then((resp) => {
-          if (resp.code === 0);
+          if (resp.code === 0) this.getData();
           this.$message({
             message: resp.msg,
             type: resp.type,
           });
         });
-        this.form = {};
       } else {
-        //do se
+        updDictType(this.form).then((resp) => {
+          if (resp.code === 0) this.getData();
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        });
+        this.dialogVisible = false;
       }
+      this.form = {};
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
