@@ -57,6 +57,11 @@ const system = {
         component: () => import('@/views/system/work/'),
         name: 'WorkManagement',
         meta: { title: '岗位管理' }
+    }, {
+        path: 'dict',
+        component: () => import('@/views/system/dict/'),
+        name: 'DictType',
+        meta: { title: '字典管理' }
     }]
 }
 
