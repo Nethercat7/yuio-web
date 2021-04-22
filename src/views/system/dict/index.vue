@@ -7,6 +7,7 @@
         >
       </el-col>
     </el-row>
+
     <!-- 表单 -->
     <el-dialog
       :title="type === 0 ? '添加字典类型' : '修改字典类型'"
@@ -41,11 +42,24 @@
         <el-button type="primary" @click="submitDialog()">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 表格 -->
+    <el-table :data="tableData">
+      <el-table-column label="名称" prop="name"></el-table-column>
+      <el-table-column label="类型" prop="type"></el-table-column>
+      <el-table-column label="状态" prop="status"></el-table-column>
+      <el-table-column label="备注" prop="remark"></el-table-column>
+      <el-table-column label="操作">
+        <el-button type="primary" size="mini">编辑</el-button>
+        <el-button type="danger" size="mini">删除</el-button>
+        <el-button type="info" size="mini">查看</el-button>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-import { addDictType } from "@/api/system/dict/type";
+import { addDictType,getDict } from "@/api/system/dict/type";
 
 export default {
   name: "DictType",
@@ -54,6 +68,7 @@ export default {
       form: {},
       dialogVisible: false,
       type: null,
+      tableData:[]
     };
   },
   methods: {
@@ -88,7 +103,15 @@ export default {
         })
         .catch(() => {});
     },
+    getData(){
+      getDict().then(resp=>{
+        this.tableData=resp.obj;
+      })
+    }
   },
+  mounted(){
+    this.getData();
+  }
 };
 </script>
 

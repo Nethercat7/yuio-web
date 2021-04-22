@@ -7,3 +7,10 @@ export function addDictType(data){
         data:data
     })
 }
+
+export function getDict(){
+    return request({
+        url:'sys/dict/type/get',
+        method:'get'
+    })
+}
