@@ -10,6 +10,12 @@
             <el-form-item label="密码">
               <el-input v-model="form.pwd" type="password"></el-input>
             </el-form-item>
+            <el-form-item label="登录类型">
+              <el-radio-group v-model="form.isUser">
+                <el-radio :label="true">管理员</el-radio>
+                <el-radio :label="false">学生</el-radio>
+              </el-radio-group>
+            </el-form-item>
             <el-form-item>
               <el-row>
                 <el-col :span="12">
@@ -29,7 +35,8 @@
 </template>
 
 <script>
-import api from "@/api/api";
+import storage from "../utils/storage";
+import { doLogin } from "@/api/system/sys";
 
 export default {
   name: "Login",
@@ -43,8 +50,17 @@ export default {
   },
   methods: {
     login() {
-      api.login(this.form).then((resp) => {
-        console.log(resp);
+      doLogin(this.form).then((resp) => {
+        if (resp.code === 0) {
+          console.log(resp)
+          storage.setSubject(resp.obj);
+          this.$router.push("/")
+        } else {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
       });
     },
   },

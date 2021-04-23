@@ -14,7 +14,7 @@ let storage = {
         return jwt.decode(localStorage.getItem(k))
     },
     setSubject(v) {
-        localStorage.setItem('token', JSON.stringify(v))
+        localStorage.setItem("token", JSON.stringify(v))
     },
     getSubject() {
         return jwt.verify(this.get('token'),"*******")

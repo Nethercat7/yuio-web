@@ -6,8 +6,6 @@ Vue.use(Router)
 //Layout
 import Layout from '@/layout/'
 import UserLogin from '@/layout/login'
-import Container from '@/container/'
-import StudentLogin from '@/container/login'
 
 //各模块路由
 import system from './modules/system'
@@ -23,19 +21,11 @@ Router.prototype.push = function push(location) {
 
 const constantRoutes = [
     {
-        path:'/',
-        component:Container
-    },
-    {
-        path:'/login',
-        component:StudentLogin
-    },
-    {
-        path: '/admin',
+        path: '/',
         component: Layout
     },
     {
-        path: '/admin/login',
+        path: '/login',
         component: UserLogin
     },
     system,
