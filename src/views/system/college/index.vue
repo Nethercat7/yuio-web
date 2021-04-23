@@ -27,8 +27,8 @@
       </el-col>
     </el-row>
 
+    <!-- 表格 -->
     <el-row class="card">
-      <!-- 表格 -->
       <el-col :span="24">
         <el-table
           ref="table"
@@ -38,11 +38,15 @@
               currentPage * pageSize
             )
           "
-          :row-class-name="tableRowClassName"
         >
           <el-table-column label="院系名称" prop="name" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="status" sortable>
+          <el-table-column
+            label="状态"
+            prop="status"
+            sortable
+            :formatter="statusFormatter"
+          >
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -80,6 +84,7 @@
         </el-pagination>
       </el-col>
     </el-row>
+
     <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加院系' : '修改院系'"
@@ -93,8 +98,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">启用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -124,6 +133,7 @@ export default {
       pageSize: 10,
       total: 0,
       keyword: "",
+      statusOptions: [],
     };
   },
   methods: {
@@ -165,11 +175,6 @@ export default {
         })
         .catch(() => {});
     },
-    tableRowClassName({ row }) {
-      if (row.status == 1) {
-        return "warning-row";
-      }
-    },
     deleteRow(id) {
       api.delCollege(id).then((resp) => {
         this.$message({
@@ -185,6 +190,10 @@ export default {
         this.total = resp.obj.length;
         let data = resp.obj;
         this.tableData = data;
+      });
+      //获取数据字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
       });
     },
     //页面切换控制器
@@ -217,6 +226,9 @@ export default {
       this.total = this.tableData.length;
       this.keyword = "";
     },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
   },
   mounted() {
     this.getData();
@@ -225,18 +237,4 @@ export default {
 </script>
 
 <style>
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
 </style>

@@ -31,8 +31,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio label="0">正常</el-radio>
-            <el-radio label="1">禁用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -60,7 +64,11 @@
             <el-table-column label="标签" prop="label"></el-table-column>
             <el-table-column label="类型" prop="type"></el-table-column>
             <el-table-column label="键值" prop="value"></el-table-column>
-            <el-table-column label="状态" prop="status"></el-table-column>
+            <el-table-column
+              label="状态"
+              prop="status"
+              :formatter="statusFormatter"
+            ></el-table-column>
             <el-table-column label="备注" prop="remark"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
@@ -122,6 +130,7 @@ export default {
       pageSize: 10,
       total: 0,
       dictType: null,
+      statusOptions: [],
     };
   },
   methods: {
@@ -169,6 +178,10 @@ export default {
         this.tableData = resp.obj;
         this.total = resp.obj.length;
       });
+      //获取数据字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
+      });
     },
     deleteData(id) {
       delDictData(id).then((resp) => {
@@ -178,6 +191,9 @@ export default {
           type: resp.type,
         });
       });
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
   },
   mounted() {

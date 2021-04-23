@@ -44,7 +44,12 @@
           </el-table-column>
           <el-table-column label="所属院系" prop="college_name" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="status" sortable>
+          <el-table-column
+            label="状态"
+            prop="status"
+            sortable
+            :formatter="statusFormatter"
+          >
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -94,7 +99,11 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="所属院系">
-          <el-select v-model="form.college_id" placeholder="请选择" @change="handelChange">
+          <el-select
+            v-model="form.college_id"
+            placeholder="请选择"
+            @change="handelChange"
+          >
             <el-option
               v-for="item in colleges"
               :key="item.id"
@@ -106,8 +115,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">启用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -139,6 +152,7 @@ export default {
       pageSize: 10,
       total: 0,
       colleges: [],
+      statusOptions: [],
     };
   },
   methods: {
@@ -207,6 +221,10 @@ export default {
       api.getColleges().then((resp) => {
         this.colleges = resp.obj;
       });
+      //获取数据字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
+      });
     },
     //页面切换控制器
     changePage(val) {
@@ -236,12 +254,17 @@ export default {
     resetResult() {
       this.tableData = this.tableDataBak;
       this.keyword = "";
-      this.total=this.tableData.length;
+      this.total = this.tableData.length;
     },
-    handelChange(){
-      let college=this.colleges.filter(data=>data.college_id.includes(this.form.college_id));
-      this.form.college_name=college[0].college_name;
-    }
+    handelChange() {
+      let college = this.colleges.filter((data) =>
+        data.college_id.includes(this.form.college_id)
+      );
+      this.form.college_name = college[0].college_name;
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
   },
   mounted() {
     this.getMajors();

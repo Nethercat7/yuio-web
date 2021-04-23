@@ -46,8 +46,20 @@
           <el-table-column label="标识" prop="mark"></el-table-column>
           <el-table-column label="请求地址" prop="url"></el-table-column>
           <el-table-column label="图标" prop="icon"></el-table-column>
-          <el-table-column label="状态" prop="status"></el-table-column>
-          <el-table-column label="创建时间" prop="create_time"></el-table-column>
+          <el-table-column
+            label="类型"
+            prop="type"
+            :formatter="typeFormatter"
+          ></el-table-column>
+          <el-table-column
+            label="状态"
+            prop="status"
+            :formatter="statusFormatter"
+          ></el-table-column>
+          <el-table-column
+            label="创建时间"
+            prop="create_time"
+          ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -108,16 +120,23 @@
           <el-input v-model="form.icon"></el-input>
         </el-form-item>
         <el-form-item label="类型">
-            <el-radio-group v-model="form.type">
-            <el-radio :label="0">目录</el-radio>
-            <el-radio :label="1">菜单</el-radio>
-            <el-radio :label="2">按钮</el-radio>
+          <el-radio-group v-model="form.type">
+            <el-radio
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -165,8 +184,10 @@ export default {
         value: "id",
         label: "name",
         checkStrictly: true,
-        emitPath:false
+        emitPath: false,
       },
+      statusOptions: [],
+      typeOptions: [],
     };
   },
   methods: {
@@ -175,6 +196,13 @@ export default {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
+      });
+      //获取字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
+      });
+      this.getDictData("sys_menu_type").then((resp) => {
+        this.typeOptions = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -274,6 +302,12 @@ export default {
         .catch(() => {
           return null;
         });
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    typeFormatter(row) {
+      return this.selectDictLabel(this.typeOptions, row.status);
     },
   },
   mounted() {

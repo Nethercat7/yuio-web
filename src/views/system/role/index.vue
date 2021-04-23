@@ -43,7 +43,11 @@
             label="创建时间"
             prop="create_time"
           ></el-table-column>
-          <el-table-column label="状态" prop="status"></el-table-column>
+          <el-table-column
+            label="状态"
+            prop="status"
+            :formatter="statusFormatter"
+          ></el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button
@@ -96,8 +100,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="操作权限">
@@ -153,6 +161,7 @@ export default {
         label: "name",
       },
       perms: [],
+      statusOptions: [],
     };
   },
   methods: {
@@ -164,6 +173,10 @@ export default {
       });
       api.getMenu().then((resp) => {
         this.perms = resp.obj;
+      });
+      //获取字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -181,7 +194,7 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase())
+        data.name.toLowerCase().includes(this.keyword.toLowerCase());
     },
     handleReset() {
       this.tableData = this.tableDataBak;
@@ -189,8 +202,8 @@ export default {
     },
     openDialog(type, row) {
       this.dialogVisible = true;
-      this.value=0;
-      this.customize=false;
+      this.value = 0;
+      this.customize = false;
       if (type == "add") {
         this.type = type;
       } else {
@@ -256,6 +269,9 @@ export default {
         this.customize = false;
         this.form.perms = 1;
       }
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
   },
   mounted() {

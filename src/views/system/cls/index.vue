@@ -46,7 +46,12 @@
           </el-table-column>
           <el-table-column label="所属年级" prop="grade" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="status" sortable>
+          <el-table-column
+            label="状态"
+            prop="status"
+            sortable
+            :formatter="statusFormatter"
+          >
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
@@ -115,8 +120,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">启用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -153,6 +162,7 @@ export default {
         value: "id",
         label: "name",
       },
+      statusOptions: [],
     };
   },
   methods: {
@@ -170,6 +180,10 @@ export default {
       });
       //获取年级
       this.getGrade();
+      //获取数据字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
+      });
     },
     openDialog(type, row) {
       this.dialogVisible = true;
@@ -258,6 +272,9 @@ export default {
       }
       this.grade = dateArr;
     },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
   },
   mounted() {
     this.getData();
@@ -266,22 +283,4 @@ export default {
 </script>
 
 <style>
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-.element-right {
-  display: inline;
-  text-align: right;
-}
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
 </style>

@@ -25,7 +25,6 @@
             ref="cascader"
             @change="setParams"
             clearable
-            @remove-tag="test"
           ></el-cascader>
         </div>
         <div>
@@ -82,7 +81,6 @@
               currentPage * pageSize
             )
           "
-          :row-class-name="tableRowClassName"
         >
           <!-- 表格展开行 -->
           <el-table-column type="expand">
@@ -133,17 +131,24 @@
           </el-table-column>
           <el-table-column label="所属班级" prop="cls_name" sortable>
           </el-table-column>
-          <el-table-column label="状态" prop="status" sortable>
+          <el-table-column
+            label="状态"
+            prop="status"
+            sortable
+            :formatter="statusFormatter"
+          >
           </el-table-column>
           <el-table-column
             label="就业信息填写"
             prop="write"
             sortable
+            :formatter="writeFormatter"
           ></el-table-column>
           <el-table-column
             label="就业情况"
             prop="employment"
             sortable
+            :formatter="emplFormatter"
           ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
@@ -211,8 +216,12 @@
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="form.gender">
-            <el-radio :label="0">女</el-radio>
-            <el-radio :label="1">男</el-radio>
+            <el-radio
+              v-for="item in genderOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="所属年级">
@@ -240,9 +249,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">休学</el-radio>
-            <el-radio :label="2">退学</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
@@ -293,6 +305,10 @@ export default {
       params: {
         grade: new Date().getFullYear() - 4,
       },
+      statusOptions: [],
+      genderOptions: [],
+      writeOptions: [],
+      emplOptions: [],
     };
   },
   methods: {
@@ -317,6 +333,19 @@ export default {
       api.getGrade().then((resp) => {
         this.gradeList = resp.obj;
         this.gradeList2 = resp.obj;
+      });
+      //获取数据字典
+      this.getDictData("sys_stdnt_status").then((resp) => {
+        this.statusOptions = resp.obj;
+      });
+      this.getDictData("sys_user_gender").then((resp) => {
+        this.genderOptions = resp.obj;
+      });
+      this.getDictData("sys_write_status").then((resp) => {
+        this.writeOptions = resp.obj;
+      });
+      this.getDictData("sys_empl_status").then((resp) => {
+        this.emplOptions = resp.obj;
       });
     },
     openDialog(type, row) {
@@ -355,11 +384,6 @@ export default {
           this.form = {};
         })
         .catch(() => {});
-    },
-    tableRowClassName({ row }) {
-      if (row.status === 1) {
-        return "aberrant-row";
-      }
     },
     handleDelete(id) {
       api.delStudent(id).then((resp) => {
@@ -422,8 +446,17 @@ export default {
           this.orgList = resp.obj;
         });
     },
-    test() {
-      console.log(1);
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    genderFormatter(row) {
+      return this.selectDictLabel(this.genderOptions, row.gender);
+    },
+    writeFormatter(row) {
+      return this.selectDictLabel(this.writeOptions, row.write);
+    },
+    emplFormatter(row) {
+      return this.selectDictLabel(this.emplOptions, row.employment);
     },
   },
   mounted() {

@@ -44,8 +44,15 @@
         >
           <el-table-column label="名称" prop="name"></el-table-column>
           <el-table-column label="层级" prop="level"></el-table-column>
-          <el-table-column label="状态" prop="status"></el-table-column>
-          <el-table-column label="创建时间" prop="create_time"></el-table-column>
+          <el-table-column
+            label="状态"
+            prop="status"
+            :formatter="statusFormatter"
+          ></el-table-column>
+          <el-table-column
+            label="创建时间"
+            prop="create_time"
+          ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -98,8 +105,12 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
-            <el-radio :label="0">正常</el-radio>
-            <el-radio :label="1">停用</el-radio>
+            <el-radio
+              v-for="item in statusOptions"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}</el-radio
+            >
           </el-radio-group>
         </el-form-item>
         <el-form-item label="上级城市">
@@ -144,8 +155,9 @@ export default {
         value: "id",
         label: "name",
         checkStrictly: true,
-        emitPath:false
+        emitPath: false,
       },
+      statusOptions: [],
     };
   },
   methods: {
@@ -154,6 +166,10 @@ export default {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
+      });
+      //获取字典
+      this.getDictData("sys_uvsl_status").then((resp) => {
+        this.statusOptions = resp.obj;
       });
     },
     searchSuggestions(queryString, cb) {
@@ -171,12 +187,12 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase())
+        data.name.toLowerCase().includes(this.keyword.toLowerCase());
     },
     handleReset() {
       this.tableData = this.tableDataBak;
       this.total = this.tableData.length;
-      this.keyword="";
+      this.keyword = "";
     },
     openDialog(type, row) {
       this.dialogVisible = true;
@@ -231,6 +247,9 @@ export default {
           type: resp.type,
         });
       });
+    },
+    statusFormatter(row) {
+      return this.selectDictLabel(this.statusOptions, row.status);
     },
   },
   mounted() {
