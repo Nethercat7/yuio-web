@@ -303,7 +303,7 @@ export default {
         });
     },
     genderFormatter(row) {
-      return this.selectDictLabel(this.genderOptions, row.status);
+      return this.selectDictLabel(this.genderOptions, row.gender);
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
