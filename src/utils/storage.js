@@ -5,7 +5,7 @@ export function setStorage(k, v) {
 }
 
 export function getStorage(k) {
-    return localStorage.getItem(k).split('"').join("");
+    return localStorage.getItem(k);
 }
 
 export function delStorage(k) {
@@ -20,6 +20,6 @@ export function getSubject() {
     return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******")
 }
 
-export function removeSubject() {
+export function delSubject() {
     localStorage.removeItem("token")
 }
