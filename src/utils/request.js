@@ -1,27 +1,19 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
-import storage from "./storage";
+import {getStorage} from "./storage";
 
-// create an axios instance
+//创建实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  baseURL: process.env.VUE_APP_BASE_API, 
+  timeout: 5000 
 })
 
 //配置请求拦截器
 service.interceptors.request.use(config=>{
-  //发请求前做的一些处理，数据转化，配置请求头，设置token,设置loading等，根据需求去添加
-/*  config.data = JSON.stringify(config.data); //数据转化,也可以使用qs转换
-  config.headers = {
-    'Content-Type':'application/x-www-form-urlencoded' //配置请求头
-  }*/
-  //注意使用token的时候需要引入cookie方法或者用本地localStorage等方法，推荐js-cookie
-  const token = storage.get('token')//这里取token之前，你肯定需要先拿到token,存一下
+  //设置请求头
+  const token = getStorage("token")
   if(token){
-    //如果要求携带在参数中
-    //config.params = {'token':token}
-    config.headers.token= token; //如果要求携带在请求头中
+    config.headers.token= token;
   }
   return config
 }, error => {
@@ -89,7 +81,7 @@ service.interceptors.response.use(resp=>{
   /***** 处理结束 *****/
   //如果不需要错误处理，以上的处理过程都可省略
   //return Promise.resolve(error.response)
-  return Promise.resolve()
+  return Promise.resolve(error.response)
 })
 
 export default service

@@ -1,27 +1,25 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken"
 
-let storage = {
-    set(k, v) {
-        localStorage.setItem(k, JSON.stringify(v))
-    },
-    get(k) {
-        return localStorage.getItem(k).split('"').join("")
-    },
-    remove(k) {
-        localStorage.removeItem(k)
-    },
-    parse(k) {
-        return jwt.decode(localStorage.getItem(k))
-    },
-    setSubject(v) {
-        localStorage.setItem("token", JSON.stringify(v))
-    },
-    getSubject() {
-        return jwt.verify(this.get('token'),"*******")
-    },
-    removeSubject() {
-        localStorage.removeItem('token')
-    }
+export function setStorage(k, v) {
+    return localStorage.setItem(k, JSON.stringify(v));
 }
 
-export default storage
+export function getStorage(k) {
+    return localStorage.getItem(k).split('"').join("");
+}
+
+export function delStorage(k) {
+    return localStorage.removeItem(k);
+}
+
+export function setSubject(v) {
+    localStorage.setItem("token", JSON.stringify(v))
+}
+
+export function getSubject() {
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******")
+}
+
+export function removeSubject() {
+    localStorage.removeItem("token")
+}

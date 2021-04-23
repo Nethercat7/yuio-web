@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import storage from "../utils/storage";
 import { doLogin } from "@/api/system/sys";
+import { setSubject } from "@/utils/storage";
 
 export default {
   name: "Login",
@@ -52,9 +52,8 @@ export default {
     login() {
       doLogin(this.form).then((resp) => {
         if (resp.code === 0) {
-          console.log(resp)
-          storage.setSubject(resp.obj);
-          this.$router.push("/")
+          setSubject(resp.obj);
+          this.$router.push("/");
         } else {
           this.$message({
             message: resp.msg,
