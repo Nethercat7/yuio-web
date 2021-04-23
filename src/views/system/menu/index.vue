@@ -307,7 +307,7 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     typeFormatter(row) {
-      return this.selectDictLabel(this.typeOptions, row.status);
+      return this.selectDictLabel(this.typeOptions, row.type);
     },
   },
   mounted() {
