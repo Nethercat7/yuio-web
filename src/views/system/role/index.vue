@@ -139,6 +139,7 @@
 <script>
 import Pager from "@/components/pager";
 import api from "../../../api/api";
+import { addRole, getRoles, delRole, updRole } from "@/api/system/role";
 
 export default {
   name: "roleManagement",
@@ -166,7 +167,7 @@ export default {
   },
   methods: {
     getData() {
-      api.getRoles().then((resp) => {
+      getRoles().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
@@ -220,7 +221,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addRole(this.form).then((resp) => {
+        addRole(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -228,7 +229,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updRole(this.form).then((resp) => {
+        updRole(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -248,7 +249,7 @@ export default {
         .catch(() => {});
     },
     handleDelete(id) {
-      api.delRole(id).then((resp) => {
+      delRole(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
