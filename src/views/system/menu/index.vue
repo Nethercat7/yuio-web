@@ -165,6 +165,7 @@
 <script>
 import Pager from "@/components/pager";
 import api from "../../../api/api";
+import { addPerms, getPerms, delPerms, updPerms } from "@/api/system/perms";
 
 export default {
   name: "menuManagement",
@@ -192,7 +193,7 @@ export default {
   },
   methods: {
     getData() {
-      api.getMenu().then((resp) => {
+      getPerms().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
@@ -238,7 +239,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addMenu(this.form).then((resp) => {
+        addPerms(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -246,7 +247,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updMenu(this.form).then((resp) => {
+        updPerms(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -271,7 +272,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delMenu(id).then((resp) => {
+      delPerms(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
