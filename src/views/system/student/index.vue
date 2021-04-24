@@ -231,13 +231,13 @@
 </template>
 
 <script>
-import api from "@/api/api";
 import {
   addStudent,
   delStudent,
   updStudent,
   getWithEStatusInfo,
 } from "@/api/system/student";
+import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
 export default {
   name: "studentManagement",
@@ -297,7 +297,7 @@ export default {
       });
       //获取院系、专业和班级信息
       this.getOrg();
-      api.getGrade().then((resp) => {
+      getGrade().then((resp) => {
         this.gradeList = resp.obj;
         this.gradeList2 = resp.obj;
       });
@@ -381,7 +381,7 @@ export default {
             isUser: false,
             key: id,
           };
-          api.resetPwd(reset).then((resp) => {
+          resetPwd(reset).then((resp) => {
             this.$message({
               type: resp.type,
               message: resp.msg,
@@ -407,11 +407,11 @@ export default {
       }
     },
     getOrg(query) {
-      api
-        .getFullOrg({ grade: query ? this.params.grade : this.form.grade })
-        .then((resp) => {
+      getCompleteOrg(query ? this.params.grade : this.form.grade).then(
+        (resp) => {
           this.orgList = resp.obj;
-        });
+        }
+      );
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);

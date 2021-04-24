@@ -141,8 +141,8 @@
 </template>
 
 <script>
-import api from "@/api/api";
 import { addClass, getClasses, delClass, updClass } from "@/api/system/class";
+import { getCollegeAndMajor } from "@/api/system/sys";
 
 export default {
   name: "classManagement",
@@ -176,7 +176,7 @@ export default {
         this.tableData = data;
       });
       //获取学院和专业
-      api.getCollegeAndMajor().then((resp) => {
+      getCollegeAndMajor().then((resp) => {
         this.colleges = resp.obj;
       });
       //获取年级

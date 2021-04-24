@@ -87,7 +87,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import Radar from "@/components/charts/radar";
-import api from "@/api/api";
+import { getGrade, getCompleteOrg } from "@/api/system/sys";
 import {
   getEmplCityInfo,
   getEmplWorkInfo,
@@ -150,7 +150,7 @@ export default {
         });
       });
       //获取年级信息
-      api.getGrade().then((resp) => {
+      getGrade().then((resp) => {
         this.gradeList = resp.obj;
       });
       //获取学院信息
@@ -178,7 +178,7 @@ export default {
       this.params.class_id = arr[2];
     },
     getOrg() {
-      api.getFullOrg({ grade: this.params.grade }).then((resp) => {
+      getCompleteOrg({ grade: this.params.grade }).then((resp) => {
         this.orgList = resp.obj;
       });
     },

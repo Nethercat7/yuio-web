@@ -138,8 +138,8 @@
 
 <script>
 import Pager from "@/components/pager";
-import api from "../../../api/api";
 import { addRole, getRoles, delRole, updRole } from "@/api/system/role";
+import { getPerms } from "@/api/system/perms";
 
 export default {
   name: "roleManagement",
@@ -172,7 +172,7 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
       });
-      api.getMenu().then((resp) => {
+      getPerms().then((resp) => {
         this.perms = resp.obj;
       });
       //获取字典

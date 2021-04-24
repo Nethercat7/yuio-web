@@ -164,7 +164,6 @@
 
 <script>
 import Pager from "@/components/pager";
-import api from "../../../api/api";
 import { addPerms, getPerms, delPerms, updPerms } from "@/api/system/perms";
 
 export default {
@@ -281,28 +280,6 @@ export default {
           type: resp.type,
         });
       });
-    },
-    resetPwd(id) {
-      this.$confirm("此操作将会重置的登录密码, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.reset = {
-            isUser: true,
-            key: id,
-          };
-          api.resetPwd(this.reset).then((resp) => {
-            this.$message({
-              type: resp.type,
-              message: resp.msg,
-            });
-          });
-        })
-        .catch(() => {
-          return null;
-        });
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);

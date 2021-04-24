@@ -6,11 +6,6 @@ const system = {
     name: 'SchoolManagement',
     meta: { title: '基本信息管理' },
     children: [{
-        path: 'org',
-        component: () => import("@/views/system/org/"),
-        name: 'OrgManagement',
-        meta: { title: "组织管理" }
-    }, {
         path: 'college',
         component: () => import('@/views/system/college/'),
         name: 'CollegeManagement',

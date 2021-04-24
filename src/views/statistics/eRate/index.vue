@@ -123,7 +123,7 @@
 
 <script>
 import Bar from "@/components/charts/bar";
-import api from "../../../api/api";
+import { getGrade } from "@/api/system/sys";
 import { getEmplInfo, getCollegeEmplInfo } from "@/api/statistics/rate";
 
 export default {
@@ -157,7 +157,7 @@ export default {
         this.tableData = resp.obj.data;
       });
       //获取年级信息
-      api.getGrade().then((resp) => {
+      getGrade().then((resp) => {
         this.gradeList = resp.obj;
       });
     },

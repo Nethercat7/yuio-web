@@ -169,8 +169,9 @@
 
 <script>
 import Pager from "@/components/pager";
-import api from "../../../api/api";
 import { addUser, getUsers, delUser, updUser } from "@/api/system/user";
+import { getRoles } from "@/api/system/role";
+import { resetPwd } from "@/api/system/sys";
 
 export default {
   name: "userManagement",
@@ -198,7 +199,7 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
       });
-      api.getRoles().then((resp) => {
+      getRoles().then((resp) => {
         this.roles = resp.obj;
       });
       //获取字典数据
@@ -296,7 +297,7 @@ export default {
             isUser: true,
             key: id,
           };
-          api.resetPwd(this.reset).then((resp) => {
+          resetPwd(this.reset).then((resp) => {
             this.$message({
               type: resp.type,
               message: resp.msg,
