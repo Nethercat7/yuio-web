@@ -135,7 +135,7 @@
 
 <script>
 import Pager from "@/components/pager";
-import api from "@/api/api";
+import { addWork, getWorks, delWork, updWork } from "@/api/system/work";
 
 export default {
   name: "workManagement",
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getData() {
-      api.getWorks().then((resp) => {
+      getWorks().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
@@ -205,7 +205,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addWork(this.form).then((resp) => {
+        addWork(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -213,7 +213,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updWork(this.form).then((resp) => {
+        updWork(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -238,7 +238,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delWork(id).then((resp) => {
+      delWork(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
