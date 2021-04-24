@@ -129,7 +129,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.description"></el-input>
+          <el-input type="textarea" v-model="form.remark"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -142,6 +142,7 @@
 
 <script>
 import api from "@/api/api";
+import { addClass, getClasses, delClass, updClass } from "@/api/system/class";
 
 export default {
   name: "classManagement",
@@ -168,7 +169,7 @@ export default {
   methods: {
     getData() {
       //获取班级
-      api.getCls().then((resp) => {
+      getClasses().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
@@ -196,7 +197,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addCls(this.form).then((resp) => {
+        addClass(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -204,7 +205,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updCls(this.form).then((resp) => {
+        updClass(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -224,7 +225,7 @@ export default {
         .catch(() => {});
     },
     handleDelete(id) {
-      api.delCls(id).then((resp) => {
+      delClass(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }

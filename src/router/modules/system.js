@@ -23,8 +23,8 @@ const system = {
         meta: { title: '专业管理' }
     },
     {
-        path: 'cls',
-        component: () => import('@/views/system/cls/'),
+        path: 'class',
+        component: () => import('@/views/system/class/'),
         name: "ClsManagement",
         meta: { title: '班级管理' }
     }, {
