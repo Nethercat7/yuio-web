@@ -135,7 +135,7 @@
 
 <script>
 import Pager from "@/components/pager";
-import api from "@/api/api";
+import { addCity, getCities, delCity, updCity } from "@/api/system/city";
 
 export default {
   name: "cityManagement",
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getData() {
-      api.getCities().then((resp) => {
+      getCities().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
@@ -205,7 +205,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addCity(this.form).then((resp) => {
+        addCity(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -213,7 +213,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updCity(this.form).then((resp) => {
+        updCity(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -238,7 +238,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delCity(id).then((resp) => {
+      delCity(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
