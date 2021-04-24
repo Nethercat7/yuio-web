@@ -82,45 +82,6 @@
             )
           "
         >
-          <!-- 表格展开行 -->
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form
-                label-position="left"
-                inline
-                label-suffix=":"
-                class="demo-table-expand"
-              >
-                <el-form-item label="姓名">
-                  <span>{{ props.row.name }}</span>
-                </el-form-item>
-                <el-form-item label="学号">
-                  <span>{{ props.row.code }}</span>
-                </el-form-item>
-                <el-form-item label="性别">
-                  <span>{{ props.row.gender }}</span>
-                </el-form-item>
-                <el-form-item label="电话号码">
-                  <span>{{ props.row.phone }}</span>
-                </el-form-item>
-                <el-form-item label="所属院系">
-                  <span>{{ props.row.college_name }}</span>
-                </el-form-item>
-                <el-form-item label="所属专业">
-                  <span>{{ props.row.major_name }}</span>
-                </el-form-item>
-                <el-form-item label="所属年级">
-                  <span>{{ props.row.grade }}</span>
-                </el-form-item>
-                <el-form-item label="所属班级">
-                  <span>{{ props.row.cls_name }}</span>
-                </el-form-item>
-                <el-form-item label="状态">
-                  <span>{{ props.row.status }}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
           <el-table-column label="姓名" prop="name" sortable> </el-table-column>
           <el-table-column label="学号" prop="code" sortable> </el-table-column>
           <el-table-column label="所属院系" prop="college_name" sortable>
@@ -129,7 +90,7 @@
           </el-table-column>
           <el-table-column label="所属年级" prop="grade" sortable>
           </el-table-column>
-          <el-table-column label="所属班级" prop="cls_name" sortable>
+          <el-table-column label="所属班级" prop="class_name" sortable>
           </el-table-column>
           <el-table-column
             label="状态"
@@ -258,7 +219,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.description"></el-input>
+          <el-input type="textarea" v-model="form.remark"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -432,11 +393,11 @@ export default {
         let arr = this.$refs.cascader.getCheckedNodes()[0].path;
         this.params.college_id = arr[0];
         this.params.major_id = arr[1];
-        this.params.cls_id = arr[2];
+        this.params.class_id = arr[2];
       } else {
         this.params.college_id = null;
         this.params.major_id = null;
-        this.params.cls_id = null;
+        this.params.class_id = null;
       }
     },
     getOrg(query) {

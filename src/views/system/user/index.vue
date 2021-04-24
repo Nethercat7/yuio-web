@@ -40,7 +40,7 @@
           :row-class-name="tableRowClassName"
         >
           <el-table-column label="姓名" prop="name"></el-table-column>
-          <el-table-column label="账号" prop="account"></el-table-column>
+          <el-table-column label="账号" prop="code"></el-table-column>
           <el-table-column
             label="性别"
             prop="gender"
@@ -107,7 +107,7 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="账号">
-          <el-input v-model="form.account"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="性别">
           <el-radio-group v-model="form.gender">
@@ -152,7 +152,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" v-model="form.desciption"></el-input>
+          <el-input type="textarea" v-model="form.remark"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
