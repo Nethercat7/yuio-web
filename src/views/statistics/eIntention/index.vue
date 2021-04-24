@@ -145,7 +145,7 @@ export default {
       this.params.class_id = arr[2];
     },
     getOrg() {
-      getCompleteOrg({ grade: this.params.grade }).then((resp) => {
+      getCompleteOrg(this.params.grade).then((resp) => {
         this.orgList = resp.obj;
       });
     },
