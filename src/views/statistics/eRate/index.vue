@@ -124,6 +124,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import api from "../../../api/api";
+import { getEmplInfo, getCollegeEmplInfo } from "@/api/statistics/rate";
 
 export default {
   name: "EmploymentRate",
@@ -145,11 +146,11 @@ export default {
       let date = new Date();
       if (r) this.grade = date.getFullYear() - 4;
       //学校总就业信息
-      api.getTotalEmploymentInfo(this.grade).then((resp) => {
+      getEmplInfo(this.grade).then((resp) => {
         this.total = resp.obj;
       });
       //各院系总就业信息
-      api.getCollegeEmploymentInfo(this.grade).then((resp) => {
+      getCollegeEmplInfo(this.grade).then((resp) => {
         this.collegeName = resp.obj.college_name;
         this.collegeEmploymentRate = resp.obj.college_employment_rate;
         this.collegeEmploymentPeople = resp.obj.college_employment_people;

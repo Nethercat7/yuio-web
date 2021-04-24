@@ -73,6 +73,10 @@
 import Bar from "@/components/charts/bar";
 import Radar from "@/components/charts/radar";
 import api from "@/api/api";
+import {
+  getIntentionCityInfo,
+  getIntentionWorkInfo,
+} from "@/api/statistics/intention";
 
 export default {
   name: "EmploymentIntention",
@@ -99,14 +103,14 @@ export default {
     getData(r) {
       this.reset(r);
       //获取意向城市选择信息
-      api.getIntentionCityInfo(this.params).then((resp) => {
+      getIntentionCityInfo(this.params).then((resp) => {
         resp.obj.forEach((element) => {
           this.cityList.push(element.city);
           this.cityIntentionPeople.push(element.people);
         });
       });
       //获取意向岗位选择信息
-      api.getIntentionWorkInfo(this.params).then((resp) => {
+      getIntentionWorkInfo(this.params).then((resp) => {
         let data = [];
         resp.obj.forEach((element) => {
           this.workList.push({ name: element.type, max: resp.obj[0].people });
@@ -138,7 +142,7 @@ export default {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;
       this.params.college_id = arr[0];
       this.params.major_id = arr[1];
-      this.params.cls_id = arr[2];
+      this.params.class_id = arr[2];
     },
     getOrg() {
       api.getFullOrg({ grade: this.params.grade }).then((resp) => {

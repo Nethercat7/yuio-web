@@ -88,6 +88,11 @@
 import Bar from "@/components/charts/bar";
 import Radar from "@/components/charts/radar";
 import api from "@/api/api";
+import {
+  getEmplCityInfo,
+  getEmplWorkInfo,
+  getStudentPlan,
+} from "@/api/statistics/status";
 
 export default {
   name: "EmploymentStatus",
@@ -117,7 +122,7 @@ export default {
     getData(r) {
       this.reset(r);
       //获取就业城市选择信息
-      api.getEmploymentCityInfo(this.params).then((resp) => {
+      getEmplCityInfo(this.params).then((resp) => {
         let data = resp.obj;
         //转换为适用于柱状图的数据格式
         data.forEach((element) => {
@@ -127,7 +132,7 @@ export default {
         });
       });
       //获取就业岗位选择信息
-      api.getEmploymentWorkInfo(this.params).then((resp) => {
+      getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj;
         let values = [];
         //转换为适用于雷达图的数据格式
@@ -138,7 +143,7 @@ export default {
         this.workTypePeople.push({ value: values, name: "就业岗位统计" });
       });
       //获取未就业学生计划信息
-      api.getUnEmploymentStudentPlan(this.params).then((resp) => {
+      getStudentPlan(this.params).then((resp) => {
         resp.obj.forEach((element) => {
           this.planList.push(element.plan);
           this.unEmploymentPeople.push(element.people);
@@ -149,7 +154,7 @@ export default {
         this.gradeList = resp.obj;
       });
       //获取学院信息
-      this.getOrg()
+      this.getOrg();
     },
     reset(r) {
       this.workCityPeople = [];
@@ -170,10 +175,10 @@ export default {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;
       this.params.college_id = arr[0];
       this.params.major_id = arr[1];
-      this.params.cls_id = arr[2];
+      this.params.class_id = arr[2];
     },
     getOrg() {
-      api.getFullOrg({grade:this.params.grade}).then((resp) => {
+      api.getFullOrg({ grade: this.params.grade }).then((resp) => {
         this.orgList = resp.obj;
       });
     },
