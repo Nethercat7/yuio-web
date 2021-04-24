@@ -136,7 +136,8 @@
 </template>
 
 <script>
-import api from "@/api/api";
+import {addMajor,getMajors,delMajor,updMajor} from "@/api/system/major";
+import {getColleges} from "@/api/system/college";
 
 export default {
   name: "majorManagement",
@@ -167,7 +168,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addMajor(this.form).then((resp) => {
+        addMajor(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -175,7 +176,7 @@ export default {
           if (resp.code === 0) this.getMajors();
         });
       } else {
-        api.updMajor(this.form).then((resp) => {
+        updMajor(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -200,7 +201,7 @@ export default {
       }
     },
     delMajor(id) {
-      api.delMajor(id).then((resp) => {
+      delMajor(id).then((resp) => {
         if (resp.code === 0) {
           this.getMajors();
         }
@@ -211,14 +212,14 @@ export default {
       });
     },
     getMajors() {
-      api.getMajors().then((resp) => {
+      getMajors().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
         this.tableData = data;
       });
       //获取院系信息
-      api.getColleges().then((resp) => {
+      getColleges().then((resp) => {
         this.colleges = resp.obj;
       });
       //获取数据字典

@@ -8,9 +8,9 @@ export function addCollege(data){
     })
 }
 
-export function getColleges(type){
+export function getColleges(){
     return request({
-        url:'sys/college/get?type='+type,
+        url:'sys/college/get',
         method:'get'
     })
 }
