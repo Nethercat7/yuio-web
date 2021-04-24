@@ -5,7 +5,11 @@ export function setStorage(k, v) {
 }
 
 export function getStorage(k) {
-    return localStorage.getItem(k);
+    let item=localStorage.getItem(k);
+    if(item){
+        item=item.split('"').join("")
+    }
+    return item;
 }
 
 export function delStorage(k) {

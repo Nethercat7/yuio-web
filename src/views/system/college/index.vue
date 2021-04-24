@@ -119,9 +119,10 @@
 </template>
 
 <script>
-import api from "@/api/api";
+import {addCollege,getColleges,delCollege,updCollege} from "@/api/system/college";
+
 export default {
-  name: "collegeManagement",
+  name: "CollegeManagement",
   data() {
     return {
       tableData: [],
@@ -148,7 +149,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addCollege(this.form).then((resp) => {
+        addCollege(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -156,7 +157,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updCollege(this.form).then((resp) => {
+        updCollege(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -176,7 +177,7 @@ export default {
         .catch(() => {});
     },
     deleteRow(id) {
-      api.delCollege(id).then((resp) => {
+      delCollege(id).then((resp) => {
         this.$message({
           message: resp.msg,
           type: resp.type,
@@ -185,7 +186,7 @@ export default {
       });
     },
     getData() {
-      api.getColleges().then((resp) => {
+      getColleges().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         let data = resp.obj;
