@@ -47,7 +47,11 @@
             :formatter="genderFormatter"
           ></el-table-column>
           <el-table-column label="电话号码" prop="phone"></el-table-column>
-          <el-table-column label="状态" prop="status" :formatter="statusFormatter"></el-table-column>
+          <el-table-column
+            label="状态"
+            prop="status"
+            :formatter="statusFormatter"
+          ></el-table-column>
           <el-table-column label="操作" fixed="right" width="250px">
             <template slot-scope="scope">
               <el-button
@@ -166,6 +170,7 @@
 <script>
 import Pager from "@/components/pager";
 import api from "../../../api/api";
+import { addUser, getUsers, delUser, updUser } from "@/api/system/user";
 
 export default {
   name: "userManagement",
@@ -188,7 +193,7 @@ export default {
   },
   methods: {
     getData() {
-      api.getUsers().then((resp) => {
+      getUsers().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
@@ -237,7 +242,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addUser(this.form).then((resp) => {
+        addUser(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -245,7 +250,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updUser(this.form).then((resp) => {
+        updUser(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -270,7 +275,7 @@ export default {
       }
     },
     handleDelete(id) {
-      api.delUser(id).then((resp) => {
+      delUser(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
