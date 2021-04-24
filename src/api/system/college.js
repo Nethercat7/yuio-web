@@ -1,10 +1,10 @@
 import request from "@/utils/request"
 
-export function addCollege(data){
+export function addCollege(params){
     return request({
         url:'sys/college/add',
         method:'post',
-        data:data
+        data:params
     })
 }
 
@@ -22,10 +22,10 @@ export function delCollege(id){
     })
 }
 
-export function updCollege(data){
+export function updCollege(params){
     return request({
         url:'sys/college/upd',
         method:'put',
-        data:data
+        data:params
     })
 }

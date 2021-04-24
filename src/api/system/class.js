@@ -1,10 +1,10 @@
 import request from "@/utils/request"
 
-export function addClass(data){
+export function addClass(params){
     return request({
         url:'sys/class/add',
         method:'post',
-        data:data
+        data:params
     })
 }
 
@@ -22,10 +22,10 @@ export function delClass(id){
     })
 }
 
-export function updClass(data){
+export function updClass(params){
     return request({
         url:'sys/class/upd',
         method:'put',
-        data:data
+        data:params
     })
 }

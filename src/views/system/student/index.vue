@@ -232,6 +232,12 @@
 
 <script>
 import api from "@/api/api";
+import {
+  addStudent,
+  delStudent,
+  updStudent,
+  getWithEStatusInfo,
+} from "@/api/system/student";
 
 export default {
   name: "studentManagement",
@@ -284,7 +290,7 @@ export default {
       this.keyword = "";
       this.currentPage = 1;
       //获取学生信息
-      api.getWithEStatusInfo(this.params).then((resp) => {
+      getWithEStatusInfo(this.params).then((resp) => {
         this.total = resp.obj.length;
         this.tableDataBak = resp.obj;
         this.tableData = resp.obj;
@@ -320,7 +326,7 @@ export default {
     },
     submitDialog() {
       if (this.type == "add") {
-        api.addStudent(this.form).then((resp) => {
+        addStudent(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -328,7 +334,7 @@ export default {
           if (resp.code === 0) this.getData();
         });
       } else {
-        api.updStudent(this.form).then((resp) => {
+        updStudent(this.form).then((resp) => {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -347,7 +353,7 @@ export default {
         .catch(() => {});
     },
     handleDelete(id) {
-      api.delStudent(id).then((resp) => {
+      delStudent(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
         }
