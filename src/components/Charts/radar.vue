@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="{ width: width, height: height, margin: margin }"></div>
+  <div :id="id" :style="{ width: width, height: height }"></div>
 </template>
 
 <script>
@@ -19,75 +19,52 @@ export default {
       type: String,
       default: "500px",
     },
-    margin: {
-      type: String,
-      default: "auto",
+    data: {
+      type: Object,
+      default: null,
     },
     title: {
       type: String,
-      default: "",
-    },
-    indicator: {
-      type: Array,
       default: null,
     },
-    data: {
-      type: Array,
-      default: null,
-    },
-    showTitle: {
-      type: Boolean,
-      default: true,
-    },
-    subTitle: {
-      type: String,
-      default: "",
-    },
+  },
+  data() {
+    return {
+      chart: null,
+    };
   },
   methods: {
     initial() {
-      var chartDom = document.getElementById(this.id);
-      var myChart = echarts.init(chartDom);
-      var option;
-
-      option = {
+      this.chart = echarts.init(document.getElementById(this.id));
+      this.setOptions(this.data);
+    },
+    setOptions({ name, data } = {}) {
+      this.chart.setOption({
         title: {
-          show: this.showTitle,
           text: this.title,
-          subtext: this.subTitle,
         },
-        tooltip: {},
-        /*         legend: {
-          data: ["预算分配（Allocated Budget）", "实际开销（Actual Spending）"],
-        }, */
         radar: {
-          // shape: 'circle',
-          axisName: {
-            textStyle: {
-              color: "#fff",
-              backgroundColor: "#999",
-              borderRadius: 3,
-              padding: [3, 5],
-            },
-          },
-          indicator: this.indicator,
+          indicator: name,
         },
         series: [
           {
-            /* name: "预算 vs 开销（Budget vs spending)", */
+            name: this.title,
             type: "radar",
-            // areaStyle: {normal: {}},
-            data: this.data,
+            data: data,
           },
         ],
-      };
-
-      option && myChart.setOption(option);
+        tooltip: {
+          trigger: "item",
+        },
+      });
     },
   },
   watch: {
-    data() {
-      this.initial();
+    data: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val);
+      },
     },
   },
   mounted() {

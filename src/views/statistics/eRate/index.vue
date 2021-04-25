@@ -60,24 +60,22 @@
       <el-card shadow="never">
         <el-col :span="12">
           <Bar
-            id="e-rate"
-            :data="collegeEmploymentRate"
-            :name="collegeName"
+            id="empl-rate"
+            :data="rateData"
             title="各学院就业率"
             width="100%"
             suffix="%"
-            :rotate="-15"
+            horizontal
           ></Bar>
         </el-col>
         <el-col :span="12">
           <Bar
-            id="e-people"
-            :data="collegeEmploymentPeople"
-            :name="collegeName"
+            id="empl-people"
+            :data="emplData"
             title="各学院就业人数"
             width="100%"
             suffix="人"
-            :rotate="-15"
+            horizontal
           ></Bar>
         </el-col>
       </el-card>
@@ -131,10 +129,13 @@ export default {
   components: { Bar },
   data() {
     return {
+      rateData: {
+        series: [],
+      },
+      emplData: {
+        series: [],
+      },
       total: {},
-      collegeName: [],
-      collegeEmploymentRate: [],
-      collegeEmploymentPeople: [],
       tableData: [],
       gradeList: [],
       grade: new Date().getFullYear() - 4,
@@ -151,9 +152,16 @@ export default {
       });
       //各院系总就业信息
       getCollegeEmplInfo(this.grade).then((resp) => {
-        this.collegeName = resp.obj.college_name;
-        this.collegeEmploymentRate = resp.obj.college_employment_rate;
-        this.collegeEmploymentPeople = resp.obj.college_employment_people;
+        this.rateData.name = resp.obj.college_name;
+        this.rateData.series.push({
+          data: resp.obj.college_employment_rate,
+          type: "bar",
+        });
+        this.emplData.name = resp.obj.college_name;
+        this.emplData.series.push({
+          data: resp.obj.college_employment_people,
+          type: "bar",
+        });
         this.tableData = resp.obj.data;
       });
       //获取年级信息
@@ -165,11 +173,12 @@ export default {
       return row.employment_rate + "%";
     },
     reset() {
-      this.total = {};
-      this.collegeName = [];
-      this.collegeEmploymentRate = [];
-      this.collegeEmploymentPeople = [];
-      this.tableData = [];
+      this.rateData = {
+        series: [],
+      };
+      this.emplData = {
+        series: [],
+      };
     },
   },
   mounted() {

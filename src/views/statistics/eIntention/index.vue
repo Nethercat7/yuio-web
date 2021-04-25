@@ -42,9 +42,8 @@
       <el-card>
         <el-col :span="12">
           <Bar
-            id="work-cityies"
-            :data="cityIntentionPeople"
-            :name="cityList"
+            id="intention-city"
+            :data="cityData"
             title="意向工作城市统计"
             suffix="人"
           ></Bar>
@@ -57,9 +56,8 @@
       <el-card>
         <el-col :span="12">
           <Radar
-            id="work"
-            :data="workIntentionPeople"
-            :indicator="workList"
+            id="intention-work"
+            :data="workData"
             title="意向工作岗位统计"
           ></Radar>
         </el-col>
@@ -83,10 +81,13 @@ export default {
   components: { Bar, Radar },
   data() {
     return {
-      cityList: [],
-      cityIntentionPeople: [],
-      workList: [],
-      workIntentionPeople: [],
+      cityData: {
+        series: [],
+      },
+      workData: {
+        name: [],
+        data: [],
+      },
       gradeList: [],
       orgList: [],
       cascaderProps: {
@@ -104,19 +105,26 @@ export default {
       this.reset(r);
       //获取意向城市选择信息
       getIntentionCityInfo(this.params).then((resp) => {
+        let cityList = [];
+        let peopleList = [];
         resp.obj.forEach((element) => {
-          this.cityList.push(element.city);
-          this.cityIntentionPeople.push(element.people);
+          cityList.push(element.city);
+          peopleList.push(element.people);
         });
+        this.cityData.name = cityList;
+        this.cityData.series.push({ data: peopleList, type: "bar" });
       });
       //获取意向岗位选择信息
       getIntentionWorkInfo(this.params).then((resp) => {
         let data = [];
         resp.obj.forEach((element) => {
-          this.workList.push({ name: element.type, max: resp.obj[0].people });
+          this.workData.name.push({
+            name: element.type,
+            max: resp.obj[0].people,
+          });
           data.push(element.people);
         });
-        this.workIntentionPeople.push({
+        this.workData.data.push({
           value: data,
           name: "意向工作岗位统计",
         });
@@ -133,10 +141,13 @@ export default {
         this.params = {};
         this.params.grade = new Date().getFullYear() - 4;
       }
-      this.cityList = [];
-      this.cityIntentionPeople = [];
-      this.workList = [];
-      this.workIntentionPeople = [];
+      this.cityData = {
+        series: [],
+      };
+      this.workData = {
+        name: [],
+        data: [],
+      };
     },
     setParams() {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;

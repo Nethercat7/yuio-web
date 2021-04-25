@@ -44,6 +44,7 @@
         <el-menu-item index="2-8" @click="$router.push('/system/city')">城市管理</el-menu-item>
         <el-menu-item index="2-9" @click="$router.push('/system/work')">岗位管理</el-menu-item>
         <el-menu-item index="2-10" @click="$router.push('/system/dict')">字典管理</el-menu-item>
+        <el-menu-item index="2-11" @click="$router.push('/system/test')">功能测试</el-menu-item>
       </el-submenu>
 
       <el-submenu index="3">

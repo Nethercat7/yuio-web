@@ -42,9 +42,8 @@
       <el-card>
         <el-col :span="12">
           <Bar
-            id="work-cityies"
-            :data="workCityPeople"
-            :name="workCityName"
+            id="empl-city"
+            :data="cityData"
             title="就业城市统计"
             suffix="人"
           ></Bar>
@@ -56,12 +55,7 @@
     <el-row class="mb-20">
       <el-card>
         <el-col :span="12">
-          <Radar
-            id="job"
-            :data="workTypePeople"
-            :indicator="workTypeName"
-            title="工作岗位"
-          ></Radar>
+          <Radar id="empl-work" :data="workData" title="工作岗位"></Radar>
         </el-col>
         <el-col :span="12"> </el-col>
       </el-card>
@@ -71,11 +65,11 @@
       <el-card>
         <el-col :span="12">
           <Bar
-            id="bar-1"
-            :data="unEmploymentPeople"
-            :name="planList"
+            id="plan"
+            :data="planData"
             title="未就业的学生接下来的打算"
             horizontal
+            suffix="人"
           ></Bar>
         </el-col>
         <el-col :span="12"> </el-col>
@@ -96,16 +90,22 @@ import {
 
 export default {
   name: "EmploymentStatus",
-  components: { Bar, Radar },
+  components: {
+    Bar,
+    Radar,
+  },
   data() {
     return {
-      workCityPeople: [],
-      workCityName: [],
-      totalPeople: 0,
-      workTypePeople: [],
-      workTypeName: [],
-      planList: [],
-      unEmploymentPeople: [],
+      cityData: {
+        series: [],
+      },
+      workData: {
+        name: [],
+        data: [],
+      },
+      planData: {
+        series: [],
+      },
       gradeList: [],
       orgList: [],
       cascaderProps: {
@@ -123,30 +123,38 @@ export default {
       this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
-        let data = resp.obj;
-        //转换为适用于柱状图的数据格式
-        data.forEach((element) => {
-          this.workCityPeople.push(element.people);
-          this.workCityName.push(element.city);
-          this.totalPeople += element.people;
+        let cityList = [];
+        let peopleList = [];
+        resp.obj.forEach((element) => {
+          cityList.push(element.city);
+          peopleList.push(element.people);
         });
+        this.cityData.name = cityList;
+        this.cityData.series.push({ data: peopleList, type: "bar" });
       });
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
-        let data = resp.obj;
-        let values = [];
-        //转换为适用于雷达图的数据格式
-        data.forEach((element) => {
-          values.push(element.people);
-          this.workTypeName.push({ name: element.type, max: data[0].people });
+        let workList = [];
+        let peopleList = [];
+        resp.obj.forEach((element) => {
+          workList.push({ name: element.type, max: resp.obj[0].people });
+          peopleList.push(element.people);
         });
-        this.workTypePeople.push({ value: values, name: "就业岗位统计" });
+        this.workData.name = workList;
+        this.workData.data.push({ value: peopleList, name: "就业岗位" });
       });
       //获取未就业学生计划信息
       getStudentPlan(this.params).then((resp) => {
+        let planList = [];
+        let popleList = [];
         resp.obj.forEach((element) => {
-          this.planList.push(element.plan);
-          this.unEmploymentPeople.push(element.people);
+          planList.push(element.plan);
+          popleList.push(element.people);
+        });
+        //字典转换
+        this.getDictData("stats_stdnt_plan").then((resp) => {
+          this.planData.name = this.selectDictLabels(resp.obj, planList);
+          this.planData.series.push({ data: popleList, type: "bar" });
         });
       });
       //获取年级信息
@@ -157,15 +165,16 @@ export default {
       this.getOrg();
     },
     reset(r) {
-      this.workCityPeople = [];
-      this.workCityName = [];
-      this.totalPeople = 0;
-      this.workTypePeople = [];
-      this.workTypeName = [];
-      this.workName = "";
-      this.rateList = [];
-      this.planList = [];
-      this.unEmploymentPeople = [];
+      this.cityData = {
+        series: [],
+      };
+      this.workData = {
+        name: [],
+        data: [],
+      };
+      this.planData = {
+        series: [],
+      };
       if (r) {
         this.params = {};
         this.params.grade = new Date().getFullYear() - 4;

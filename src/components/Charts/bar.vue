@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="{ width: width, height: height, margin: margin }"></div>
+  <div :id="id" :style="{ width: width, height: height }"></div>
 </template>
 
 <script>
@@ -19,21 +19,13 @@ export default {
       type: String,
       default: "500px",
     },
-    margin: {
-      type: String,
-      default: "auto",
+    data: {
+      type: Object,
+      default: null,
     },
     showTooltip: {
       type: Boolean,
       default: true,
-    },
-    name: {
-      type: Array,
-      default: null,
-    },
-    data: {
-      type: Array,
-      default: null,
     },
     showName: {
       type: Boolean,
@@ -68,18 +60,30 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      chart: null,
+    };
+  },
   methods: {
     inital() {
-      var chartDom = document.getElementById(this.id);
-      var myChart = echarts.init(chartDom);
-      var option;
-
-      option = {
+      this.chart = echarts.init(document.getElementById(this.id));
+      this.setOptions(this.data);
+    },
+    setOptions({ name, series } = {}) {
+      this.chart.setOption({
         title: {
           show: this.showTitle,
           text: this.title,
           subtext: this.subTitle,
           left: "center",
+        },
+        grid: {
+          top: 35,
+          left: "2%",
+          right: "2%",
+          bottom: "3%",
+          containLabel: true,
         },
         xAxis: this.horizontal
           ? {
@@ -93,7 +97,7 @@ export default {
           : {
               show: this.showName,
               type: "category",
-              data: this.name,
+              data: name,
               axisLabel: {
                 interval: this.interval,
                 rotate: this.rotate,
@@ -103,7 +107,7 @@ export default {
           ? {
               show: this.showName,
               type: "category",
-              data: this.name,
+              data: name,
               axisLabel: {
                 interval: this.interval,
                 rotate: this.rotate,
@@ -122,20 +126,16 @@ export default {
           trigger: "axis",
           formatter: "{b}： {c}" + this.suffix,
         },
-        series: [
-          {
-            data: this.data,
-            type: "bar",
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
+        series: series,
+      });
     },
   },
   watch: {
-    data() {
-      this.inital();
+    data: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val);
+      },
     },
   },
   mounted() {
