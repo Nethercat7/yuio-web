@@ -109,12 +109,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="操作权限">
-          <el-select v-model="value" @change="handlePermsSelect">
-            <el-option :value="0" label="全部权限"></el-option>
-            <el-option :value="1" label="自定义权限">自定义权限</el-option>
-          </el-select>
           <el-tree
-            v-if="customize"
             :data="perms"
             :props="defaultProps"
             show-checkbox
@@ -154,9 +149,7 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: { perms: 1 },
-      customize: false,
-      value: 0,
+      form: {},
       defaultProps: {
         children: "children",
         label: "name",
@@ -203,20 +196,15 @@ export default {
     },
     openDialog(type, row) {
       this.dialogVisible = true;
-      this.value = 0;
-      this.customize = false;
+      this.form.perms=[];
       if (type == "add") {
         this.type = type;
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
-        if (row.perms.length > 0) {
-          this.value = 1;
-          this.customize = true;
-          this.$nextTick(() => {
-            this.$refs.tree.setCheckedKeys(row.perms);
-          });
-        }
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(row.perms);
+        });
       }
     },
     submitDialog() {
@@ -261,15 +249,6 @@ export default {
     },
     handleNodeClick() {
       this.form.perms = this.$refs.tree.getCheckedKeys();
-    },
-    handlePermsSelect() {
-      if (this.value === 1) {
-        this.customize = true;
-        this.form.perms = [];
-      } else {
-        this.customize = false;
-        this.form.perms = 1;
-      }
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
