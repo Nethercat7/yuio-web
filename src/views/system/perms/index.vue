@@ -243,7 +243,10 @@ export default {
             message: resp.msg,
             type: resp.type,
           });
-          if (resp.code === 0) this.getData();
+          if (resp.code === 0) {
+            this.getData();
+            this.form = {};
+          }
         });
       } else {
         updPerms(this.form).then((resp) => {
@@ -254,8 +257,6 @@ export default {
           if (resp.code === 0) this.getData();
         });
       }
-      this.form = {};
-      this.dialogVisible = false;
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
