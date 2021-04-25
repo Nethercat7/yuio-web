@@ -38,10 +38,10 @@ const system = {
         name: 'RoleManagement',
         meta: { title: '角色管理' }
     }, {
-        path: 'menu',
-        component: () => import('@/views/system/menu/'),
-        name: 'MenuManagement',
-        meta: { title: '菜单管理' }
+        path: 'perms',
+        component: () => import('@/views/system/perms/'),
+        name: 'PermsManagement',
+        meta: { title: '权限管理' }
     }, {
         path: 'city',
         component: () => import('@/views/system/city/'),
