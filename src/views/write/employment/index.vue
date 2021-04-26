@@ -141,12 +141,6 @@ export default {
     submit() {
       if (!this.update) {
         addEmplInfo(this.params).then((resp) => {
-          if (resp.code === 0) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
           if (resp.status != 500) {
             this.$message({
               message: resp.msg,
@@ -156,12 +150,6 @@ export default {
         });
       } else {
         updEmplInfo(this.params).then((resp) => {
-          if (resp.code === 0) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
           if (resp.status != 500) {
             this.$message({
               message: resp.msg,
