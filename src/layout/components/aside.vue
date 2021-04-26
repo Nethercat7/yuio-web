@@ -5,7 +5,7 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      :default-openeds="['2', '3', '4']"
+      :default-openeds="['2', '3', '4','5']"
     >
       <div>
         <img class="logo" src="../../assets/logo.png" alt="Logo" />
@@ -80,6 +80,16 @@
         </template>
         <el-menu-item index="4-1" @click="$router.push('/compare/eRate')"
           >就业率对比</el-menu-item
+        >
+      </el-submenu>
+
+      <el-submenu index="5">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>数据填写</span>
+        </template>
+         <el-menu-item index="5-1" @click="$router.push('/write/employment')"
+          >就业情况填写</el-menu-item
         >
       </el-submenu>
     </el-menu>

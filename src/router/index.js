@@ -11,6 +11,7 @@ import UserLogin from '@/layout/login'
 import system from './modules/system'
 import statistics from './modules/statistics'
 import compare from './modules/compare'
+import write from './modules/write'
 
 // 解决路由重复控制台报错
 const originalPush = Router.prototype.push;
@@ -30,6 +31,7 @@ const constantRoutes = [
     system,
     statistics,
     compare,
+    write
 ]
 
 export default new Router({
