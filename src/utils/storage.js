@@ -27,3 +27,15 @@ export function getSubject() {
 export function delSubject() {
     localStorage.removeItem("token")
 }
+
+export function getSubjectId(){
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").id
+}
+
+export function getSubjectName(){
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").name
+}
+
+export function getSubjectCode(){
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").code
+}
