@@ -4,8 +4,11 @@
 
 <script>
 import * as echarts from "echarts";
+import resize from '@/utils/chartResize'
+
 export default {
   name: "BarChart",
+  mixins:[resize],
   props: {
     id: {
       type: String,
@@ -140,6 +143,10 @@ export default {
   },
   mounted() {
     this.inital();
+    let _this = this;
+    window.onresize = function () {
+      _this.chart.resize();
+    };
   },
 };
 </script>

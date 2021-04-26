@@ -4,8 +4,11 @@
 
 <script>
 import * as echarts from "echarts";
+import resize from "@/utils/chartResize";
+
 export default {
   name: "RadarChart",
+  mixins: [resize],
   props: {
     id: {
       type: String,

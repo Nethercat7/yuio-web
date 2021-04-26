@@ -69,9 +69,7 @@
             >添加</el-button
           >
           <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning" style="margin-right: 20px"
-            >导出</el-button
-          >
+          <el-button size="mini" type="warning">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -443,7 +441,7 @@ export default {
 .search-bar div {
   display: inline-block;
   margin-right: 10px;
-  margin-bottom: 5px;
+  padding-bottom: 5px;
 }
 .search-bar .label {
   font-size: 14px;
