@@ -7,21 +7,21 @@ const statistics = {
     meta: { title: '数据统计' },
     children: [
         {
-            path: 'eRate',
-            name: 'Employment Rate',
-            component: () => import('@/views/statistics/eRate/'),
+            path: 'emplRate',
+            name: 'EmploymentRate',
+            component: () => import('@/views/statistics/emplRate/'),
             meta: { title: '就业率统计' },
         }
         , {
-            path: 'eStatus',
-            name: 'Employment Status',
-            component: () => import('@/views/statistics/eStatus/'),
+            path: 'emplStatus',
+            name: 'EmploymentStatus',
+            component: () => import('@/views/statistics/emplStatus/'),
             meta: { title: '就业情况统计' }
         },
         {
-            path: 'eIntention',
-            name: 'Employment Intention',
-            component: () => import('@/views/statistics/eIntention/'),
+            path: 'emplIntention',
+            name: 'EmploymentIntention',
+            component: () => import('@/views/statistics/emplIntention/'),
             meta: { title: '就业意向统计' }
         }
     ]

@@ -60,15 +60,15 @@
           <i class="el-icon-location"></i>
           <span>数据统计</span>
         </template>
-        <el-menu-item index="3-1" @click="$router.push('/statistics/eRate')"
+        <el-menu-item index="3-1" @click="$router.push('/statistics/emplRate')"
           >就业率统计</el-menu-item
         >
-        <el-menu-item index="3-2" @click="$router.push('/statistics/eStatus')"
+        <el-menu-item index="3-2" @click="$router.push('/statistics/emplStatus')"
           >就业情况统计</el-menu-item
         >
         <el-menu-item
           index="3-3"
-          @click="$router.push('/statistics/eIntention')"
+          @click="$router.push('/statistics/emplIntention')"
           >就业意向统计</el-menu-item
         >
       </el-submenu>
