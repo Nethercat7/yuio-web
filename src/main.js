@@ -10,6 +10,7 @@ import { selectDictLabel, selectDictLabels } from "@/utils/ruoyi"
 Vue.prototype.getDictData = getDictData
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
+Vue.prototype.cardShadow = "never"
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

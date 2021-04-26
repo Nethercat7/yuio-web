@@ -1,45 +1,47 @@
 <template>
   <div>
-    <el-row class="mb-20">
-      <el-col :span="24" style="text-align: right">
-        <el-card class="top-tools">
-          <el-select
-            size="mini"
-            style="margin-right: 20px"
-            v-model="params.grade"
-            @change="getOrg"
-          >
-            <el-option
-              v-for="item in gradeList"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
-          <el-cascader
-            v-model="params.temp"
-            size="mini"
-            :options="orgList"
-            clearable
-            :props="cascaderProps"
-            style="margin-right: 20px"
-            filterable
-            :show-all-levels="false"
-            ref="cascader"
-            @change="setParams"
-          ></el-cascader>
-          <el-button size="mini" type="success" @click="getData()"
-            >切换</el-button
-          >
-          <el-button size="mini" type="danger" @click="getData(true)"
-            >重置</el-button
-          >
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24" style="text-align: right">
+          <el-card class="top-tools">
+            <el-select
+              size="mini"
+              style="margin-right: 20px"
+              v-model="params.grade"
+              @change="getOrg"
+            >
+              <el-option
+                v-for="item in gradeList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+            <el-cascader
+              v-model="params.temp"
+              size="mini"
+              :options="orgList"
+              clearable
+              :props="cascaderProps"
+              style="margin-right: 20px"
+              filterable
+              :show-all-levels="false"
+              ref="cascader"
+              @change="setParams"
+            ></el-cascader>
+            <el-button size="mini" type="success" @click="getData()"
+              >切换</el-button
+            >
+            <el-button size="mini" type="danger" @click="getData(true)"
+              >重置</el-button
+            >
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-card>
 
-    <el-row class="mb-20">
-      <el-card>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
         <el-col :span="12">
           <Bar
             id="empl-city"
@@ -49,20 +51,20 @@
           ></Bar>
         </el-col>
         <el-col :span="12"> </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
 
-    <el-row class="mb-20">
-      <el-card>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
         <el-col :span="12">
           <Radar id="empl-work" :data="workData" title="工作岗位"></Radar>
         </el-col>
         <el-col :span="12"> </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
 
-    <el-row>
-      <el-card>
+    <el-card :shadow="cardShadow">
+      <el-row>
         <el-col :span="12">
           <Bar
             id="plan"
@@ -73,8 +75,8 @@
           ></Bar>
         </el-col>
         <el-col :span="12"> </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
   </div>
 </template>
 

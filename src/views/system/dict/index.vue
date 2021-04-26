@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row class="mb-20">
-      <el-col :span="24">
-        <el-card :shadow="shadow" class="top-tools">
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
           <el-button type="success" size="mini" @click="openDialog(0)"
             >添加</el-button
           >
-        </el-card>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表单 -->
     <el-dialog
@@ -50,9 +50,9 @@
     </el-dialog>
 
     <!-- 表格 -->
-    <el-row>
-      <el-col :span="24">
-        <el-card :shadow="shadow">
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
           <el-table
             :data="
               tableData.slice(
@@ -109,9 +109,9 @@
             :page.sync="currentPage"
             :size.sync="pageSize"
           ></Pager>
-        </el-card>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -133,7 +133,6 @@ export default {
       dialogVisible: false,
       type: null,
       tableData: [],
-      shadow: "never",
       currentPage: 1,
       pageSize: 10,
       total: 0,

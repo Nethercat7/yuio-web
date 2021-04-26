@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-row class="mb-20">
-      <el-col :span="24" style="text-align: right">
-        <el-card class="top-tools" shadow="never">
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24" style="text-align: right">
           <el-select size="mini" style="margin-right: 20px" v-model="grade">
             <el-option
               v-for="item in gradeList"
@@ -17,13 +17,13 @@
           <el-button size="mini" type="danger" @click="getData(true)"
             >重置</el-button
           >
-        </el-card>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
 
-    <el-row class="mb-20" :gutter="24">
+    <el-row :gutter="24" class="mb-20">
       <el-col :span="6">
-        <el-card class="text-center" shadow="never">
+        <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
             <span>毕业生总人数</span>
           </div>
@@ -31,7 +31,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card class="text-center" shadow="never">
+        <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
             <span>各学院就业人数</span>
           </div>
@@ -39,7 +39,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card class="text-center" shadow="never">
+        <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
             <span>各学院未就业人数</span>
           </div>
@@ -47,7 +47,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card class="text-center" shadow="never">
+        <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
             <span>总就业率</span>
           </div>
@@ -56,8 +56,8 @@
       </el-col>
     </el-row>
 
-    <el-row class="mb-20">
-      <el-card shadow="never">
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
         <el-col :span="12">
           <Bar
             id="empl-rate"
@@ -78,11 +78,11 @@
             horizontal
           ></Bar>
         </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
 
-    <el-row>
-      <el-card shadow="never">
+    <el-card :shadow="cardShadow">
+      <el-row>
         <el-col :span="24">
           <el-table :data="tableData">
             <el-table-column
@@ -114,8 +114,8 @@
             ></el-table-column>
           </el-table>
         </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
   </div>
 </template>
 

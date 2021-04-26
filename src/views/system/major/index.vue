@@ -1,92 +1,95 @@
 <template>
   <div>
-    <el-row class="card">
-      <!-- 选项卡 -->
-      <el-col :span="12">
-        <el-button size="mini" @click="openDialog('add')" type="success"
-          >添加</el-button
-        >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning">导出</el-button>
-      </el-col>
-      <el-col :span="12" style="text-align: right">
-        <el-autocomplete
-          v-model="keyword"
-          placeholder="请输入内容"
-          size="mini"
-          style="margin-right: 10px"
-          :trigger-on-focus="false"
-          :fetch-suggestions="searchSuggestions"
-          value-key="name"
-        ></el-autocomplete>
-        <el-button size="mini" type="success" @click="handleSearch"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="resetResult"
-          >重置</el-button
-        >
-      </el-col>
-    </el-row>
-    <el-row class="card">
-      <!-- 表格 -->
-      <el-col :span="24">
-        <el-table
-          ref="table"
-          :data="
-            tableData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize
-            )
-          "
-          :row-class-name="tableRowClassName"
-        >
-          <el-table-column label="专业名称" prop="name" sortable>
-          </el-table-column>
-          <el-table-column label="所属院系" prop="college_name" sortable>
-          </el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-            sortable
-            :formatter="statusFormatter"
+    <!-- 选项卡 -->
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="12">
+          <el-button size="mini" @click="openDialog('add')" type="success"
+            >添加</el-button
           >
-          </el-table-column>
-          <el-table-column label="操作" fixed="right">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="openDialog('upd', scope.row)"
-                type="info"
-                >编辑</el-button
-              >
-              <el-popconfirm
-                title="删除后将无法恢复，确定删除吗？"
-                style="padding: 7px 15px"
-                icon="el-icon-info"
-                icon-color="red"
-                @confirm="delMajor(scope.row.id)"
-              >
-                <el-button slot="reference" size="mini" type="danger"
-                  >删除</el-button
+          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="warning">导出</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <el-autocomplete
+            v-model="keyword"
+            placeholder="请输入内容"
+            size="mini"
+            style="margin-right: 10px"
+            :trigger-on-focus="false"
+            :fetch-suggestions="searchSuggestions"
+            value-key="name"
+          ></el-autocomplete>
+          <el-button size="mini" type="success" @click="handleSearch"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="resetResult"
+            >重置</el-button
+          >
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <!-- 表格 -->
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            ref="table"
+            :data="
+              tableData.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize
+              )
+            "
+            :row-class-name="tableRowClassName"
+          >
+            <el-table-column label="专业名称" prop="name" sortable>
+            </el-table-column>
+            <el-table-column label="所属院系" prop="college_name" sortable>
+            </el-table-column>
+            <el-table-column
+              label="状态"
+              prop="status"
+              sortable
+              :formatter="statusFormatter"
+            >
+            </el-table-column>
+            <el-table-column label="操作" fixed="right">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="openDialog('upd', scope.row)"
+                  type="info"
+                  >编辑</el-button
                 >
-              </el-popconfirm>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 分页器 -->
-        <el-pagination
-          layout="total,sizes,prev, pager, next,jumper"
-          :total="total"
-          @current-change="changePage"
-          :current-page="currentPage"
-          :hide-on-single-page="true"
-          @size-change="changeSize"
-          :page-size="pageSize"
-          style="margin-top: 10px; text-align: center"
-        >
-        </el-pagination>
-      </el-col>
-    </el-row>
+                <el-popconfirm
+                  title="删除后将无法恢复，确定删除吗？"
+                  style="padding: 7px 15px"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="delMajor(scope.row.id)"
+                >
+                  <el-button slot="reference" size="mini" type="danger"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 分页器 -->
+          <el-col :span="24">
+            <Pager
+              :total="total"
+              :currentPage="currentPage"
+              :page.sync="currentPage"
+              :size.sync="pageSize"
+            ></Pager>
+          </el-col>
+        </el-col>
+      </el-row>
+    </el-card>
+
     <!-- 表单 -->
     <el-dialog
       :title="type == 'add' ? '添加专业' : '修改专业'"
@@ -136,11 +139,13 @@
 </template>
 
 <script>
-import {addMajor,getMajors,delMajor,updMajor} from "@/api/system/major";
-import {getColleges} from "@/api/system/college";
+import Pager from "@/components/pager";
+import { addMajor, getMajors, delMajor, updMajor } from "@/api/system/major";
+import { getColleges } from "@/api/system/college";
 
 export default {
   name: "majorManagement",
+  components: { Pager },
   data() {
     return {
       tableData: [],

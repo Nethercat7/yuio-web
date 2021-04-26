@@ -1,98 +1,102 @@
 <template>
   <div>
-    <el-row class="card">
-      <el-col :span="12">
-        <el-button size="mini" type="success" @click="openDialog('add')"
-          >添加</el-button
-        >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning">导出</el-button>
-      </el-col>
-      <el-col :span="12" style="text-align: right">
-        <el-autocomplete
-          placeholder="请输入内容"
-          size="mini"
-          style="margin-right: 10px"
-          :trigger-on-focus="false"
-          value-key="name"
-          v-model="keyword"
-          :fetch-suggestions="searchSuggestions"
-        ></el-autocomplete>
-        <el-button size="mini" type="success" @click="handleSearch"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="handleReset"
-          >重置</el-button
-        >
-      </el-col>
-    </el-row>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="12">
+          <el-button size="mini" type="success" @click="openDialog('add')"
+            >添加</el-button
+          >
+          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="warning">导出</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <el-autocomplete
+            placeholder="请输入内容"
+            size="mini"
+            style="margin-right: 10px"
+            :trigger-on-focus="false"
+            value-key="name"
+            v-model="keyword"
+            :fetch-suggestions="searchSuggestions"
+          ></el-autocomplete>
+          <el-button size="mini" type="success" @click="handleSearch"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="handleReset"
+            >重置</el-button
+          >
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表格 -->
-    <el-row class="card">
-      <el-col :span="24">
-        <el-table
-          ref="table"
-          :data="
-            tableData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize
-            )
-          "
-          :row-class-name="tableRowClassName"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-          row-key="id"
-        >
-          <el-table-column label="名称" prop="name"></el-table-column>
-          <el-table-column label="标识" prop="mark"></el-table-column>
-          <el-table-column label="请求地址" prop="url"></el-table-column>
-          <el-table-column label="图标" prop="icon"></el-table-column>
-          <el-table-column
-            label="类型"
-            prop="type"
-            :formatter="typeFormatter"
-          ></el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-            :formatter="statusFormatter"
-          ></el-table-column>
-          <el-table-column
-            label="创建时间"
-            prop="create_time"
-          ></el-table-column>
-          <el-table-column label="操作" fixed="right" width="250px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="info"
-                @click="openDialog('upd', scope.row)"
-                >编辑</el-button
-              >
-              <el-popconfirm
-                title="删除后将无法恢复，确定删除吗？"
-                style="padding: 7px 15px"
-                icon="el-icon-info"
-                icon-color="red"
-                @confirm="handleDelete(scope.row.id)"
-              >
-                <el-button slot="reference" size="mini" type="danger"
-                  >删除</el-button
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            ref="table"
+            :data="
+              tableData.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize
+              )
+            "
+            :row-class-name="tableRowClassName"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+            row-key="id"
+          >
+            <el-table-column label="名称" prop="name"></el-table-column>
+            <el-table-column label="标识" prop="mark"></el-table-column>
+            <el-table-column label="请求地址" prop="url"></el-table-column>
+            <el-table-column label="图标" prop="icon"></el-table-column>
+            <el-table-column
+              label="类型"
+              prop="type"
+              :formatter="typeFormatter"
+            ></el-table-column>
+            <el-table-column
+              label="状态"
+              prop="status"
+              :formatter="statusFormatter"
+            ></el-table-column>
+            <el-table-column
+              label="创建时间"
+              prop="create_time"
+            ></el-table-column>
+            <el-table-column label="操作" fixed="right" width="250px">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="info"
+                  @click="openDialog('upd', scope.row)"
+                  >编辑</el-button
                 >
-              </el-popconfirm>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-      <!-- 分页器 -->
-      <el-col :span="24">
-        <Pager
-          :total="total"
-          :currentPage="currentPage"
-          :page.sync="currentPage"
-          :size.sync="pageSize"
-        ></Pager>
-      </el-col>
-    </el-row>
+                <el-popconfirm
+                  title="删除后将无法恢复，确定删除吗？"
+                  style="padding: 7px 15px"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="handleDelete(scope.row.id)"
+                >
+                  <el-button slot="reference" size="mini" type="danger"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <!-- 分页器 -->
+        <el-col :span="24">
+          <Pager
+            :total="total"
+            :currentPage="currentPage"
+            :page.sync="currentPage"
+            :size.sync="pageSize"
+          ></Pager>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表单 -->
     <el-dialog

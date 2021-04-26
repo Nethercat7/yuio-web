@@ -1,160 +1,165 @@
 <template>
   <div>
-    <el-row class="card search-bar">
-      <el-col :span="24">
-        <div>
-          <span class="label">年级</span>
-          <el-select size="mini" v-model="params.grade" @change="getOrg(true)">
-            <el-option
-              v-for="item in gradeList"
-              :key="item.value"
-              :value="item.value"
-              :label="item.label"
-            ></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span class="label">专业</span>
-          <el-cascader
-            size="mini"
-            v-model="params.temp"
-            :options="orgList"
-            :props="orgProps"
-            filterable
-            :show-all-levels="false"
-            ref="cascader"
-            @change="setParams"
-            clearable
-          ></el-cascader>
-        </div>
-        <div>
-          <span class="label">就业情况</span>
-          <el-select v-model="params.employment" size="mini" clearable>
-            <el-option value="0" label="未就业"></el-option>
-            <el-option value="1" label="已就业"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span class="label">填写情况</span>
-          <el-select v-model="params.write" size="mini" clearable>
-            <el-option value="0" label="未填写"></el-option>
-            <el-option value="1" label="已填写"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span class="label"> 姓名</span>
-          <el-input
-            v-model="params.name"
-            style="width: 200px"
-            size="mini"
-          ></el-input>
-        </div>
-        <!-- 按钮 -->
-        <div>
-          <el-button size="mini" type="success" @click="getData()"
-            >搜索</el-button
+    <el-card class="mb-20 search-bar" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
+          <div>
+            <span class="label">年级</span>
+            <el-select
+              size="mini"
+              v-model="params.grade"
+              @change="getOrg(true)"
+            >
+              <el-option
+                v-for="item in gradeList"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span class="label">专业</span>
+            <el-cascader
+              size="mini"
+              v-model="params.temp"
+              :options="orgList"
+              :props="orgProps"
+              filterable
+              :show-all-levels="false"
+              ref="cascader"
+              @change="setParams"
+              clearable
+            ></el-cascader>
+          </div>
+          <div>
+            <span class="label">就业情况</span>
+            <el-select v-model="params.employment" size="mini" clearable>
+              <el-option value="0" label="未就业"></el-option>
+              <el-option value="1" label="已就业"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span class="label">填写情况</span>
+            <el-select v-model="params.write" size="mini" clearable>
+              <el-option value="0" label="未填写"></el-option>
+              <el-option value="1" label="已填写"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span class="label"> 姓名</span>
+            <el-input
+              v-model="params.name"
+              style="width: 200px"
+              size="mini"
+            ></el-input>
+          </div>
+          <!-- 按钮 -->
+          <div>
+            <el-button size="mini" type="success" @click="getData()"
+              >搜索</el-button
+            >
+            <el-button size="mini" type="danger" @click="getData(true)"
+              >重置</el-button
+            >
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <el-button size="mini" @click="openDialog('add')" type="success"
+            >添加</el-button
           >
-          <el-button size="mini" type="danger" @click="getData(true)"
-            >重置</el-button
+          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="warning" style="margin-right: 20px"
+            >导出</el-button
           >
-        </div>
-      </el-col>
-      <el-col :span="24">
-        <el-button size="mini" @click="openDialog('add')" type="success"
-          >添加</el-button
-        >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning" style="margin-right: 20px"
-          >导出</el-button
-        >
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表格 -->
-    <el-row class="card">
-      <el-col :span="24">
-        <el-table
-          ref="table"
-          :data="
-            tableData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize
-            )
-          "
-        >
-          <el-table-column label="姓名" prop="name" sortable> </el-table-column>
-          <el-table-column label="学号" prop="code" sortable> </el-table-column>
-          <el-table-column label="所属院系" prop="college_name" sortable>
-          </el-table-column>
-          <el-table-column label="所属专业" prop="major_name" sortable>
-          </el-table-column>
-          <el-table-column label="所属年级" prop="grade" sortable>
-          </el-table-column>
-          <el-table-column label="所属班级" prop="class_name" sortable>
-          </el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-            sortable
-            :formatter="statusFormatter"
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            ref="table"
+            :data="
+              tableData.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize
+              )
+            "
           >
-          </el-table-column>
-          <el-table-column
-            label="就业信息填写"
-            prop="write"
-            sortable
-            :formatter="writeFormatter"
-          ></el-table-column>
-          <el-table-column
-            label="就业情况"
-            prop="employment"
-            sortable
-            :formatter="emplFormatter"
-          ></el-table-column>
-          <el-table-column label="操作" fixed="right" width="250px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="openDialog('upd', scope.row)"
-                type="info"
-                >编辑</el-button
-              >
-              <el-popconfirm
-                title="删除后将无法恢复，确定删除吗？"
-                style="padding: 7px 15px"
-                icon="el-icon-info"
-                icon-color="red"
-                @confirm="handleDelete(scope.row.id)"
-              >
-                <el-button slot="reference" size="mini" type="danger"
-                  >删除</el-button
+            <el-table-column label="姓名" prop="name" sortable>
+            </el-table-column>
+            <el-table-column label="学号" prop="code" sortable>
+            </el-table-column>
+            <el-table-column label="所属院系" prop="college_name" sortable>
+            </el-table-column>
+            <el-table-column label="所属专业" prop="major_name" sortable>
+            </el-table-column>
+            <el-table-column label="所属年级" prop="grade" sortable>
+            </el-table-column>
+            <el-table-column label="所属班级" prop="class_name" sortable>
+            </el-table-column>
+            <el-table-column
+              label="状态"
+              prop="status"
+              sortable
+              :formatter="statusFormatter"
+            >
+            </el-table-column>
+            <el-table-column
+              label="就业信息填写"
+              prop="write"
+              sortable
+              :formatter="writeFormatter"
+            ></el-table-column>
+            <el-table-column
+              label="就业情况"
+              prop="employment"
+              sortable
+              :formatter="emplFormatter"
+            ></el-table-column>
+            <el-table-column label="操作" fixed="right" width="250px">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="openDialog('upd', scope.row)"
+                  type="info"
+                  >编辑</el-button
                 >
-              </el-popconfirm>
-              <el-dropdown>
-                <el-button size="mini" type="primary">更多</el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <span @click="resetPwd(scope.row.id)">重置密码</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 分页器 -->
-        <el-pagination
-          layout="total,sizes,prev, pager, next,jumper"
-          :total="total"
-          @current-change="changePage"
-          :current-page="currentPage"
-          :hide-on-single-page="true"
-          @size-change="changeSize"
-          :page-size="pageSize"
-          style="margin-top: 10px; text-align: center"
-        >
-        </el-pagination>
-      </el-col>
-    </el-row>
+                <el-popconfirm
+                  title="删除后将无法恢复，确定删除吗？"
+                  style="padding: 7px 15px"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="handleDelete(scope.row.id)"
+                >
+                  <el-button slot="reference" size="mini" type="danger"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+                <el-dropdown>
+                  <el-button size="mini" type="primary">更多</el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <span @click="resetPwd(scope.row.id)">重置密码</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 分页器 -->
+          <Pager
+            :total="total"
+            :currentPage="currentPage"
+            :page.sync="currentPage"
+            :size.sync="pageSize"
+          ></Pager>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表单 -->
     <el-dialog
@@ -231,6 +236,7 @@
 </template>
 
 <script>
+import Pager from "@/components/pager";
 import {
   addStudent,
   delStudent,
@@ -241,6 +247,7 @@ import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
 export default {
   name: "studentManagement",
+  components: { Pager },
   data() {
     return {
       tableData: [],

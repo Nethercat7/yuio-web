@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-row class="mb-20">
-      <el-col :span="24" style="text-align: right">
-        <el-card class="top-tools">
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24" style="text-align: right">
           <el-select
             size="mini"
             style="margin-right: 20px"
@@ -34,12 +34,12 @@
           <el-button size="mini" type="danger" @click="getData(true)"
             >重置</el-button
           >
-        </el-card>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
 
-    <el-row class="mb-20">
-      <el-card>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row class="mb-20">
         <el-col :span="12">
           <Bar
             id="intention-city"
@@ -48,12 +48,12 @@
             suffix="人"
           ></Bar>
         </el-col>
-        <el-col :span="12"> </el-col>
-      </el-card>
-    </el-row>
+        <el-col :span="12"></el-col>
+      </el-row>
+    </el-card>
 
-    <el-row class="mb-20">
-      <el-card>
+    <el-card :shadow="cardShadow">
+      <el-row class="mb-20">
         <el-col :span="12">
           <Radar
             id="intention-work"
@@ -62,8 +62,8 @@
           ></Radar>
         </el-col>
         <el-col :span="12"> </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
   </div>
 </template>
 

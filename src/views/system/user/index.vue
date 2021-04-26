@@ -1,98 +1,103 @@
 <template>
   <div>
-    <el-row class="card">
-      <el-col :span="12">
-        <el-button size="mini" type="success" @click="openDialog('add')"
-          >添加</el-button
-        >
-        <el-button size="mini" type="primary">导入</el-button>
-        <el-button size="mini" type="warning">导出</el-button>
-      </el-col>
-      <el-col :span="12" style="text-align: right">
-        <el-autocomplete
-          placeholder="请输入内容"
-          size="mini"
-          style="margin-right: 10px"
-          :trigger-on-focus="false"
-          value-key="name"
-          v-model="keyword"
-          :fetch-suggestions="searchSuggestions"
-        ></el-autocomplete>
-        <el-button size="mini" type="success" @click="handleSearch"
-          >搜索</el-button
-        >
-        <el-button size="mini" type="danger" @click="handleReset"
-          >重置</el-button
-        >
-      </el-col>
-    </el-row>
-    <el-row class="card">
-      <!-- 表格 -->
-      <el-col :span="24">
-        <el-table
-          ref="table"
-          :data="
-            tableData.slice(
-              (currentPage - 1) * pageSize,
-              currentPage * pageSize
-            )
-          "
-          :row-class-name="tableRowClassName"
-        >
-          <el-table-column label="姓名" prop="name"></el-table-column>
-          <el-table-column label="账号" prop="code"></el-table-column>
-          <el-table-column
-            label="性别"
-            prop="gender"
-            :formatter="genderFormatter"
-          ></el-table-column>
-          <el-table-column label="电话号码" prop="phone"></el-table-column>
-          <el-table-column
-            label="状态"
-            prop="status"
-            :formatter="statusFormatter"
-          ></el-table-column>
-          <el-table-column label="操作" fixed="right" width="250px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="info"
-                @click="openDialog('upd', scope.row)"
-                >编辑</el-button
-              >
-              <el-popconfirm
-                title="删除后将无法恢复，确定删除吗？"
-                style="padding: 7px 15px"
-                icon="el-icon-info"
-                icon-color="red"
-                @confirm="handleDelete(scope.row.id)"
-              >
-                <el-button slot="reference" size="mini" type="danger"
-                  >删除</el-button
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <el-col :span="12">
+          <el-button size="mini" type="success" @click="openDialog('add')"
+            >添加</el-button
+          >
+          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="warning">导出</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <el-autocomplete
+            placeholder="请输入内容"
+            size="mini"
+            style="margin-right: 10px"
+            :trigger-on-focus="false"
+            value-key="name"
+            v-model="keyword"
+            :fetch-suggestions="searchSuggestions"
+          ></el-autocomplete>
+          <el-button size="mini" type="success" @click="handleSearch"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="handleReset"
+            >重置</el-button
+          >
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <!-- 表格 -->
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            ref="table"
+            :data="
+              tableData.slice(
+                (currentPage - 1) * pageSize,
+                currentPage * pageSize
+              )
+            "
+            :row-class-name="tableRowClassName"
+          >
+            <el-table-column label="姓名" prop="name"></el-table-column>
+            <el-table-column label="账号" prop="code"></el-table-column>
+            <el-table-column
+              label="性别"
+              prop="gender"
+              :formatter="genderFormatter"
+            ></el-table-column>
+            <el-table-column label="电话号码" prop="phone"></el-table-column>
+            <el-table-column
+              label="状态"
+              prop="status"
+              :formatter="statusFormatter"
+            ></el-table-column>
+            <el-table-column label="操作" fixed="right" width="250px">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="info"
+                  @click="openDialog('upd', scope.row)"
+                  >编辑</el-button
                 >
-              </el-popconfirm>
-              <el-dropdown>
-                <el-button size="mini" type="primary">更多</el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <span @click="resetPwd(scope.row.id)">重置密码</span>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-      <!-- 分页器 -->
-      <el-col :span="24">
-        <Pager
-          :total="total"
-          :currentPage="currentPage"
-          :page.sync="currentPage"
-          :size.sync="pageSize"
-        ></Pager>
-      </el-col>
-    </el-row>
+                <el-popconfirm
+                  title="删除后将无法恢复，确定删除吗？"
+                  style="padding: 7px 15px"
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="handleDelete(scope.row.id)"
+                >
+                  <el-button slot="reference" size="mini" type="danger"
+                    >删除</el-button
+                  >
+                </el-popconfirm>
+                <el-dropdown>
+                  <el-button size="mini" type="primary">更多</el-button>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <span @click="resetPwd(scope.row.id)">重置密码</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <!-- 分页器 -->
+        <el-col :span="24">
+          <Pager
+            :total="total"
+            :currentPage="currentPage"
+            :page.sync="currentPage"
+            :size.sync="pageSize"
+          ></Pager>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 表单 -->
     <el-dialog
