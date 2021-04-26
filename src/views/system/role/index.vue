@@ -109,15 +109,16 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="操作权限">
-          <el-tree
-            :data="perms"
-            :props="defaultProps"
-            show-checkbox
-            default-expand-all
-            ref="tree"
-            node-key="id"
-            @check-change="handleNodeClick"
-          ></el-tree>
+          <div class="perms-box">
+            <el-tree
+              :data="perms"
+              :props="defaultProps"
+              show-checkbox
+              ref="tree"
+              node-key="id"
+              @check-change="handleNodeClick"
+            ></el-tree>
+          </div>
         </el-form-item>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.remark"></el-input>
@@ -149,7 +150,7 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {},
+      form: { perms: [] },
       defaultProps: {
         children: "children",
         label: "name",
@@ -196,7 +197,7 @@ export default {
     },
     openDialog(type, row) {
       this.dialogVisible = true;
-      this.form.perms=[];
+      this.form.perms = [];
       if (type == "add") {
         this.type = type;
       } else {
@@ -247,8 +248,11 @@ export default {
         });
       });
     },
+    //设置被选中的权限
     handleNodeClick() {
-      this.form.perms = this.$refs.tree.getCheckedKeys();
+      this.form.perms = this.$refs.tree
+        .getCheckedKeys()
+        .concat(this.$refs.tree.getHalfCheckedKeys());
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
@@ -261,4 +265,21 @@ export default {
 </script>
 
 <style>
+.perms-box {
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  outline: 0;
+  transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+  min-height: 20px;
+  max-height: 200px;
+  overflow: auto;
+}
 </style>
