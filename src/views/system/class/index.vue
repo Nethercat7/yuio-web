@@ -201,18 +201,22 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addClass(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       } else {
         updClass(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       }
@@ -232,10 +236,12 @@ export default {
         if (resp.code === 0) {
           this.getData();
         }
-        this.$message({
-          message: resp.msg,
-          type: resp.type,
-        });
+        if (resp.status != 500) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
       });
     },
     //页面切换控制器

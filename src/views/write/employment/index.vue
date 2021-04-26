@@ -146,7 +146,8 @@ export default {
               message: resp.msg,
               type: resp.type,
             });
-          } else {
+          }
+          if (resp.status != 500) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -154,13 +155,14 @@ export default {
           }
         });
       } else {
-       updEmplInfo(this.params).then((resp) => {
+        updEmplInfo(this.params).then((resp) => {
           if (resp.code === 0) {
             this.$message({
               message: resp.msg,
               type: resp.type,
             });
-          } else {
+          }
+          if (resp.status != 500) {
             this.$message({
               message: resp.msg,
               type: resp.type,

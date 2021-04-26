@@ -147,18 +147,22 @@ export default {
       if (this.type === 0) {
         addDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
         });
       } else {
         updDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
         });
         this.dialogVisible = false;
       }
@@ -186,10 +190,12 @@ export default {
     deleteData(id) {
       delDictData(id).then((resp) => {
         if (resp.code === 0) this.getData();
-        this.$message({
-          message: resp.msg,
-          type: resp.type,
-        });
+        if (resp.status != 500) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
       });
     },
     statusFormatter(row) {

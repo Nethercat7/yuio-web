@@ -210,18 +210,22 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addCity(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       } else {
         updCity(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       }
@@ -246,10 +250,12 @@ export default {
         if (resp.code === 0) {
           this.getData();
         }
-        this.$message({
-          message: resp.msg,
-          type: resp.type,
-        });
+        if (resp.status != 500) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
       });
     },
     statusFormatter(row) {

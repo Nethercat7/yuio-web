@@ -54,7 +54,7 @@ export default {
         if (resp.code === 0) {
           setSubject(resp.obj);
           this.$router.push("/");
-        } else {
+        } else if(resp.status!=500) {
           this.$message({
             message: resp.msg,
             type: resp.type,

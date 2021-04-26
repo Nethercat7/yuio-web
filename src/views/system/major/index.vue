@@ -174,18 +174,22 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addMajor(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getMajors();
         });
       } else {
         updMajor(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getMajors();
         });
       }
@@ -210,10 +214,12 @@ export default {
         if (resp.code === 0) {
           this.getMajors();
         }
-        this.$message({
-          message: resp.msg,
-          type: resp.type,
-        });
+        if (resp.status != 500) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
       });
     },
     getMajors() {

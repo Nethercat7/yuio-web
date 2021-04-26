@@ -156,18 +156,22 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addCollege(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       } else {
         updCollege(this.form).then((resp) => {
-          this.$message({
-            message: resp.msg,
-            type: resp.type,
-          });
+          if (resp.status != 500) {
+            this.$message({
+              message: resp.msg,
+              type: resp.type,
+            });
+          }
           if (resp.code === 0) this.getData();
         });
       }
@@ -184,10 +188,12 @@ export default {
     },
     deleteRow(id) {
       delCollege(id).then((resp) => {
-        this.$message({
-          message: resp.msg,
-          type: resp.type,
-        });
+        if (resp.status != 500) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
         if (resp.code === 0) this.getData();
       });
     },
