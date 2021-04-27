@@ -1,130 +1,143 @@
 <template>
   <div>
-    <!-- 各届总就业率对比 -->
-    <el-row class="mb-20">
-      <el-card>
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
         <el-col :span="12">
-          <Pie id="schoolCompare" :data="data" title="各届就业率对比" suffix="%"></Pie>
+          <Pie
+            id="rate-compare"
+            :data="rateData"
+            title="就业率比较"
+            :subTitle="subTitle"
+          ></Pie>
         </el-col>
         <el-col :span="12">
-          <div style="text-align:right">
+          <div>
             <el-select
-              v-model="value"
-              multiple
-              collapse-tags
-              style="margin-right: 20px"
-              placeholder="请选择"
               size="mini"
+              v-model="params.grades"
+              multiple
+              clearable
+              collapse-tags
             >
               <el-option
-                v-for="item in options"
+                v-for="item in gradeList"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               >
               </el-option>
             </el-select>
-            <el-button size="mini" type="success">筛选</el-button>
+            <el-cascader
+              ref="cascader"
+              size="mini"
+              v-model="params.temp"
+              :options="orgList"
+              :props="cascaderProps"
+              @change="setOrgParams"
+            ></el-cascader>
+            <el-button size="mini" type="success" @click="submit"
+              >提交</el-button
+            >
+            <el-button size="mini" type="danger" @click="reset"
+              >重置</el-button
+            >
           </div>
           <el-divider></el-divider>
         </el-col>
-      </el-card>
-    </el-row>
-    <!-- 各学院就业率对比 -->
-    <el-row>
-      <el-card>
-        <el-col :span="12">
-          <LineChart id="collegeCompare" :seriesName="collegeName" :seriesData="collegeData" suffix="%" title="经济与管理学院往届就业率对比"></LineChart>
-        </el-col>
-        <el-col :span="12">
-          <div style="text-align:right">
-            <el-select
-              v-model="value"
-              multiple
-              collapse-tags
-              style="margin-right: 20px"
-              placeholder="请选择"
-              size="mini"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-
-            <el-select
-              v-model="value"
-              multiple
-              collapse-tags
-              style="margin-right: 20px"
-              placeholder="请选择"
-              size="mini"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-            <el-button size="mini" type="success">筛选</el-button>
-          </div>
-          <el-divider></el-divider>
-        </el-col>
-      </el-card>
-    </el-row>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
 <script>
+import { getGrade, getCollegeAndMajor } from "@/api/system/sys";
+import { getRateCompare } from "@/api/compare/rate";
 import Pie from "@/components/charts/pie";
-import LineChart from  "@/components/charts/line";
 
 export default {
   name: "EmploymentRateCompare",
-  components: {
-    Pie,
-    LineChart
-  },
+  components: { Pie },
   data() {
     return {
-      data: [
-        { value: 100, name: "2021届" },
-        { value: 95, name: "2020届" },
-        { value: 90, name: "2019届" },
-        { value: 85, name: "2018届" },
-        { value: 80, name: "2017届" },
-      ],
-      options: [
-        {
-          value: "2021",
-          label: "2021",
-        },
-        {
-          value: "2020",
-          label: "2020",
-        },
-        {
-          value: "2019",
-          label: "2019",
-        },
-        {
-          value: "2018",
-          label: "2018",
-        },
-        {
-          value: "2017",
-          label: "2017",
-        },
-      ],
-      value: [],
-      collegeName:['2021','2020','2019','2018','2016','2015','2014'],
-      collegeData:[85,67,77,95,82,97,87]
+      params: {
+        grades: [],
+      },
+      gradeList: [],
+      orgList: [],
+      cascaderProps: {
+        label: "name",
+        value: "id",
+        checkStrictly: true,
+      },
+      rateData: [],
+      subTitle: "",
+      grades: [],
     };
+  },
+  methods: {
+    async getData() {
+      //获取年级
+      await getGrade().then((resp) => {
+        let grades = resp.obj;
+        this.gradeList = grades;
+        //设置初始状态，默认请求5个年级的数据。
+        if (grades.length > 5) {
+          for (let i = 0; i < 5; i++) {
+            this.grades.push(grades.value);
+          }
+          this.params.grades = this.grades;
+        } else {
+          grades.forEach((element) => {
+            this.grades.push(element.value);
+          });
+          this.params.grades = this.grades;
+        }
+      });
+      //获取完整的学校组织信息
+      getCollegeAndMajor().then((resp) => {
+        this.orgList = resp.obj;
+      });
+      //获取就业率
+      this.getRates();
+    },
+    setOrgParams() {
+      //判断是选择还是清空
+      if (this.$refs.cascader.getCheckedNodes().length != 0) {
+        let arr = this.$refs.cascader.getCheckedNodes()[0].path;
+        this.params.college_id = arr[0];
+        this.params.major_id = arr[1];
+      } else {
+        this.params.college_id = null;
+        this.params.major_id = null;
+      }
+    },
+    submit() {
+      this.getRates();
+    },
+    reset() {
+      //恢复初始状态
+      this.params={};
+      this.params.grades = this.grades;
+      this.getRates();
+    },
+    //获取就业率
+    getRates() {
+      getRateCompare(this.params).then((resp) => {
+        //图表数据初始化
+        this.rateData = [];
+        //格式化
+        for (let i = 0; i < resp.obj.grades.length; i++) {
+          this.rateData.push({
+            value: resp.obj.rates[i],
+            name: resp.obj.grades[i] + "届",
+          });
+          this.subTitle = resp.obj.type;
+        }
+      });
+    },
+  },
+  created() {
+    this.getData();
   },
 };
 </script>

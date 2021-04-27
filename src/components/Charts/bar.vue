@@ -143,10 +143,6 @@ export default {
   },
   mounted() {
     this.inital();
-    let _this = this;
-    window.onresize = function () {
-      _this.chart.resize();
-    };
   },
 };
 </script>

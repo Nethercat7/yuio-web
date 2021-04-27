@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="{ width: width, height: height, margin: margin }"></div>
+  <div :id="id" :style="{ width: width, height: height }"></div>
 </template>
 
 <script>
@@ -20,9 +20,13 @@ export default {
       type: String,
       default: "500px",
     },
-    margin: {
-      type: String,
-      default: "auto",
+    data: {
+      type: Array,
+      default: null,
+    },
+    showTitle: {
+      type: Boolean,
+      default: true,
     },
     title: {
       type: String,
@@ -32,50 +36,40 @@ export default {
       type: String,
       default: "",
     },
-    data: {
-      type: Array,
-      default: null,
-    },
-    switchable: {
-      type: Boolean,
-      default: false,
-    },
-    suffix: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {
-      legend: {
-        orient: "vertical",
-        left: "left",
-      },
+      chart: null,
     };
   },
   methods: {
-    initial() {
-      var chartDom = document.getElementById(this.id);
-      var myChart = echarts.init(chartDom);
-      var option;
-
-      option = {
+    inital() {
+      this.chart = echarts.init(document.getElementById(this.id));
+      if (this.data.length > 0) {
+        this.setOptions(this.data);
+      }
+    },
+    setOptions(data) {
+      this.chart.setOption({
         title: {
+          show: this.showTitle,
           text: this.title,
           subtext: this.subTitle,
           left: "center",
         },
         tooltip: {
           trigger: "item",
-          formatter: "{b}：{c}" + this.suffix,
         },
-        legend: this.switchable ? this.legend : null,
+        legend: {
+          orient: "vertical",
+          left: "left",
+        },
         series: [
           {
-            name: "访问来源",
+            name: this.title,
             type: "pie",
             radius: "50%",
-            data: this.data,
+            data: data,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -85,13 +79,19 @@ export default {
             },
           },
         ],
-      };
-
-      option && myChart.setOption(option);
+      });
+    },
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val);
+      },
     },
   },
   mounted() {
-    this.initial();
+    this.inital();
   },
 };
 </script>
