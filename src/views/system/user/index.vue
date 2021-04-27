@@ -249,7 +249,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addUser(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -259,7 +259,7 @@ export default {
         });
       } else {
         updUser(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -289,7 +289,7 @@ export default {
         if (resp.code === 0) {
           this.getData();
         }
-        if (resp.status != 500) {
+        if (resp.status == null) {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -309,7 +309,7 @@ export default {
             key: id,
           };
           resetPwd(this.reset).then((resp) => {
-            if (resp.status != 500) {
+            if (resp.status == null) {
               this.$message({
                 type: resp.type,
                 message: resp.msg,

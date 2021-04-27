@@ -156,7 +156,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addCollege(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -166,7 +166,7 @@ export default {
         });
       } else {
         updCollege(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -188,7 +188,7 @@ export default {
     },
     deleteRow(id) {
       delCollege(id).then((resp) => {
-        if (resp.status != 500) {
+        if (resp.status == null) {
           this.$message({
             message: resp.msg,
             type: resp.type,

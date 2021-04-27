@@ -201,7 +201,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addClass(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -211,7 +211,7 @@ export default {
         });
       } else {
         updClass(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -236,7 +236,7 @@ export default {
         if (resp.code === 0) {
           this.getData();
         }
-        if (resp.status != 500) {
+        if (resp.status == null) {
           this.$message({
             message: resp.msg,
             type: resp.type,

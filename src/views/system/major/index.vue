@@ -174,7 +174,7 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addMajor(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -184,7 +184,7 @@ export default {
         });
       } else {
         updMajor(this.form).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -214,7 +214,7 @@ export default {
         if (resp.code === 0) {
           this.getMajors();
         }
-        if (resp.status != 500) {
+        if (resp.status == null) {
           this.$message({
             message: resp.msg,
             type: resp.type,

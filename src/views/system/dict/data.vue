@@ -147,7 +147,7 @@ export default {
       if (this.type === 0) {
         addDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -157,7 +157,7 @@ export default {
       } else {
         updDictData(this.form).then((resp) => {
           if (resp.code === 0) this.getData();
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -190,7 +190,7 @@ export default {
     deleteData(id) {
       delDictData(id).then((resp) => {
         if (resp.code === 0) this.getData();
-        if (resp.status != 500) {
+        if (resp.status == null) {
           this.$message({
             message: resp.msg,
             type: resp.type,

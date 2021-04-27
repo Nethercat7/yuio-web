@@ -141,7 +141,7 @@ export default {
     submit() {
       if (!this.update) {
         addEmplInfo(this.params).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
@@ -150,7 +150,7 @@ export default {
         });
       } else {
         updEmplInfo(this.params).then((resp) => {
-          if (resp.status != 500) {
+          if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
