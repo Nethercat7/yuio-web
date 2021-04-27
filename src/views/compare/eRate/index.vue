@@ -116,7 +116,9 @@ export default {
     },
     reset() {
       //恢复初始状态
-      this.params={};
+      this.params={
+        grades:[]
+      };
       this.params.grades = this.grades;
       this.getRates();
     },
