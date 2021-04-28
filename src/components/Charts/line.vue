@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :style="{ width: width, height: height, margin: margin }"></div>
+  <div :id="id" :style="{ width: width, height: height }"></div>
 </template>
 
 <script>
@@ -19,9 +19,9 @@ export default {
       type: String,
       default: "500px",
     },
-    margin: {
-      type: String,
-      default: "auto",
+    data: {
+      type: Object,
+      default: null,
     },
     title: {
       type: String,
@@ -31,26 +31,24 @@ export default {
       type: String,
       default: "",
     },
-    seriesName: {
-      type: Array,
-      default: null,
-    },
-    seriesData: {
-      type: Array,
-      default: null,
-    },
     suffix: {
       type: String,
       default: "",
     },
   },
+  data() {
+    return {
+      chart: null,
+    };
+  },
   methods: {
-    initial() {
-      var chartDom = document.getElementById(this.id);
-      var myChart = echarts.init(chartDom);
-      var option;
+    inital() {
+      this.chart = echarts.init(document.getElementById(this.id));
+        this.setOptions(this.data);
 
-      option = {
+    },
+    setOptions({ name, series } = {}) {
+      this.chart.setOption({
         title: {
           text: this.title,
           subtext: this.subtitle,
@@ -58,11 +56,10 @@ export default {
         },
         tooltip: {
           trigger: "axis",
-          formatter: "{b}： {c}" + this.suffix,
         },
         xAxis: {
           type: "category",
-          data: this.seriesName,
+          data: name,
         },
         yAxis: {
           type: "value",
@@ -71,19 +68,20 @@ export default {
             formatter: "{value}" + this.suffix,
           },
         },
-        series: [
-          {
-            data: this.seriesData,
-            type: "line",
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
+        series: series,
+      });
+    },
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val);
+      },
     },
   },
   mounted() {
-    this.initial();
+    this.inital();
   },
 };
 </script>

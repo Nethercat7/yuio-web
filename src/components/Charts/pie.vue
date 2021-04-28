@@ -36,6 +36,10 @@ export default {
       type: String,
       default: "",
     },
+    showLegend: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -45,9 +49,7 @@ export default {
   methods: {
     inital() {
       this.chart = echarts.init(document.getElementById(this.id));
-      if (this.data.length > 0) {
-        this.setOptions(this.data);
-      }
+      this.setOptions(this.data);
     },
     setOptions(data) {
       this.chart.setOption({
@@ -63,6 +65,7 @@ export default {
         legend: {
           orient: "vertical",
           left: "left",
+          show: this.showLegend,
         },
         series: [
           {

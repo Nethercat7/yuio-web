@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 自身就业率比较 -->
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
@@ -8,6 +9,7 @@
             :data="rateData"
             title="就业率比较"
             :subTitle="subTitle"
+            :showLegend="false"
           ></Pie>
         </el-col>
         <el-col :span="12">
@@ -38,9 +40,7 @@
             <el-button size="mini" type="success" @click="submit"
               >提交</el-button
             >
-            <el-button size="mini" type="danger" @click="reset"
-              >重置</el-button
-            >
+            <el-button size="mini" type="danger" @click="reset">重置</el-button>
           </div>
           <el-divider></el-divider>
         </el-col>
@@ -51,7 +51,7 @@
 
 <script>
 import { getGrade, getCollegeAndMajor } from "@/api/system/sys";
-import { getRateCompare } from "@/api/compare/rate";
+import { getSelfCompare } from "@/api/compare/rate";
 import Pie from "@/components/charts/pie";
 
 export default {
@@ -77,28 +77,13 @@ export default {
   methods: {
     async getData() {
       //获取年级
-      await getGrade().then((resp) => {
-        let grades = resp.obj;
-        this.gradeList = grades;
-        //设置初始状态，默认请求5个年级的数据。
-        if (grades.length > 5) {
-          for (let i = 0; i < 5; i++) {
-            this.grades.push(grades.value);
-          }
-          this.params.grades = this.grades;
-        } else {
-          grades.forEach((element) => {
-            this.grades.push(element.value);
-          });
-          this.params.grades = this.grades;
-        }
+       getGrade().then((resp) => {
+        this.gradeList = resp.obj;
       });
       //获取完整的学校组织信息
       getCollegeAndMajor().then((resp) => {
         this.orgList = resp.obj;
       });
-      //获取就业率
-      this.getRates();
     },
     setOrgParams() {
       //判断是选择还是清空
@@ -112,19 +97,17 @@ export default {
       }
     },
     submit() {
-      this.getRates();
+      this.getSelf();
     },
     reset() {
       //恢复初始状态
-      this.params={
-        grades:[]
-      };
-      this.params.grades = this.grades;
-      this.getRates();
+      this.params = {};
+      this.subTitle="";
+      this.rateData=[];
     },
     //获取就业率
-    getRates() {
-      getRateCompare(this.params).then((resp) => {
+    getSelf() {
+      getSelfCompare(this.params).then((resp) => {
         //图表数据初始化
         this.rateData = [];
         //格式化

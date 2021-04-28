@@ -1,8 +1,8 @@
 import request from "@/utils/request";
 
-export function getRateCompare(params){
+export function getSelfCompare(params){
     return request({
-        url:"/cmp/rate/get",
+        url:"/cmp/rate/getSelf",
         method:"post",
         data:params
     })
