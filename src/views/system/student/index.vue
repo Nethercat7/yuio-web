@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-card class="mb-20 search-bar" :shadow="cardShadow">
+    <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
-        <el-col :span="24">
+        <el-col :span="24" class="search-bar">
           <div>
             <span class="label">年级</span>
             <el-select
@@ -114,7 +114,7 @@
             ></el-table-column>
             <el-table-column
               label="就业情况"
-              prop="employment"
+              prop="empl_status"
               sortable
               :formatter="emplFormatter"
             ></el-table-column>
@@ -303,8 +303,16 @@ export default {
       //获取院系、专业和班级信息
       this.getOrg();
       getGrade().then((resp) => {
-        this.gradeList = resp.obj;
-        this.gradeList2 = resp.obj;
+        //格式化
+        let grade = [];
+        resp.obj.forEach((element) => {
+          grade.push({
+            label: element + "级",
+            value: element,
+          });
+        });
+        this.gradeList = grade;
+        this.gradeList2 = grade;
       });
       //获取数据字典
       this.getDictData("sys_stdnt_status").then((resp) => {
@@ -436,7 +444,7 @@ export default {
       return this.selectDictLabel(this.writeOptions, row.write);
     },
     emplFormatter(row) {
-      return this.selectDictLabel(this.emplOptions, row.employment);
+      return this.selectDictLabel(this.emplOptions, row.empl_status);
     },
   },
   mounted() {
@@ -446,10 +454,10 @@ export default {
 </script>
 
 <style>
-.search-bar div {
+.search-bar > div {
   display: inline-block;
   margin-right: 10px;
-  padding-bottom: 5px;
+  padding-bottom: 20px;
 }
 .search-bar .label {
   font-size: 14px;

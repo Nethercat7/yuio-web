@@ -159,7 +159,12 @@ export default {
       });
       //获取年级信息
       getGrade().then((resp) => {
-        this.gradeList = resp.obj;
+        resp.obj.forEach((element) => {
+          this.gradeList.push({
+            label: element + 4 + "届",
+            value: element,
+          });
+        });
       });
       //获取学院信息
       this.getOrg();
