@@ -35,7 +35,7 @@
           <div slot="header">
             <span>各学院就业人数</span>
           </div>
-          <div>{{ total.employment_people }}</div>
+          <div>{{ total.empl_people }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
@@ -43,7 +43,7 @@
           <div slot="header">
             <span>各学院未就业人数</span>
           </div>
-          <div>{{ total.unemployment_people }}</div>
+          <div>{{ total.un_empl_people }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
@@ -51,7 +51,7 @@
           <div slot="header">
             <span>总就业率</span>
           </div>
-          <div>{{ total.employment_rate }}%</div>
+          <div>{{ total.empl_rate }}%</div>
         </el-card>
       </el-col>
     </el-row>
