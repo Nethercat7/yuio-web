@@ -205,9 +205,10 @@
         </el-form-item>
         <el-form-item label="所属班级">
           <el-cascader
-            v-model="form.container"
+            v-model="form.class_id"
             :options="orgList"
             :props="cascaderProps"
+            :show-all-levels="false"
           >
           </el-cascader>
         </el-form-item>
@@ -239,7 +240,7 @@ import {
   addStudent,
   delStudent,
   updStudent,
-  getWithEStatusInfo,
+  getStudents,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
@@ -253,15 +254,14 @@ export default {
       keyword: "",
       dialogVisible: false,
       type: "",
-      form: {
-        grade: new Date().getFullYear() - 4,
-      },
+      form: {},
       currentPage: 1,
       pageSize: 10,
       total: 0,
       cascaderProps: {
         value: "id",
         label: "name",
+        emitPath: false,
       },
       reset: {},
       //选择框数据
@@ -272,7 +272,6 @@ export default {
         label: "name",
         value: "id",
         checkStrictly: true,
-        //emitPath: false,
       },
       params: {
         grade: new Date().getFullYear() - 4,
@@ -290,18 +289,16 @@ export default {
         this.params = {};
         this.params.grade = grade;
       }
-      this.form = {};
-      this.form.grade = grade;
       this.keyword = "";
       this.currentPage = 1;
       //获取学生信息
-      getWithEStatusInfo(this.params).then((resp) => {
+      getStudents(this.params).then((resp) => {
         this.total = resp.obj.length;
         this.tableDataBak = resp.obj;
         this.tableData = resp.obj;
       });
       //获取院系、专业和班级信息
-      this.getOrg();
+      this.getOrg(true);
       getGrade().then((resp) => {
         //格式化
         let grade = [];
@@ -340,13 +337,17 @@ export default {
     submitDialog() {
       if (this.type == "add") {
         addStudent(this.form).then((resp) => {
+          console.log(this.form);
           if (resp.status == null) {
             this.$message({
               message: resp.msg,
               type: resp.type,
             });
           }
-          if (resp.code === 0) this.getData();
+          if (resp.code === 0) {
+            this.getData();
+            this.form = {};
+          }
         });
       } else {
         updStudent(this.form).then((resp) => {
@@ -359,7 +360,6 @@ export default {
           if (resp.code === 0) this.getData();
         });
       }
-      this.dialogVisible = false;
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -428,11 +428,15 @@ export default {
       }
     },
     getOrg(query) {
-      getCompleteOrg(query ? this.params.grade : this.form.grade).then(
-        (resp) => {
+      if (query) {
+        getCompleteOrg(this.params.grade).then((resp) => {
           this.orgList = resp.obj;
-        }
-      );
+        });
+      } else {
+        getCompleteOrg(this.form.grade).then((resp) => {
+          this.orgList2 = resp.obj;
+        });
+      }
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);

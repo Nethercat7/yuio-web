@@ -56,6 +56,7 @@
               prop="status"
               :formatter="statusFormatter"
             ></el-table-column>
+            <el-table-column label="创建时间" prop="create_time"></el-table-column>
             <el-table-column label="操作" fixed="right" width="250px">
               <template slot-scope="scope">
                 <el-button
@@ -150,6 +151,7 @@
             multiple
             filterable
             placeholder="请选择"
+            collapse-tags
           >
             <el-option
               v-for="item in roles"

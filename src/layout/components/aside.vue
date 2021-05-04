@@ -10,10 +10,10 @@
       <div>
         <img class="logo" src="../../assets/logo.png" alt="Logo" />
       </div>
-      <el-menu-item index="1" @click="$router.push('/')">
+<!--       <el-menu-item index="1" @click="$router.push('/')">
         <i class="el-icon-menu"></i>
         <span slot="title">仪表盘</span>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <el-submenu index="2">
         <template slot="title">
@@ -50,9 +50,9 @@
         <el-menu-item index="2-10" @click="$router.push('/system/dict')"
           >字典管理</el-menu-item
         >
-        <el-menu-item index="2-11" @click="$router.push('/system/test')"
+<!--         <el-menu-item index="2-11" @click="$router.push('/system/test')"
           >功能测试</el-menu-item
-        >
+        > -->
       </el-submenu>
 
       <el-submenu index="3">
@@ -73,7 +73,7 @@
         >
       </el-submenu>
 
-      <el-submenu index="4">
+<!--       <el-submenu index="4">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>数据对比</span>
@@ -81,7 +81,7 @@
         <el-menu-item index="4-1" @click="$router.push('/compare/eRate')"
           >就业率对比</el-menu-item
         >
-      </el-submenu>
+      </el-submenu> -->
 
       <el-submenu index="5">
         <template slot="title">

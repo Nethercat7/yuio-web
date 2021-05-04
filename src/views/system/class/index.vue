@@ -103,9 +103,10 @@
         </el-form-item>
         <el-form-item label="所属专业">
           <el-cascader
-            v-model="form.container"
+            v-model="form.major_id"
             :options="colleges"
             :props="cascaderProps"
+            :show-all-levels="false"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="所属年级">
@@ -165,6 +166,7 @@ export default {
       cascaderProps: {
         value: "id",
         label: "name",
+        emitPath: false,
       },
       statusOptions: [],
     };

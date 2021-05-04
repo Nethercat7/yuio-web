@@ -201,8 +201,7 @@ export default {
       getColleges().then((resp) => {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
-        let data = resp.obj;
-        this.tableData = data;
+        this.tableData = resp.obj;
       });
       //获取数据字典
       this.getDictData("sys_uvsl_status").then((resp) => {
@@ -231,8 +230,7 @@ export default {
     },
     createFilter() {
       return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.code.toLowerCase().includes(this.keyword.toLowerCase());
+        data.name.toLowerCase().includes(this.keyword.toLowerCase());
     },
     resetResult() {
       this.tableData = this.tableDataBak;

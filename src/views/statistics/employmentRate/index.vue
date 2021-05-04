@@ -122,7 +122,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
-import { getEmplInfo, getCollegeEmplInfo } from "@/api/statistics/rate";
+import { getEmplInfo} from "@/api/statistics/rate";
 
 export default {
   name: "EmploymentRate",
@@ -150,26 +150,26 @@ export default {
       getEmplInfo(this.grade).then((resp) => {
         this.total = resp.obj;
       });
-      //各院系总就业信息
-      getCollegeEmplInfo(this.grade).then((resp) => {
-        this.rateData.name = resp.obj.college_name;
-        this.rateData.series.push({
-          data: resp.obj.college_employment_rate,
-          type: "bar",
-        });
-        this.emplData.name = resp.obj.college_name;
-        this.emplData.series.push({
-          data: resp.obj.college_employment_people,
-          type: "bar",
-        });
-        this.tableData = resp.obj.data;
-      });
+      // //各院系总就业信息
+      // getCollegeEmplInfo(this.grade).then((resp) => {
+      //   this.rateData.name = resp.obj.college_name;
+      //   this.rateData.series.push({
+      //     data: resp.obj.college_employment_rate,
+      //     type: "bar",
+      //   });
+      //   this.emplData.name = resp.obj.college_name;
+      //   this.emplData.series.push({
+      //     data: resp.obj.college_employment_people,
+      //     type: "bar",
+      //   });
+      //   this.tableData = resp.obj.data;
+      // });
       //获取年级信息
       getGrade().then((resp) => {
-        resp.obj.forEach(element => {
+        resp.obj.forEach((element) => {
           this.gradeList.push({
-            label:element+4+"届",
-            value:element
+            label: element + 4 + "届",
+            value: element,
           });
         });
       });

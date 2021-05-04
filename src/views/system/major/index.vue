@@ -55,6 +55,7 @@
               :formatter="statusFormatter"
             >
             </el-table-column>
+            <el-table-column label="创建时间" prop="create_time"></el-table-column>
             <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
@@ -285,22 +286,4 @@ export default {
 </script>
 
 <style>
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-.element-right {
-  display: inline;
-  text-align: right;
-}
-.el-table .warning-row {
-  background-color: oldlace;
-}
-
-.el-table .success-row {
-  background-color: #f0f9eb;
-}
 </style>

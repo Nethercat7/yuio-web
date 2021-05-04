@@ -8,10 +8,11 @@ export function addStudent(params){
     })
 }
 
-export function getStudents(){
+export function getStudents(params){
     return request({
         url:'sys/student/get',
-        method:'get'
+        method:'post',
+        data:params
     })
 }
 

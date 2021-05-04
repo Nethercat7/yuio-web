@@ -22,18 +22,20 @@
               </el-form-item>
               <el-form-item label="所在城市">
                 <el-cascader
-                  v-model="params.work_city"
+                  v-model="params.city_id"
                   :options="cityList"
                   :props="cascaderProps"
                   clearable
+                  :show-all-levels="false"
                 ></el-cascader>
               </el-form-item>
               <el-form-item label="岗位类型">
                 <el-cascader
-                  v-model="params.work_type"
+                  v-model="params.work_id"
                   :options="workList"
                   :props="cascaderProps"
-                  clearable=""
+                  clearable
+                  :show-all-levels="false"
                 ></el-cascader>
               </el-form-item>
               <el-form-item label="协议状况">
@@ -63,16 +65,22 @@
             <el-divider></el-divider>
             <el-form-item label="意向的工作地点">
               <el-cascader
-                v-model="params.intention_city"
+                v-model="params.intention_cities"
                 :options="cityList"
-                :props="cascaderProps"
+                :props="cascaderProps2"
+                collapse-tags
+                :show-all-levels="false"
+                clearable
               ></el-cascader>
             </el-form-item>
             <el-form-item label="意向的工作岗位">
               <el-cascader
-                v-model="params.intention_work"
+                v-model="params.intention_works"
                 :options="workList"
-                :props="cascaderProps"
+                :props="cascaderProps2"
+                collapse-tags
+                :show-all-levels="false"
+                clearable
               ></el-cascader>
             </el-form-item>
             <el-divider></el-divider>
@@ -108,6 +116,13 @@ export default {
         value: "id",
         label: "name",
         emitPath: false,
+      },
+      //就业意向选择器
+      cascaderProps2: {
+        value: "id",
+        label: "name",
+        emitPath: false,
+        multiple: true,
       },
       update: false,
     };

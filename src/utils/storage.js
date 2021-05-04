@@ -29,7 +29,7 @@ export function delSubject() {
 }
 
 export function getSubjectId(){
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").id
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").id.toFixed(0);//因为JS数字类型过长会造成精度丢失，所以使用雪花算法作为ID的话，要先转为字符串。
 }
 
 export function getSubjectName(){
