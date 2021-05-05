@@ -58,21 +58,39 @@
 
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
-        <el-col :span="12">
+        <!-- 就业率 -->
+        <el-col :span="24">
           <Bar
             id="empl-rate"
             :data="rateData"
             title="各学院就业率"
             width="100%"
             suffix="%"
-            horizontal
           ></Bar>
         </el-col>
+      </el-row>
+    </el-card>
+
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <!-- 就业人数 -->
         <el-col :span="12">
           <Bar
             id="empl-people"
             :data="emplData"
             title="各学院就业人数"
+            width="100%"
+            suffix="人"
+            horizontal
+          ></Bar>
+        </el-col>
+
+        <!-- 未就业人数 -->
+        <el-col :span="12">
+          <Bar
+            id="un-empl-people"
+            :data="unEmplData"
+            title="各学院未就业人数"
             width="100%"
             suffix="人"
             horizontal
@@ -100,15 +118,15 @@
               label="总人数"
             ></el-table-column>
             <el-table-column
-              prop="employment_people"
+              prop="empl_people"
               label="就业人数"
             ></el-table-column>
             <el-table-column
-              prop="unemployment_people"
+              prop="un_empl_people"
               label="未就业人数"
             ></el-table-column>
             <el-table-column
-              prop="employment_rate"
+              prop="empl_rate"
               label="就业率"
               :formatter="formatterRate"
             ></el-table-column>
@@ -122,7 +140,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
-import { getEmplInfo} from "@/api/statistics/rate";
+import { getEmplInfo, getCollegeEmplInfo } from "@/api/statistics/rate";
 
 export default {
   name: "EmploymentRate",
@@ -133,6 +151,9 @@ export default {
         series: [],
       },
       emplData: {
+        series: [],
+      },
+      unEmplData: {
         series: [],
       },
       total: {},
@@ -150,20 +171,29 @@ export default {
       getEmplInfo(this.grade).then((resp) => {
         this.total = resp.obj;
       });
-      // //各院系总就业信息
-      // getCollegeEmplInfo(this.grade).then((resp) => {
-      //   this.rateData.name = resp.obj.college_name;
-      //   this.rateData.series.push({
-      //     data: resp.obj.college_employment_rate,
-      //     type: "bar",
-      //   });
-      //   this.emplData.name = resp.obj.college_name;
-      //   this.emplData.series.push({
-      //     data: resp.obj.college_employment_people,
-      //     type: "bar",
-      //   });
-      //   this.tableData = resp.obj.data;
-      // });
+      //各院系总就业信息
+      getCollegeEmplInfo(this.grade).then((resp) => {
+        //格式化图表数据
+        let data = resp.obj;
+        let names = [];
+        let emplRate = [];
+        let emplPeople = [];
+        let unEmplPeople = [];
+        data.forEach((element) => {
+          names.push(element.college_name);
+          emplRate.push(element.empl_rate);
+          emplPeople.push(element.empl_people);
+          unEmplPeople.push(element.un_empl_people);
+        });
+        this.rateData.name = names;
+        this.rateData.series.push({ data: emplRate, type: "bar" });
+        this.emplData.name = names;
+        this.emplData.series.push({ data: emplPeople, type: "bar" });
+        this.unEmplData.name = names;
+        this.unEmplData.series.push({ data: unEmplPeople, type: "bar" });
+        //图表数据
+        this.tableData = data;
+      });
       //获取年级信息
       getGrade().then((resp) => {
         resp.obj.forEach((element) => {
@@ -175,13 +205,16 @@ export default {
       });
     },
     formatterRate(row) {
-      return row.employment_rate + "%";
+      return row.empl_rate + "%";
     },
     reset() {
       this.rateData = {
         series: [],
       };
       this.emplData = {
+        series: [],
+      };
+      this.unEmplData = {
         series: [],
       };
     },
