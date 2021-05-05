@@ -123,38 +123,45 @@ export default {
       this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
-        let cityList = [];
-        let peopleList = [];
-        resp.obj.forEach((element) => {
-          cityList.push(element.city);
-          peopleList.push(element.people);
+        let data = resp.obj;
+        //格式化数据
+        let cities = [];
+        let peoples = [];
+        data.forEach((element) => {
+          cities.push(element.city_name);
+          peoples.push(element.total_people);
         });
-        this.cityData.name = cityList;
-        this.cityData.series.push({ data: peopleList, type: "bar" });
+        this.cityData.name = cities;
+        this.cityData.series.push({ data: peoples, type: "bar" });
       });
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
-        let workList = [];
-        let peopleList = [];
-        resp.obj.forEach((element) => {
-          workList.push({ name: element.type, max: resp.obj[0].people });
-          peopleList.push(element.people);
+        let data = resp.obj;
+        //格式化数据
+        let works = [];
+        let peoples = [];
+        data.forEach((element) => {
+          works.push(element.work_name);
+          peoples.push(element.total_people);
         });
-        this.workData.name = workList;
-        this.workData.data.push({ value: peopleList, name: "就业岗位" });
+        let max = Math.max.apply(null, peoples);
+        works.forEach((element) => {
+          this.workData.name.push({ name: element, max: max });
+        });
+        this.workData.data.push({ value: peoples, name: "就业岗位" });
       });
       //获取未就业学生计划信息
       getStudentPlan(this.params).then((resp) => {
         let planList = [];
-        let popleList = [];
+        let peoples = [];
         resp.obj.forEach((element) => {
           planList.push(element.plan);
-          popleList.push(element.people);
+          peoples.push(element.total_people);
         });
         //字典转换
         this.getDictData("stats_stdnt_plan").then((resp) => {
           this.planData.name = this.selectDictLabels(resp.obj, planList);
-          this.planData.series.push({ data: popleList, type: "bar" });
+          this.planData.series.push({ data: peoples, type: "bar" });
         });
       });
       //获取年级信息
@@ -181,8 +188,9 @@ export default {
         series: [],
       };
       if (r) {
-        this.params = {};
-        this.params.grade = new Date().getFullYear() - 4;
+        this.params = {
+          grade: new Date().getFullYear() - 4,
+        };
       }
     },
     setParams() {
