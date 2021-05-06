@@ -2,10 +2,20 @@
   <div>
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-button type="success" size="mini" @click="openDialog(0)"
             >添加</el-button
           >
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <el-input
+            v-model="keyword"
+            placeholder="请输入内容"
+            size="mini"
+            style="width: 200px; margin-right: 10px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -121,6 +131,7 @@ import {
   getDict,
   delDict,
   updDictType,
+  getDataTypeByKeyword,
 } from "@/api/system/dict/type";
 import Pager from "@/components/pager";
 
@@ -137,6 +148,7 @@ export default {
       pageSize: 10,
       total: 0,
       statusOptions: [],
+      keyword: "",
     };
   },
   methods: {
@@ -183,6 +195,7 @@ export default {
         .catch(() => {});
     },
     getData() {
+      this.keyword = "";
       getDict().then((resp) => {
         this.tableData = resp.obj;
         this.total = resp.obj.length;
@@ -205,6 +218,12 @@ export default {
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    search() {
+      getDataTypeByKeyword(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
+      });
     },
   },
   mounted() {
