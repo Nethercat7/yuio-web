@@ -3,24 +3,24 @@
     <el-card :shadow="cardShadow">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <el-form :model="params">
+          <el-form :model="params" ref="form" :rules="rules">
             <h3>就业情况</h3>
             <el-divider></el-divider>
-            <el-form-item label="是否就业">
+            <el-form-item label="是否就业" prop="status">
               <el-radio-group v-model="params.status">
                 <el-radio label="0">否</el-radio>
                 <el-radio label="1">是</el-radio>
               </el-radio-group>
             </el-form-item>
             <div v-if="params.status === '1'">
-              <el-form-item label="单位名称">
+              <el-form-item label="单位名称" prop="company">
                 <el-input
                   placeholder="请输入单位名称"
                   style="width: 300px"
                   v-model="params.company"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="所在城市">
+              <el-form-item label="所在城市" prop="city_id">
                 <el-cascader
                   v-model="params.city_id"
                   :options="cityList"
@@ -29,7 +29,7 @@
                   :show-all-levels="false"
                 ></el-cascader>
               </el-form-item>
-              <el-form-item label="岗位类型">
+              <el-form-item label="岗位类型" prop="work_id">
                 <el-cascader
                   v-model="params.work_id"
                   :options="workList"
@@ -38,7 +38,7 @@
                   :show-all-levels="false"
                 ></el-cascader>
               </el-form-item>
-              <el-form-item label="协议状况">
+              <el-form-item label="协议状况" prop="protocol">
                 <el-select v-model="params.protocol">
                   <el-option
                     v-for="item in protocolList"
@@ -50,7 +50,7 @@
               </el-form-item>
             </div>
             <div v-if="params.status === '0'">
-              <el-form-item label="接下来打算">
+              <el-form-item label="接下来打算" prop="plan">
                 <el-select v-model="params.plan">
                   <el-option
                     v-for="item in planList"
@@ -63,7 +63,7 @@
             </div>
             <h3>就业意向</h3>
             <el-divider></el-divider>
-            <el-form-item label="意向的工作地点">
+            <el-form-item label="意向的工作地点" prop="intention_cities">
               <el-cascader
                 v-model="params.intention_cities"
                 :options="cityList"
@@ -73,7 +73,7 @@
                 clearable
               ></el-cascader>
             </el-form-item>
-            <el-form-item label="意向的工作岗位">
+            <el-form-item label="意向的工作岗位" prop="intention_works">
               <el-cascader
                 v-model="params.intention_works"
                 :options="workList"
@@ -125,6 +125,32 @@ export default {
         multiple: true,
       },
       update: false,
+      rules: {
+        status: [
+          { required: true, message: "请选择就业状态", trigger: "change" },
+        ],
+        company: [
+          { required: true, message: "请输入就业单位名称", trigger: "blur" },
+        ],
+        city_id: [
+          { required: true, message: "请选择就业城市", trigger: "change" },
+        ],
+        work_id: [
+          { required: true, message: "请选择就业岗位", trigger: "change" },
+        ],
+        protocol: [
+          { required: true, message: "请选择协议状况", trigger: "change" },
+        ],
+        plan: [
+          { required: true, message: "请选择接下来的计划", trigger: "change" },
+        ],
+        intention_cities: [
+          { required: true, message: "请选择意向就业城市", trigger: "change" },
+        ],
+        intention_works: [
+          { required: true, message: "请选择意向就业岗位", trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
@@ -154,25 +180,31 @@ export default {
       });
     },
     submit() {
-      if (!this.update) {
-        addEmplInfo(this.params).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (!this.update) {
+            addEmplInfo(this.params).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+            });
+          } else {
+            updEmplInfo(this.params).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
             });
           }
-        });
-      } else {
-        updEmplInfo(this.params).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-        });
-      }
+        } else {
+          return false;
+        }
+      });
     },
   },
   created() {

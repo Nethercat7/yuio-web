@@ -159,7 +159,7 @@ export default {
       statusOptions: [],
       rules: {
         name: [
-          { required: true, message: "请输入城市名称", trigger: "blur" },
+          { required: true, message: "请输入岗位名称", trigger: "blur" },
           {
             min: 1,
             max: 30,
