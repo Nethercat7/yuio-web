@@ -241,6 +241,7 @@ export default {
       });
     },
     getData() {
+      this.keyword=""
       getMajors().then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;

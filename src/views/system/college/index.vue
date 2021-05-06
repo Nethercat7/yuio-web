@@ -220,6 +220,7 @@ export default {
       });
     },
     getData() {
+      this.keyword = "";
       getColleges().then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;

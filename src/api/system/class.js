@@ -29,3 +29,10 @@ export function updClass(params){
         data:params
     })
 }
+
+export function getClassByKeyword(param) {
+    return request({
+        url: "sys/class/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}
