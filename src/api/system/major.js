@@ -29,3 +29,10 @@ export function updMajor(params){
         data:params
     })
 }
+
+export function getMajorByKeyword(param) {
+    return request({
+        url: "sys/major/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}

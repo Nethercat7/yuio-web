@@ -30,7 +30,7 @@ export function updCollege(params) {
     })
 }
 
-export function getByKeyworkd(param) {
+export function getCollegeByKeyword(param) {
     return request({
         url: "sys/college/getByKeyword?keyword=" + param,
         method: "get"

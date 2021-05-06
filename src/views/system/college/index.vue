@@ -15,11 +15,9 @@
             v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="width: 200px;margin-right:20px"
+            style="width: 200px; margin-right: 10px"
           ></el-input>
-          <el-button size="mini" type="success" @click="search"
-            >搜索</el-button
-          >
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
           <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
@@ -124,7 +122,7 @@ import {
   getColleges,
   delCollege,
   updCollege,
-  getByKeyworkd,
+  getCollegeByKeyword,
 } from "@/api/system/college";
 
 export default {
@@ -235,7 +233,7 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getByKeyworkd(this.keyword).then((resp) => {
+      getCollegeByKeyword(this.keyword).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
       });

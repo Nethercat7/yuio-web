@@ -11,16 +11,14 @@
           <el-button size="mini" type="warning">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-autocomplete
+          <el-input
             v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-            value-key="name"
-          ></el-autocomplete>
-          <el-button size="mini" type="success">搜索</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+            style="width: 200px; margin-right: 10px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -134,7 +132,13 @@
 
 <script>
 import Pager from "@/components/pager";
-import { addMajor, getMajors, delMajor, updMajor } from "@/api/system/major";
+import {
+  addMajor,
+  getMajors,
+  delMajor,
+  updMajor,
+  getMajorByKeyword,
+} from "@/api/system/major";
 import { getColleges } from "@/api/system/college";
 
 export default {
@@ -143,7 +147,6 @@ export default {
   data() {
     return {
       tableData: [],
-      tableDataBak: [],
       keyword: "",
       dialogVisible: false,
       type: "",
@@ -194,7 +197,7 @@ export default {
                 });
               }
               if (resp.code === 0) {
-                this.getMajors();
+                this.getData();
                 this.form = {};
                 this.$refs["form"].resetFields();
               }
@@ -207,7 +210,7 @@ export default {
                   type: resp.type,
                 });
               }
-              if (resp.code === 0) this.getMajors();
+              if (resp.code === 0) this.getData();
             });
           }
         } else {
@@ -224,15 +227,10 @@ export default {
         })
         .catch(() => {});
     },
-    tableRowClassName({ row }) {
-      if (row.status == 1) {
-        return "warning-row";
-      }
-    },
     delMajor(id) {
       delMajor(id).then((resp) => {
         if (resp.code === 0) {
-          this.getMajors();
+          this.getData();
         }
         if (resp.status == null) {
           this.$message({
@@ -242,12 +240,10 @@ export default {
         }
       });
     },
-    getMajors() {
+    getData() {
       getMajors().then((resp) => {
-        this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
-        let data = resp.obj;
-        this.tableData = data;
+        this.tableData = resp.obj;
       });
       //获取院系信息
       getColleges().then((resp) => {
@@ -267,9 +263,15 @@ export default {
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
+    search() {
+      getMajorByKeyword(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
+      });
+    },
   },
   mounted() {
-    this.getMajors();
+    this.getData();
   },
 };
 </script>
