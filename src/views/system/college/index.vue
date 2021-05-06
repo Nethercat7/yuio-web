@@ -137,7 +137,15 @@ export default {
       keyword: "",
       statusOptions: [],
       rules: {
-        name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        name: [
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
         status: [
           { required: true, message: "请选择一个状态", trigger: "blur" },
         ],
@@ -191,6 +199,7 @@ export default {
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+          this.$refs["form"].resetFields();
         })
         .catch(() => {});
     },

@@ -17,15 +17,10 @@
             size="mini"
             style="margin-right: 10px"
             :trigger-on-focus="false"
-            :fetch-suggestions="searchSuggestions"
             value-key="name"
           ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="resetResult"
-            >重置</el-button
-          >
+          <el-button size="mini" type="success">搜索</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -42,7 +37,6 @@
                 currentPage * pageSize
               )
             "
-            :row-class-name="tableRowClassName"
           >
             <el-table-column label="专业名称" prop="name" sortable>
             </el-table-column>
@@ -55,7 +49,10 @@
               :formatter="statusFormatter"
             >
             </el-table-column>
-            <el-table-column label="创建时间" prop="create_time"></el-table-column>
+            <el-table-column
+              label="创建时间"
+              prop="create_time"
+            ></el-table-column>
             <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
@@ -98,16 +95,12 @@
       width="50%"
       :before-close="closeDialog"
     >
-      <el-form ref="form" :model="form">
-        <el-form-item label="名称">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="所属院系">
-          <el-select
-            v-model="form.college_id"
-            placeholder="请选择"
-            @change="handelChange"
-          >
+        <el-form-item label="所属院系" prop="college_id">
+          <el-select v-model="form.college_id" placeholder="请选择">
             <el-option
               v-for="item in colleges"
               :key="item.id"
@@ -117,7 +110,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -141,7 +134,12 @@
 
 <script>
 import Pager from "@/components/pager";
-import { addMajor, getMajors, delMajor, updMajor } from "@/api/system/major";
+import {
+  //addMajor,
+  getMajors,
+  delMajor,
+  // updMajor
+} from "@/api/system/major";
 import { getColleges } from "@/api/system/college";
 
 export default {
@@ -160,6 +158,23 @@ export default {
       total: 0,
       colleges: [],
       statusOptions: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入专业名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        college_id: [
+          { required: true, message: "请选择一个院系", trigger: "change" },
+        ],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
@@ -173,35 +188,43 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addMajor(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          /*           if (this.type == "add") {
+            addMajor(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) {
+                this.getMajors();
+                this.form = {};
+              }
             });
-          }
-          if (resp.code === 0) this.getMajors();
-        });
-      } else {
-        updMajor(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+          } else {
+            updMajor(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getMajors();
             });
-          }
-          if (resp.code === 0) this.getMajors();
-        });
-      }
-      this.form = {};
-      this.dialogVisible = false;
+          } */
+        } else {
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+          this.$refs["form"].resetFields();
         })
         .catch(() => {});
     },
@@ -238,36 +261,6 @@ export default {
       this.getDictData("sys_uvsl_status").then((resp) => {
         this.statusOptions = resp.obj;
       });
-    },
-    //页面切换控制器
-    changePage(val) {
-      this.currentPage = val;
-    },
-    changeSize(val) {
-      this.pageSize = val;
-    },
-    searchSuggestions(queryString, cb) {
-      var restaurants = this.tableDataBak;
-      var results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSearch() {
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.code.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    resetResult() {
-      this.tableData = this.tableDataBak;
-      this.keyword = "";
-      this.total = this.tableData.length;
     },
     handelChange() {
       let college = this.colleges.filter((data) =>
