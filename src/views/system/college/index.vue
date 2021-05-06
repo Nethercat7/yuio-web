@@ -17,14 +17,9 @@
             size="mini"
             style="margin-right: 10px"
             :trigger-on-focus="false"
-            :fetch-suggestions="searchSuggestions"
           ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="resetResult"
-            >重置</el-button
-          >
+          <el-button size="mini" type="success">搜索</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -91,11 +86,11 @@
       width="50%"
       :before-close="closeDialog"
     >
-      <el-form ref="form" :model="form">
-        <el-form-item label="名称">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="院系名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -141,6 +136,12 @@ export default {
       total: 0,
       keyword: "",
       statusOptions: [],
+      rules: {
+        name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
@@ -154,29 +155,36 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addCollege(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type == "add") {
+            addCollege(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
+            });
+          } else {
+            updCollege(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
             });
           }
-          if (resp.code === 0) this.getData();
-        });
-      } else {
-        updCollege(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-          if (resp.code === 0) this.getData();
-        });
-      }
-      this.form = {};
-      this.dialogVisible = false;
+          this.form = {};
+          this.dialogVisible = false;
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -207,35 +215,6 @@ export default {
       this.getDictData("sys_uvsl_status").then((resp) => {
         this.statusOptions = resp.obj;
       });
-    },
-    //页面切换控制器
-    changePage(val) {
-      this.currentPage = val;
-    },
-    changeSize(val) {
-      this.pageSize = val;
-    },
-    searchSuggestions(queryString, cb) {
-      var restaurants = this.tableDataBak;
-      var results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSearch() {
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    resetResult() {
-      this.tableData = this.tableDataBak;
-      this.total = this.tableData.length;
-      this.keyword = "";
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
