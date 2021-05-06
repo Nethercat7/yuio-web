@@ -27,6 +27,7 @@ export function validateCn(rule, value, callback) {
 
 // 邮箱验证
 export function validateEmail(rule, value, callback) {
+    //如果required为false,并且数据不为空的话那么做校验
     if (rule.required) {
         if (!emailReg.test(value)) {
             callback(new Error('请输入正确的邮箱'))

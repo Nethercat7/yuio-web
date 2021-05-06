@@ -143,7 +143,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="角色" prop="roles">
+        <el-form-item label="角色">
           <el-select
             v-model="form.roles"
             multiple
@@ -205,9 +205,6 @@ export default {
             message: "长度在 1 到 30 个字符",
             trigger: "blur",
           },
-        ],
-        roles: [
-          { required: true, message: "请选择一个角色", trigger: "change" },
         ],
         status: [
           { required: true, message: "请选择一个状态", trigger: "change" },
@@ -294,6 +291,7 @@ export default {
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+                    this.$refs["form"].resetFields();
         })
         .catch(() => {});
     },
@@ -301,7 +299,6 @@ export default {
       delUser(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
-          this.$refs["form"].resetFields();
         }
         if (resp.status == null) {
           this.$message({
