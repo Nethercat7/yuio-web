@@ -217,6 +217,7 @@ export default {
       this.unEmplData = {
         series: [],
       };
+      this.gradeList = [];
     },
   },
   mounted() {

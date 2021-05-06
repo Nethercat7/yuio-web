@@ -192,6 +192,7 @@ export default {
           grade: new Date().getFullYear() - 4,
         };
       }
+      this.gradeList=[];
     },
     setParams() {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;

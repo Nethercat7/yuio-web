@@ -166,6 +166,7 @@ export default {
         name: [],
         data: [],
       };
+      this.gradeList=[];
     },
     setParams() {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;
