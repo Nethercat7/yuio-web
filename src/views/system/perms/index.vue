@@ -10,16 +10,14 @@
           <el-button size="mini" type="warning">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-autocomplete
+          <el-input
+            v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-            value-key="name"
-            v-model="keyword"
-          ></el-autocomplete>
-          <el-button size="mini" type="success">搜索</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+            style="width: 200px; margin-right: 10px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -163,7 +161,13 @@
 
 <script>
 import Pager from "@/components/pager";
-import { addPerms, getPerms, delPerms, updPerms } from "@/api/system/perms";
+import {
+  addPerms,
+  getPerms,
+  delPerms,
+  updPerms,
+  getPermsByKeyword,
+} from "@/api/system/perms";
 
 export default {
   name: "menuManagement",
@@ -209,14 +213,15 @@ export default {
             trigger: "blur",
           },
         ],
-        type:[
+        type: [
           { required: true, message: "请选择一个类型", trigger: "change" },
-        ]
+        ],
       },
     };
   },
   methods: {
     getData() {
+      this.keyword="";
       getPerms().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
@@ -299,6 +304,12 @@ export default {
     },
     typeFormatter(row) {
       return this.selectDictLabel(this.typeOptions, row.type);
+    },
+    search() {
+      getPermsByKeyword(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
+      });
     },
   },
   mounted() {

@@ -29,3 +29,10 @@ export function updPerms(params){
         data:params
     })
 }
+
+export function getPermsByKeyword(param) {
+    return request({
+        url: "sys/perms/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}
