@@ -29,3 +29,10 @@ export function updUser(params){
         data:params
     })
 }
+
+export function getUserByKeyword(param) {
+    return request({
+        url: "sys/user/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}
