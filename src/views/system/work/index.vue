@@ -10,16 +10,14 @@
           <el-button size="mini" type="warning">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-autocomplete
+          <el-input
+            v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-            value-key="name"
-            v-model="keyword"
-          ></el-autocomplete>
-          <el-button size="mini" type="success">搜索</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+            style="width: 200px; margin-right: 10px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -134,7 +132,13 @@
 
 <script>
 import Pager from "@/components/pager";
-import { addWork, getWorks, delWork, updWork } from "@/api/system/work";
+import {
+  addWork,
+  getWorks,
+  delWork,
+  updWork,
+  getWorkByKeyword,
+} from "@/api/system/work";
 
 export default {
   name: "workManagement",
@@ -142,7 +146,6 @@ export default {
   data() {
     return {
       tableData: [],
-      tableDataBak: [],
       total: 0,
       currentPage: 1,
       pageSize: 10,
@@ -175,6 +178,7 @@ export default {
   },
   methods: {
     getData() {
+      this.keyword = "";
       getWorks().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
@@ -251,6 +255,12 @@ export default {
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    search() {
+      getWorkByKeyword(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
+      });
     },
   },
   mounted() {

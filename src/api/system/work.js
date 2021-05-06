@@ -29,3 +29,10 @@ export function updWork(params){
         data:params
     })
 }
+
+export function getWorkByKeyword(param) {
+    return request({
+        url: "sys/work/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}
