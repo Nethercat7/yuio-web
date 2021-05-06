@@ -17,14 +17,9 @@
             size="mini"
             style="margin-right: 10px"
             :trigger-on-focus="false"
-            :fetch-suggestions="searchSuggestions"
           ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="resetResult"
-            >重置</el-button
-          >
+          <el-button size="mini" type="success">搜索</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -97,11 +92,11 @@
       width="50%"
       :before-close="closeDialog"
     >
-      <el-form ref="form" :model="form">
-        <el-form-item label="名称">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="所属专业">
+        <el-form-item label="所属专业" prop="major_id">
           <el-cascader
             v-model="form.major_id"
             :options="colleges"
@@ -109,7 +104,7 @@
             :show-all-levels="false"
           ></el-cascader>
         </el-form-item>
-        <el-form-item label="所属年级">
+        <el-form-item label="所属年级" prop="grade">
           <el-select v-model="form.grade" placeholder="请选择">
             <el-option
               v-for="item in grade"
@@ -120,7 +115,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -169,6 +164,26 @@ export default {
         emitPath: false,
       },
       statusOptions: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入专业名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        major_id: [
+          { required: true, message: "请选择一个院系", trigger: "change" },
+        ],
+        grade: [
+          { required: true, message: "请选择一个年级", trigger: "change" },
+        ],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
@@ -201,29 +216,37 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addClass(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type == "add") {
+            addClass(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) {
+                this.getData();
+                this.form = {};
+                this.$refs["form"].resetFields();
+              }
+            });
+          } else {
+            updClass(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
             });
           }
-          if (resp.code === 0) this.getData();
-        });
-      } else {
-        updClass(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-          if (resp.code === 0) this.getData();
-        });
-      }
-      this.form = {};
-      this.dialogVisible = false;
+        } else {
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -245,35 +268,6 @@ export default {
           });
         }
       });
-    },
-    //页面切换控制器
-    changePage(val) {
-      this.currentPage = val;
-    },
-    changeSize(val) {
-      this.pageSize = val;
-    },
-    searchSuggestions(queryString, cb) {
-      var restaurants = this.tableDataBak;
-      var results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSearch() {
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.ccode.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    resetResult() {
-      this.tableData = this.tableDataBak;
-      this.keyword = "";
     },
     getGrade() {
       let date = new Date().getFullYear();

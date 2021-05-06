@@ -134,12 +134,7 @@
 
 <script>
 import Pager from "@/components/pager";
-import {
-  //addMajor,
-  getMajors,
-  delMajor,
-  // updMajor
-} from "@/api/system/major";
+import { addMajor, getMajors, delMajor, updMajor } from "@/api/system/major";
 import { getColleges } from "@/api/system/college";
 
 export default {
@@ -172,7 +167,7 @@ export default {
           { required: true, message: "请选择一个院系", trigger: "change" },
         ],
         status: [
-          { required: true, message: "请选择一个状态", trigger: "blur" },
+          { required: true, message: "请选择一个状态", trigger: "change" },
         ],
       },
     };
@@ -190,7 +185,7 @@ export default {
     submitDialog() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          /*           if (this.type == "add") {
+          if (this.type == "add") {
             addMajor(this.form).then((resp) => {
               if (resp.status == null) {
                 this.$message({
@@ -201,6 +196,7 @@ export default {
               if (resp.code === 0) {
                 this.getMajors();
                 this.form = {};
+                this.$refs["form"].resetFields();
               }
             });
           } else {
@@ -213,7 +209,7 @@ export default {
               }
               if (resp.code === 0) this.getMajors();
             });
-          } */
+          }
         } else {
           return false;
         }

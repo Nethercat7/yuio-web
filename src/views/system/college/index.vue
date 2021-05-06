@@ -147,7 +147,7 @@ export default {
           },
         ],
         status: [
-          { required: true, message: "请选择一个状态", trigger: "blur" },
+          { required: true, message: "请选择一个状态", trigger: "change" },
         ],
       },
     };
@@ -173,7 +173,11 @@ export default {
                   type: resp.type,
                 });
               }
-              if (resp.code === 0) this.getData();
+              if (resp.code === 0) {
+                this.getData();
+                this.form = {};
+                this.$refs["form"].resetFields();
+              }
             });
           } else {
             updCollege(this.form).then((resp) => {
@@ -186,10 +190,7 @@ export default {
               if (resp.code === 0) this.getData();
             });
           }
-          this.form = {};
-          this.dialogVisible = false;
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
