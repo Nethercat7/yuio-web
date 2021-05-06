@@ -34,6 +34,7 @@ export default {
   },
   mounted() {
     this.subject=getSubject();
+    console.log(localStorage.getItem('token'));
   },
 };
 </script>

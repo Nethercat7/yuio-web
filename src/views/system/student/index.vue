@@ -207,7 +207,7 @@
         <el-form-item label="所属班级" prop="class_id">
           <el-cascader
             v-model="form.class_id"
-            :options="orgList"
+            :options="orgList2"
             :props="cascaderProps"
             :show-all-levels="false"
           >
@@ -268,6 +268,7 @@ export default {
       gradeList: [], //搜索用
       gradeList2: [], //添加数据用
       orgList: [],
+      orgList2: [],
       orgProps: {
         label: "name",
         value: "id",
@@ -327,7 +328,6 @@ export default {
       getStudents(this.params).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
-        console.log(resp.obj);
       });
       //获取院系、专业和班级信息
       this.getOrg(true);
@@ -364,6 +364,7 @@ export default {
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
+        this.getOrg(false);
       }
     },
     submitDialog() {
@@ -466,6 +467,7 @@ export default {
           this.orgList = resp.obj;
         });
       } else {
+        console.log(this.form.grade);
         getCompleteOrg(this.form.grade).then((resp) => {
           this.orgList2 = resp.obj;
         });
