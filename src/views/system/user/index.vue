@@ -19,12 +19,8 @@
             v-model="keyword"
             :fetch-suggestions="searchSuggestions"
           ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="handleReset"
-            >重置</el-button
-          >
+          <el-button size="mini" type="success">搜索</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -41,7 +37,6 @@
                 currentPage * pageSize
               )
             "
-            :row-class-name="tableRowClassName"
           >
             <el-table-column label="姓名" prop="name"></el-table-column>
             <el-table-column label="账号" prop="code"></el-table-column>
@@ -56,7 +51,10 @@
               prop="status"
               :formatter="statusFormatter"
             ></el-table-column>
-            <el-table-column label="创建时间" prop="create_time"></el-table-column>
+            <el-table-column
+              label="创建时间"
+              prop="create_time"
+            ></el-table-column>
             <el-table-column label="操作" fixed="right" width="250px">
               <template slot-scope="scope">
                 <el-button
@@ -109,17 +107,18 @@
       <el-form
         ref="form"
         :model="form"
+        :rules="rules"
         label-position="left"
         label-suffix=":"
         label-width="90px"
       >
-        <el-form-item label="姓名">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="账号">
+        <el-form-item label="账号" prop="code">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="form.gender">
             <el-radio
               v-for="item in genderOptions"
@@ -129,13 +128,13 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="电话号码">
+        <el-form-item label="电话号码" prop="phone">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="电子邮箱">
+        <el-form-item label="电子邮箱" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -145,7 +144,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色" prop="roles">
           <el-select
             v-model="form.roles"
             multiple
@@ -179,6 +178,7 @@ import Pager from "@/components/pager";
 import { addUser, getUsers, delUser, updUser } from "@/api/system/user";
 import { getRoles } from "@/api/system/role";
 import { resetPwd } from "@/api/system/sys";
+import { validateEmail, validatePhone } from "@/utils/validator";
 
 export default {
   name: "userManagement",
@@ -197,6 +197,37 @@ export default {
       roles: [],
       genderOptions: [],
       statusOptions: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入用户名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        roles: [
+          { required: true, message: "请选择一个角色", trigger: "change" },
+        ],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "change" },
+        ],
+        code: [
+          { required: true, message: "请输入学号", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        gender: [
+          { required: true, message: "请选择一个性别", trigger: "change" },
+        ],
+        phone: [{ validator: validatePhone, trigger: "blur" }],
+        email: [{ validator: validateEmail, trigger: "blur" }],
+      },
     };
   },
   methods: {
@@ -217,28 +248,6 @@ export default {
         this.statusOptions = resp.obj;
       });
     },
-    searchSuggestions(queryString, cb) {
-      let restaurants = this.tableDataBak;
-      let results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      cb(results);
-    },
-    handleSearch() {
-      //搜索前先恢复备份的完整数据，然后在进行搜索。防止在当前搜索结果中进行第二次搜索找不到数据。
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.account.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    handleReset() {
-      this.tableData = this.tableDataBak;
-      this.total = this.tableData.length;
-    },
     openDialog(type, row) {
       this.dialogVisible = true;
       if (type == "add") {
@@ -249,29 +258,37 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addUser(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type == "add") {
+            addUser(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) {
+                this.form = {};
+                this.getData();
+                this.$refs["form"].resetFields();
+              }
+            });
+          } else {
+            updUser(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
             });
           }
-          if (resp.code === 0) this.getData();
-        });
-      } else {
-        updUser(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-          if (resp.code === 0) this.getData();
-        });
-      }
-      this.form = {};
-      this.dialogVisible = false;
+        } else {
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
@@ -281,15 +298,11 @@ export default {
         })
         .catch(() => {});
     },
-    tableRowClassName({ row }) {
-      if (row.status != 0) {
-        return "warning-row";
-      }
-    },
     handleDelete(id) {
       delUser(id).then((resp) => {
         if (resp.code === 0) {
           this.getData();
+          this.$refs["form"].resetFields();
         }
         if (resp.status == null) {
           this.$message({
