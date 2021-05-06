@@ -17,14 +17,9 @@
             :trigger-on-focus="false"
             value-key="name"
             v-model="keyword"
-            :fetch-suggestions="searchSuggestions"
           ></el-autocomplete>
-          <el-button size="mini" type="success" @click="handleSearch"
-            >搜索</el-button
-          >
-          <el-button size="mini" type="danger" @click="handleReset"
-            >重置</el-button
-          >
+          <el-button size="mini" type="success">搜索</el-button>
+          <el-button size="mini" type="danger">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -41,7 +36,6 @@
                 currentPage * pageSize
               )
             "
-            :row-class-name="tableRowClassName"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             row-key="id"
           >
@@ -107,14 +101,15 @@
       <el-form
         ref="form"
         :model="form"
+        :rules="rules"
         label-position="left"
         label-suffix=":"
         label-width="90px"
       >
-        <el-form-item label="名称">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="标识">
+        <el-form-item label="标识" prop="mark">
           <el-input v-model="form.mark"></el-input>
         </el-form-item>
         <el-form-item label="请求地址">
@@ -123,7 +118,7 @@
         <el-form-item label="图标">
           <el-input v-model="form.icon"></el-input>
         </el-form-item>
-        <el-form-item label="类型">
+        <el-form-item label="类型" prop="type">
           <el-radio-group v-model="form.type">
             <el-radio
               v-for="item in typeOptions"
@@ -133,7 +128,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -192,6 +187,32 @@ export default {
       },
       statusOptions: [],
       typeOptions: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入权限名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "change" },
+        ],
+        mark: [
+          { required: true, message: "请输入标识符", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        type:[
+          { required: true, message: "请选择一个类型", trigger: "change" },
+        ]
+      },
     };
   },
   methods: {
@@ -209,28 +230,6 @@ export default {
         this.typeOptions = resp.obj;
       });
     },
-    searchSuggestions(queryString, cb) {
-      let restaurants = this.tableDataBak;
-      let results = queryString
-        ? restaurants.filter(this.createFilter())
-        : restaurants;
-      cb(results);
-    },
-    handleSearch() {
-      //搜索前先恢复备份的完整数据，然后在进行搜索。防止在当前搜索结果中进行第二次搜索找不到数据。
-      this.tableData = this.tableDataBak;
-      this.tableData = this.tableData.filter(this.createFilter());
-      this.total = this.tableData.length;
-    },
-    createFilter() {
-      return (data) =>
-        data.name.toLowerCase().includes(this.keyword.toLowerCase()) ||
-        data.account.toLowerCase().includes(this.keyword.toLowerCase());
-    },
-    handleReset() {
-      this.tableData = this.tableDataBak;
-      this.total = this.tableData.length;
-    },
     openDialog(type, row) {
       this.dialogVisible = true;
       if (type == "add") {
@@ -241,43 +240,46 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addPerms(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type == "add") {
+            addPerms(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) {
+                this.getData();
+                this.form = {};
+                this.$refs["form"].resetFields();
+              }
+            });
+          } else {
+            updPerms(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
             });
           }
-          if (resp.code === 0) {
-            this.getData();
-            this.form = {};
-          }
-        });
-      } else {
-        updPerms(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-          if (resp.code === 0) this.getData();
-        });
-      }
+        } else {
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+          this.$refs["form"].resetFields();
         })
         .catch(() => {});
-    },
-    tableRowClassName({ row }) {
-      if (row.status != 0) {
-        return "warning-row";
-      }
     },
     handleDelete(id) {
       delPerms(id).then((resp) => {
