@@ -17,7 +17,6 @@
             :trigger-on-focus="false"
             value-key="name"
             v-model="keyword"
-            :fetch-suggestions="searchSuggestions"
           ></el-autocomplete>
           <el-button size="mini" type="success">搜索</el-button>
           <el-button size="mini" type="danger">重置</el-button>
@@ -214,7 +213,7 @@ export default {
           { required: true, message: "请选择一个状态", trigger: "change" },
         ],
         code: [
-          { required: true, message: "请输入学号", trigger: "blur" },
+          { required: true, message: "请输入账号", trigger: "blur" },
           {
             min: 1,
             max: 30,
@@ -225,8 +224,8 @@ export default {
         gender: [
           { required: true, message: "请选择一个性别", trigger: "change" },
         ],
-        phone: [{ validator: validatePhone, trigger: "blur" }],
-        email: [{ validator: validateEmail, trigger: "blur" }],
+        phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
+        email: [{ required: false, validator: validateEmail, trigger: "blur" }],
       },
     };
   },

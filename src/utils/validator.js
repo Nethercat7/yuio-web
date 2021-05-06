@@ -27,19 +27,41 @@ export function validateCn(rule, value, callback) {
 
 // 邮箱验证
 export function validateEmail(rule, value, callback) {
-    if (!emailReg.test(value)) {
-        callback(new Error('请输入正确的邮箱'))
+    if (rule.required) {
+        if (!emailReg.test(value)) {
+            callback(new Error('请输入正确的邮箱'))
+        } else {
+            callback()
+        }
     } else {
-        callback()
+        if (value == undefined || value == "") {
+             callback() 
+        }else {
+            if (!emailReg.test(value)) {
+                callback(new Error('请输入正确的手机号码'))
+            } else {
+                callback()
+            }
+        }
     }
 }
 
 // 电话验证
 export function validatePhone(rule, value, callback) {
-    if (!phoneReg.test(value)) {
-        callback(new Error('请输入正确的手机号码'))
+    if (rule.required) {
+        if (!phoneReg.test(value)) {
+            callback(new Error('请输入正确的手机号码'))
+        } else {
+            callback()
+        }
     } else {
-        callback()
+        if (value == undefined || value == "") { callback() } else {
+            if (!phoneReg.test(value)) {
+                callback(new Error('请输入正确的手机号码'))
+            } else {
+                callback()
+            }
+        }
     }
 }
 
