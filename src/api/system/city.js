@@ -29,3 +29,10 @@ export function updCity(params){
         data:params
     })
 }
+
+export function getCityByKeyword(param) {
+    return request({
+        url: "sys/city/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}
