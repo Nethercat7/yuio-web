@@ -19,7 +19,7 @@
             </el-select>
           </div>
           <div>
-            <span class="label">专业</span>
+            <span class="label">专业班级</span>
             <el-cascader
               size="mini"
               v-model="params.temp"
@@ -34,14 +34,14 @@
           </div>
           <div>
             <span class="label">就业情况</span>
-            <el-select v-model="params.employment" size="mini" clearable>
+            <el-select v-model="params.empl_status" size="mini" clearable>
               <el-option value="0" label="未就业"></el-option>
               <el-option value="1" label="已就业"></el-option>
             </el-select>
           </div>
           <div>
             <span class="label">填写情况</span>
-            <el-select v-model="params.write" size="mini" clearable>
+            <el-select v-model="params.empl_write" size="mini" clearable>
               <el-option value="0" label="未填写"></el-option>
               <el-option value="1" label="已填写"></el-option>
             </el-select>
@@ -108,7 +108,7 @@
             </el-table-column>
             <el-table-column
               label="就业信息填写"
-              prop="write"
+              prop="empl_write"
               sortable
               :formatter="writeFormatter"
             ></el-table-column>
@@ -251,7 +251,6 @@ export default {
   data() {
     return {
       tableData: [],
-      tableDataBak: [],
       keyword: "",
       dialogVisible: false,
       type: "",
@@ -302,7 +301,12 @@ export default {
         ],
         code: [
           { required: true, message: "请输入学号", trigger: "blur" },
-          { min: 1, max: 30, message: "长度在 1 到 30 个字符", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
         ],
         gender: [
           { required: true, message: "请选择一个性别", trigger: "change" },
@@ -322,8 +326,8 @@ export default {
       //获取学生信息
       getStudents(this.params).then((resp) => {
         this.total = resp.obj.length;
-        this.tableDataBak = resp.obj;
         this.tableData = resp.obj;
+        console.log(resp.obj);
       });
       //获取院系、专业和班级信息
       this.getOrg(true);
@@ -474,7 +478,7 @@ export default {
       return this.selectDictLabel(this.genderOptions, row.gender);
     },
     writeFormatter(row) {
-      return this.selectDictLabel(this.writeOptions, row.write);
+      return this.selectDictLabel(this.writeOptions, row.empl_write);
     },
     emplFormatter(row) {
       return this.selectDictLabel(this.emplOptions, row.empl_status);
