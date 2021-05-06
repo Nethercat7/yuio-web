@@ -30,7 +30,7 @@ export function updDictType(data){
     })
 }
 
-export function getDataTypeByKeyword(param) {
+export function getDictTypeByKeyword(param) {
     return request({
         url: "sys/dict/type/getByKeyword?keyword=" + param,
         method: "get"

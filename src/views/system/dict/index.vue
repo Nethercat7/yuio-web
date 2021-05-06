@@ -131,7 +131,7 @@ import {
   getDict,
   delDict,
   updDictType,
-  getDataTypeByKeyword,
+  getDictTypeByKeyword,
 } from "@/api/system/dict/type";
 import Pager from "@/components/pager";
 
@@ -220,7 +220,7 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getDataTypeByKeyword(this.keyword).then((resp) => {
+      getDictTypeByKeyword(this.keyword).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
       });
