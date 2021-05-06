@@ -93,7 +93,7 @@
       :before-close="closeDialog"
     >
       <el-form ref="form" :model="form" :rules="rules">
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="班级名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="所属专业" prop="major_id">
@@ -166,7 +166,7 @@ export default {
       statusOptions: [],
       rules: {
         name: [
-          { required: true, message: "请输入专业名称", trigger: "blur" },
+          { required: true, message: "请输入班级名称", trigger: "blur" },
           {
             min: 1,
             max: 30,
@@ -175,7 +175,7 @@ export default {
           },
         ],
         major_id: [
-          { required: true, message: "请选择一个院系", trigger: "change" },
+          { required: true, message: "请选择一个专业", trigger: "change" },
         ],
         grade: [
           { required: true, message: "请选择一个年级", trigger: "change" },

@@ -168,17 +168,18 @@
       <el-form
         ref="form"
         :model="form"
+        :rules="rules"
         label-position="left"
         label-suffix=":"
         label-width="90px"
       >
-        <el-form-item label="姓名">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="学号">
+        <el-form-item label="学号" prop="code">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="form.gender">
             <el-radio
               v-for="item in genderOptions"
@@ -188,7 +189,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="所属年级">
+        <el-form-item label="所属年级" prop="grade">
           <el-select
             v-model="form.grade"
             placeholder="请选择"
@@ -203,7 +204,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属班级">
+        <el-form-item label="所属班级" prop="class_id">
           <el-cascader
             v-model="form.class_id"
             :options="orgList"
@@ -212,7 +213,7 @@
           >
           </el-cascader>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -280,6 +281,38 @@ export default {
       genderOptions: [],
       writeOptions: [],
       emplOptions: [],
+      rules: {
+        name: [
+          { required: true, message: "请输入学生名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        class_id: [
+          { required: true, message: "请选择一个班级", trigger: "change" },
+        ],
+        grade: [
+          { required: true, message: "请选择一个年级", trigger: "change" },
+        ],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "change" },
+        ],
+        code: [
+          { required: true, message: "请输入学号", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "长度在 1 到 30 个字符",
+            trigger: "blur",
+          },
+        ],
+        gender: [
+          { required: true, message: "请选择一个性别", trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
@@ -335,37 +368,45 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type == "add") {
-        addStudent(this.form).then((resp) => {
-          console.log(this.form);
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type == "add") {
+            addStudent(this.form).then((resp) => {
+              console.log(this.form);
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) {
+                this.getData();
+                this.form = {};
+                this.$refs["form"].resetFields();
+              }
+            });
+          } else {
+            updStudent(this.form).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code === 0) this.getData();
             });
           }
-          if (resp.code === 0) {
-            this.getData();
-            this.form = {};
-          }
-        });
-      } else {
-        updStudent(this.form).then((resp) => {
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-          if (resp.code === 0) this.getData();
-        });
-      }
+        } else {
+          return false;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+          this.$refs["form"].resetFields();
         })
         .catch(() => {});
     },
@@ -381,13 +422,6 @@ export default {
           });
         }
       });
-    },
-    //页面切换控制器
-    changePage(val) {
-      this.currentPage = val;
-    },
-    changeSize(val) {
-      this.pageSize = val;
     },
     resetPwd(id) {
       this.$confirm("此操作将会重置的登录密码, 是否继续?", "提示", {
