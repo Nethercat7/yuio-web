@@ -1,31 +1,38 @@
 import request from "@/utils/request"
 
-export function addCollege(params){
+export function addCollege(params) {
     return request({
-        url:'sys/college/add',
-        method:'post',
-        data:params
+        url: 'sys/college/add',
+        method: 'post',
+        data: params
     })
 }
 
-export function getColleges(){
+export function getColleges() {
     return request({
-        url:'sys/college/get',
-        method:'get'
+        url: 'sys/college/get',
+        method: 'get',
     })
 }
 
-export function delCollege(id){
+export function delCollege(id) {
     return request({
-        url:'sys/college/del?id='+id,
-        method:'delete'
+        url: 'sys/college/del?id=' + id,
+        method: 'delete'
     })
 }
 
-export function updCollege(params){
+export function updCollege(params) {
     return request({
-        url:'sys/college/upd',
-        method:'put',
-        data:params
+        url: 'sys/college/upd',
+        method: 'put',
+        data: params
+    })
+}
+
+export function getByKeyworkd(param) {
+    return request({
+        url: "sys/college/getByKeyword?keyword=" + param,
+        method: "get"
     })
 }

@@ -11,15 +11,16 @@
           <el-button size="mini" type="warning">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-autocomplete
+          <el-input
             v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-          ></el-autocomplete>
-          <el-button size="mini" type="success">搜索</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+            style="width: 200px;margin-right:20px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search"
+            >搜索</el-button
+          >
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -46,6 +47,10 @@
               :formatter="statusFormatter"
             >
             </el-table-column>
+            <el-table-column
+              label="创建时间"
+              prop="create_time"
+            ></el-table-column>
             <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
@@ -119,6 +124,7 @@ import {
   getColleges,
   delCollege,
   updCollege,
+  getByKeyworkd,
 } from "@/api/system/college";
 
 export default {
@@ -127,14 +133,13 @@ export default {
   data() {
     return {
       tableData: [],
-      tableDataBak: [],
       dialogVisible: false,
       type: "",
       form: {},
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      keyword: "",
+      queryParams: {},
       statusOptions: [],
       rules: {
         name: [
@@ -150,6 +155,7 @@ export default {
           { required: true, message: "请选择一个状态", trigger: "change" },
         ],
       },
+      keyword: "",
     };
   },
   methods: {
@@ -217,7 +223,6 @@ export default {
     },
     getData() {
       getColleges().then((resp) => {
-        this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
         this.tableData = resp.obj;
       });
@@ -228,6 +233,12 @@ export default {
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    search() {
+      getByKeyworkd(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
+      });
     },
   },
   mounted() {
