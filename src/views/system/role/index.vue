@@ -181,24 +181,31 @@ export default {
         this.tableDataBak = resp.obj;
         this.total = resp.obj.length;
       });
-      getPerms().then((resp) => {
-        this.perms = resp.obj;
-      });
       //获取字典
       this.getDictData("sys_uvsl_status").then((resp) => {
         this.statusOptions = resp.obj;
       });
     },
-    openDialog(type, row) {
+    async openDialog(type, row) {
       this.dialogVisible = true;
       this.form.perms = [];
+      //获取权限
+      await getPerms().then((resp) => {
+        this.perms = resp.obj;
+      });
       if (type == "add") {
         this.type = type;
       } else {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
         this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(row.perms);
+          let perms = row.perms;
+          perms.forEach((element) => {
+            let node = this.$refs.tree.getNode(element);
+            if (node.isLeaf) {
+              this.$refs.tree.setChecked(node, true);
+            }
+          });
         });
       }
     },
@@ -259,7 +266,9 @@ export default {
     },
     //设置被选中的权限
     handleNodeClick() {
-      this.form.perms = this.$refs.tree.getCheckedKeys();
+      this.form.perms = this.$refs.tree
+        .getCheckedKeys()
+        .concat(this.$refs.tree.getHalfCheckedKeys());
     },
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
