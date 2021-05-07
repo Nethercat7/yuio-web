@@ -38,3 +38,26 @@ export function getWithEStatusInfo(params){
         data:params
     })
 }
+
+export function getStudentById(param){
+    return request({
+        url:"sys/student/getById?id="+param,
+        method:"get"
+    })
+}
+
+export function updStudentProfile(params) {
+    return request({
+        url: "sys/student/updProfile",
+        method: "put",
+        data: params
+    })
+}
+
+export function changeStudentPwd(params) {
+    return request({
+        url: "sys/student/changePwd",
+        method: "put",
+        data: params
+    })
+}
