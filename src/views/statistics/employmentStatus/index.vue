@@ -48,16 +48,39 @@
             suffix="人"
           ></Bar>
         </el-col>
-        <el-col :span="12"> </el-col>
+        <el-col :span="12">
+          <el-table :data="cityTableData">
+            <el-table-column label="城市" prop="city_name"></el-table-column>
+            <el-table-column label="人数" prop="total_people"></el-table-column>
+          </el-table>
+        </el-col>
       </el-row>
     </el-card>
 
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <Radar id="empl-work" :data="workData" title="工作岗位"></Radar>
+          <Radar id="empl-work" :data="workData" title="就业岗位"></Radar>
         </el-col>
-        <el-col :span="12"> </el-col>
+        <el-col :span="12" class="analysis">
+          <ul>
+            <li>
+              最多人选择的工作岗位是：{{ work.max.work_name }}，一共有{{
+                work.max.total_people
+              }}人选择。
+            </li>
+            <li>
+              最多女生选择的工作岗位是：{{
+                work.female_max.work_name
+              }}，一共有{{ work.female_max.total_people }}人选择。
+            </li>
+            <li>
+              最多男生选择的工作岗位是：{{ work.male_max.work_name }}，一共有{{
+                work.male_max.total_people
+              }}人选择。
+            </li>
+          </ul>
+        </el-col>
       </el-row>
     </el-card>
 
@@ -116,6 +139,8 @@ export default {
       params: {
         grade: new Date().getFullYear() - 4,
       },
+      cityTableData: [],
+      work: {},
     };
   },
   methods: {
@@ -133,22 +158,24 @@ export default {
         });
         this.cityData.name = cities;
         this.cityData.series.push({ data: peoples, type: "bar" });
+        this.cityTableData = data;
       });
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
-        let data = resp.obj;
+        let data = resp.obj.results;
+        let max = resp.obj.max;
         //格式化数据
-        let works = [];
         let peoples = [];
         data.forEach((element) => {
-          works.push(element.work_name);
+          this.workData.name.push({
+            name: element.work_name,
+            max: max.total_people,
+          });
           peoples.push(element.total_people);
         });
-        let max = Math.max.apply(null, peoples);
-        works.forEach((element) => {
-          this.workData.name.push({ name: element, max: max });
-        });
         this.workData.data.push({ value: peoples, name: "就业岗位" });
+        this.work = resp.obj;
+        console.log(this.work);
       });
       //获取未就业学生计划信息
       getStudentPlan(this.params).then((resp) => {
@@ -192,7 +219,7 @@ export default {
           grade: new Date().getFullYear() - 4,
         };
       }
-      this.gradeList=[];
+      this.gradeList = [];
     },
     setParams() {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;
@@ -213,4 +240,7 @@ export default {
 </script>
 
 <style>
+.analysis li {
+  padding-bottom: 20px;
+}
 </style>
