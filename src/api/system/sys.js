@@ -25,7 +25,7 @@ export function getCollegeAndMajor() {
 
 export function getCompleteOrg(grade) {
     return request({
-        url: 'sys/getFullOrg?grade='+grade,
+        url: 'sys/getCompleteOrg?grade='+grade,
         method: 'get',
     })
 }
