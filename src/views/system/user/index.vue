@@ -128,9 +128,6 @@
         <el-form-item label="电话号码" prop="phone">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="电子邮箱" prop="email">
-          <el-input v-model="form.email"></el-input>
-        </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
@@ -181,7 +178,7 @@ import {
 } from "@/api/system/user";
 import { getRoles } from "@/api/system/role";
 import { resetPwd } from "@/api/system/sys";
-import { validateEmail, validatePhone } from "@/utils/validator";
+import { validatePhone } from "@/utils/validator";
 
 export default {
   name: "userManagement",
@@ -226,7 +223,6 @@ export default {
           { required: true, message: "请选择一个性别", trigger: "change" },
         ],
         phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
-        email: [{ required: false, validator: validateEmail, trigger: "blur" }],
       },
     };
   },
