@@ -1,6 +1,30 @@
 <template>
   <el-container>
-    <Aside></Aside>
+    <el-aside style="width: auto">
+      <el-menu
+        class="menu"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+      >
+        <!-- 图表 -->
+        <div>
+          <img class="logo" src="../assets/logo.png" alt="Logo" />
+        </div>
+        <!-- 目录 -->
+        <el-menu-item
+          v-for="menu in children"
+          :key="menu.id"
+          :index="menu.id"
+          @click="$router.push(menu.url)"
+        >
+          <template slot="title">
+            <i :class="menu.icon"></i>
+            <span>{{ menu.name }}</span>
+          </template>
+        </el-menu-item>
+      </el-menu>
+    </el-aside>
     <el-container>
       <el-header class="header">
         <el-menu
@@ -8,11 +32,25 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
-          style="float: right"
+          :default-active="active"
         >
-          <el-submenu index="1">
-            <template slot="title">{{subject.name}}</template>
-            <el-menu-item index="1-1" @click="$router.push('/profile')">个人资料</el-menu-item>
+          <el-menu-item
+            v-for="menu in menus"
+            :key="menu.id"
+            :index="menu.id"
+            @click="setChildren(menu.children)"
+          >
+            <template slot="title">
+              <i :class="menu.icon"></i>
+              <span>{{ menu.name }}</span>
+            </template>
+          </el-menu-item>
+
+          <el-submenu index="1" style="float: right">
+            <template slot="title">{{ subject.name }}</template>
+            <el-menu-item index="1-1" @click="$router.push('/profile')"
+              >个人资料</el-menu-item
+            >
             <el-menu-item index="1-2" @click="exit">退出登录</el-menu-item>
           </el-submenu>
         </el-menu>
@@ -26,25 +64,47 @@
 </template>
 
 <script>
-import Aside from "./components/aside";
-import { getSubject, delSubject } from "@/utils/storage";
+import {
+  getSubject,
+  delSubject,
+  getSubjectId,
+  getSubjectType,
+} from "@/utils/storage";
+import { getMenus } from "@/api/system/sys";
 
 export default {
   name: "Layout",
-  components: { Aside },
   data() {
     return {
       subject: {},
+      menus: [],
+      id: 0,
+      type: "",
+      children: [],
+      active: "",
     };
   },
   methods: {
+    getData() {
+      getMenus(this.type, this.id).then((resp) => {
+        this.menus = resp.obj;
+        this.active = resp.obj[0].id;
+        this.children = resp.obj[0].children;
+      });
+    },
     exit() {
       delSubject();
       this.$router.push("/login");
     },
+    setChildren(params) {
+      this.children = params;
+    },
   },
-  mounted() {
+  created() {
     this.subject = getSubject();
+    this.id = getSubjectId();
+    this.type = getSubjectType();
+    this.getData();
   },
 };
 </script>
