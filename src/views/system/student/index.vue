@@ -95,10 +95,6 @@
             </el-table-column>
             <el-table-column label="所属专业" prop="major_name" sortable>
             </el-table-column>
-            <el-table-column label="所属年级" prop="grade" sortable>
-            </el-table-column>
-            <el-table-column label="所属班级" prop="class_name" sortable>
-            </el-table-column>
             <el-table-column
               label="状态"
               prop="status"
@@ -118,6 +114,13 @@
               sortable
               :formatter="emplFormatter"
             ></el-table-column>
+            <el-table-column
+              label="协议情况"
+              prop="empl_protocol"
+              :formatter="protocolFormatter"
+              sortable
+            >
+            </el-table-column>
             <el-table-column label="操作" fixed="right" width="250px">
               <template slot-scope="scope">
                 <el-button
@@ -281,6 +284,7 @@ export default {
       genderOptions: [],
       writeOptions: [],
       emplOptions: [],
+      protocolOptions: [],
       rules: {
         name: [
           { required: true, message: "请输入学生名称", trigger: "blur" },
@@ -355,6 +359,9 @@ export default {
       });
       this.getDictData("sys_empl_status").then((resp) => {
         this.emplOptions = resp.obj;
+      });
+      this.getDictData("sys_protocol_status").then((resp) => {
+        this.protocolOptions = resp.obj;
       });
     },
     openDialog(type, row) {
@@ -484,6 +491,9 @@ export default {
     },
     emplFormatter(row) {
       return this.selectDictLabel(this.emplOptions, row.empl_status);
+    },
+    protocolFormatter(row) {
+      return this.selectDictLabel(this.protocolOptions, row.empl_protocol);
     },
   },
   mounted() {
