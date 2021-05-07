@@ -25,16 +25,16 @@
                 </el-form-item>
                 <template v-if="!isUser">
                   <el-form-item label="所属院系">
-                     <span>{{profile.college_name}}</span>
+                    <span>{{ profile.college_name }}</span>
                   </el-form-item>
                   <el-form-item label="所属专业">
-                      <span>{{profile.major_name}}</span>
+                    <span>{{ profile.major_name }}</span>
                   </el-form-item>
                   <el-form-item label="所属班级">
-                      <span>{{profile.class_name}}</span>
+                    <span>{{ profile.class_name }}</span>
                   </el-form-item>
                   <el-form-item label="所属年级">
-                      <span>{{profile.grade}}</span>
+                    <span>{{ profile.grade }}</span>
                   </el-form-item>
                 </template>
               </el-form>
@@ -111,17 +111,11 @@
 </template>
 
 <script>
-import { getUserById, updUserProfile, changeUserPwd } from "@/api/system/user";
-import {
-  getStudentById,
-  updStudentProfile,
-  changeStudentPwd,
-} from "@/api/system/student";
+import { getUserById, updUserProfile } from "@/api/system/user";
+import { getStudentById, updStudentProfile } from "@/api/system/student";
+import { changePwd } from "@/api/system/sys";
 import { getSubjectId, getSubjectType, delSubject } from "@/utils/storage";
-import {
-  validatePhone,
-  validatePassword,
-} from "@/utils/validator";
+import { validatePhone, validatePassword } from "@/utils/validator";
 
 export default {
   name: "Profile",
@@ -134,6 +128,7 @@ export default {
       id: 0,
       pwd: {
         id: getSubjectId(),
+        type: getSubjectType(),
       },
       rules: {
         gender: [{ required: true, message: "请选择性别", trigger: "change" }],
@@ -223,33 +218,18 @@ export default {
     changePwd() {
       this.$refs["pass"].validate((valid) => {
         if (valid) {
-          if (this.type == "usr") {
-            changeUserPwd(this.pwd).then((resp) => {
-              if (resp.status == null) {
-                this.$message({
-                  message: resp.msg,
-                  type: resp.type,
-                });
-              }
-              if (resp.code == 0) {
-                delSubject();
-                this.$router.push("/login");
-              }
-            });
-          } else {
-            changeStudentPwd(this.pwd).then((resp) => {
-              if (resp.status == null) {
-                this.$message({
-                  message: resp.msg,
-                  type: resp.type,
-                });
-              }
-              if (resp.code == 0) {
-                delSubject();
-                this.$router.push("/login");
-              }
-            });
-          }
+          changePwd(this.pwd).then((resp) => {
+            if (resp.status == null) {
+              this.$message({
+                message: resp.msg,
+                type: resp.type,
+              });
+            }
+            if (resp.code == 0) {
+              delSubject();
+              this.$router.push("/login");
+            }
+          });
         } else {
           return false;
         }

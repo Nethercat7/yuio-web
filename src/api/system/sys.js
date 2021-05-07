@@ -36,3 +36,11 @@ export function getGrade(){
         method: 'get',
     })
 }
+
+export function changePwd(params){
+    return request({
+        url:"sys/changePwd",
+        method:"put",
+        data:params
+    })
+}
