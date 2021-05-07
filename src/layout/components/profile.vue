@@ -65,6 +65,42 @@
                 </el-form-item>
               </el-form>
             </el-tab-pane>
+
+            <el-tab-pane label="修改密码">
+              <el-form
+                ref="pass"
+                :model="pwd"
+                :rules="rules"
+                label-suffix=":"
+                label-width="100px"
+              >
+                <el-form-item label="旧密码" prop="oldPwd">
+                  <el-input
+                    placeholder="请输入旧密码"
+                    v-model="pwd.oldPwd"
+                    type="password"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="新密码" prop="newPwd">
+                  <el-input
+                    placeholder="请输入密码"
+                    v-model="pwd.newPwd"
+                    type="password"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="重复密码" prop="repeat">
+                  <el-input
+                    placeholder="请再次输入密码"
+                    v-model="pwd.repeat"
+                    type="password"
+                  ></el-input>
+                </el-form-item>
+                <el-divider></el-divider>
+                <el-form-item style="text-align: center">
+                  <el-button type="primary" @click="changePwd">提交</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
           </el-tabs>
         </el-col>
       </el-row>
@@ -73,9 +109,13 @@
 </template>
 
 <script>
-import { getUserById, updUserProfile } from "@/api/system/user";
-import { getSubjectId, getSubjectType } from "@/utils/storage";
-import { validateEmail, validatePhone } from "@/utils/validator";
+import { getUserById, updUserProfile, changeUserPwd } from "@/api/system/user";
+import { getSubjectId, getSubjectType, delSubject } from "@/utils/storage";
+import {
+  validateEmail,
+  validatePhone,
+  validatePassword,
+} from "@/utils/validator";
 
 export default {
   name: "Profile",
@@ -84,13 +124,40 @@ export default {
       profile: {},
       genderList: [],
       isUser: true,
-      rules: {
-        gender: [{ require: true, message: "请选择性别", trigger: "change" }],
-        email: [{ require: false, validator: validateEmail, trigger: "blur" }],
-        phone: [{ require: false, validator: validatePhone, trigger: "blur" }],
-      },
       type: "",
       id: 0,
+      pwd: {
+        id: getSubjectId(),
+      },
+      rules: {
+        gender: [{ required: true, message: "请选择性别", trigger: "change" }],
+        email: [{ required: false, validator: validateEmail, trigger: "blur" }],
+        phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
+        oldPwd: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在 6 到 30 个字符",
+            trigger: "blur",
+          },
+          { validator: validatePassword, trigger: "blur" },
+        ],
+        newPwd: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在 6 到 30 个字符",
+            trigger: "blur",
+          },
+          { validator: validatePassword, trigger: "blur" },
+        ],
+        repeat: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { validator: this.validateRepeat, trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
@@ -129,6 +196,35 @@ export default {
             return false;
           }
         });
+      }
+    },
+    changePwd() {
+      this.$refs["pass"].validate((valid) => {
+        if (valid) {
+          if (this.type == "usr") {
+            changeUserPwd(this.pwd).then((resp) => {
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+              if (resp.code == 0) {
+                delSubject();
+                this.$router.push("/login");
+              }
+            });
+          }
+        } else {
+          return false;
+        }
+      });
+    },
+    validateRepeat(rule, value, callback) {
+      if (value != this.pwd.newPwd) {
+        callback(new Error("密码不一致"));
+      } else {
+        callback();
       }
     },
   },

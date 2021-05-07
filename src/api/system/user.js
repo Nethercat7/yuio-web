@@ -44,10 +44,18 @@ export function getUserByKeyword(param) {
     })
 }
 
-export function updUserProfile(params){
+export function updUserProfile(params) {
     return request({
-        url:"sys/user/updProfile",
-        method:"put",
-        data:params
+        url: "sys/user/updProfile",
+        method: "put",
+        data: params
+    })
+}
+
+export function changeUserPwd(params) {
+    return request({
+        url: "sys/user/changePwd",
+        method: "put",
+        data: params
     })
 }
