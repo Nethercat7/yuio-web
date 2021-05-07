@@ -1,32 +1,39 @@
 import request from "@/utils/request"
 
-export function addUser(params){
+export function addUser(params) {
     return request({
-        url:'sys/user/add',
-        method:'post',
-        data:params
+        url: 'sys/user/add',
+        method: 'post',
+        data: params
     })
 }
 
-export function getUsers(){
+export function getUsers() {
     return request({
-        url:'sys/user/get',
-        method:'get'
+        url: 'sys/user/get',
+        method: 'get'
     })
 }
 
-export function delUser(id){
+export function delUser(id) {
     return request({
-        url:'sys/user/del?id='+id,
-        method:'delete'
+        url: 'sys/user/del?id=' + id,
+        method: 'delete'
     })
 }
 
-export function updUser(params){
+export function updUser(params) {
     return request({
-        url:'sys/user/upd',
-        method:'put',
-        data:params
+        url: 'sys/user/upd',
+        method: 'put',
+        data: params
+    })
+}
+
+export function getUserById(param) {
+    return request({
+        url: "sys/user/getById?id=" + param,
+        method: "get"
     })
 }
 
@@ -34,5 +41,13 @@ export function getUserByKeyword(param) {
     return request({
         url: "sys/user/getByKeyword?keyword=" + param,
         method: "get"
+    })
+}
+
+export function updUserProfile(params){
+    return request({
+        url:"sys/user/updProfile",
+        method:"put",
+        data:params
     })
 }

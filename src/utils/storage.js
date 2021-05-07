@@ -5,9 +5,9 @@ export function setStorage(k, v) {
 }
 
 export function getStorage(k) {
-    let item=localStorage.getItem(k);
-    if(item){
-        item=item.split('"').join("")
+    let item = localStorage.getItem(k);
+    if (item) {
+        item = item.split('"').join("")
     }
     return item;
 }
@@ -21,21 +21,27 @@ export function setSubject(v) {
 }
 
 export function getSubject() {
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******")
+    let subject = jwt.verify(localStorage.getItem("token").split('"').join(""), "*******");
+    subject.id.toFixed(0);
+    return subject
 }
 
 export function delSubject() {
     localStorage.removeItem("token")
 }
 
-export function getSubjectId(){
+export function getSubjectId() {
     return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").id.toFixed(0);//因为JS数字类型过长会造成精度丢失，所以使用雪花算法作为ID的话，要先转为字符串。
 }
 
-export function getSubjectName(){
+export function getSubjectName() {
     return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").name
 }
 
-export function getSubjectCode(){
+export function getSubjectCode() {
     return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").code
+}
+
+export function getSubjectType() {
+    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").type
 }

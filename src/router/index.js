@@ -22,7 +22,15 @@ Router.prototype.push = function push(location) {
 const constantRoutes = [
     {
         path: '/',
-        component: Layout
+        component: Layout,
+        children:[
+            {
+                path:"profile",
+                component:()=>import("@/layout/components/profile"),
+                name:"Profile",
+                meta:{name:"个人资料"}
+            }
+        ]
     },
     {
         path: '/login',
