@@ -25,22 +25,29 @@ export function getCollegeAndMajor() {
 
 export function getCompleteOrg(grade) {
     return request({
-        url: 'sys/getCompleteOrg?grade='+grade,
+        url: 'sys/getCompleteOrg?grade=' + grade,
         method: 'get',
     })
 }
 
-export function getGrade(){
+export function getGrade() {
     return request({
         url: 'sys/getGrade',
         method: 'get',
     })
 }
 
-export function changePwd(params){
+export function changePwd(params) {
     return request({
-        url:"sys/changePwd",
-        method:"put",
-        data:params
+        url: "sys/changePwd",
+        method: "put",
+        data: params
+    })
+}
+
+export function getMenus(type, id) {
+    return request({
+        url: "sys/getMenus?type=" + type + "&id=" + id,
+        method: "get"
     })
 }

@@ -5,100 +5,54 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      :default-openeds="['2', '3', '4','5']"
     >
+      <!-- 图表 -->
       <div>
         <img class="logo" src="../../assets/logo.png" alt="Logo" />
       </div>
-<!--       <el-menu-item index="1" @click="$router.push('/')">
-        <i class="el-icon-menu"></i>
-        <span slot="title">仪表盘</span>
-      </el-menu-item> -->
-
-      <el-submenu index="2">
+      <!-- 目录 -->
+      <el-submenu v-for="menu in menus" :key="menu.id" :index="menu.id">
         <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>系统管理</span>
+          <i :class="menu.icon"></i>
+          <span>{{ menu.name }}</span>
         </template>
-        <el-menu-item index="2-1" @click="$router.push('/system/college')"
-          >院系管理</el-menu-item
-        >
-        <el-menu-item index="2-2" @click="$router.push('/system/major')"
-          >专业管理</el-menu-item
-        >
-        <el-menu-item index="2-3" @click="$router.push('/system/class')"
-          >班级管理</el-menu-item
-        >
-        <el-menu-item index="2-4" @click="$router.push('/system/student')"
-          >学生管理</el-menu-item
-        >
-        <el-menu-item index="2-5" @click="$router.push('/system/user')"
-          >用户管理</el-menu-item
-        >
-        <el-menu-item index="2-6" @click="$router.push('/system/role')"
-          >角色管理</el-menu-item
-        >
-        <el-menu-item index="2-7" @click="$router.push('/system/perms')"
-          >权限管理</el-menu-item
-        >
-        <el-menu-item index="2-8" @click="$router.push('/system/city')"
-          >城市管理</el-menu-item
-        >
-        <el-menu-item index="2-9" @click="$router.push('/system/work')"
-          >岗位管理</el-menu-item
-        >
-        <el-menu-item index="2-10" @click="$router.push('/system/dict')"
-          >字典管理</el-menu-item
-        >
-<!--         <el-menu-item index="2-11" @click="$router.push('/system/test')"
-          >功能测试</el-menu-item
-        > -->
-      </el-submenu>
-
-      <el-submenu index="3">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>数据统计</span>
-        </template>
-        <el-menu-item index="3-1" @click="$router.push('/statistics/employmentRate')"
-          >就业率统计</el-menu-item
-        >
-        <el-menu-item index="3-2" @click="$router.push('/statistics/employmentStatus')"
-          >就业情况统计</el-menu-item
-        >
         <el-menu-item
-          index="3-3"
-          @click="$router.push('/statistics/employmentIntention')"
-          >就业意向统计</el-menu-item
+          v-for="children in menu.children"
+          :key="children.id"
+          @click="$router.push(children.url)"
         >
-      </el-submenu>
-
-<!--       <el-submenu index="4">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>数据对比</span>
-        </template>
-        <el-menu-item index="4-1" @click="$router.push('/compare/eRate')"
-          >就业率对比</el-menu-item
-        >
-      </el-submenu> -->
-
-      <el-submenu index="5">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>数据填写</span>
-        </template>
-         <el-menu-item index="5-1" @click="$router.push('/write/employment')"
-          >就业情况填写</el-menu-item
-        >
+          {{ children.name }}
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>
 </template>
 
 <script>
+import { getMenus } from "@/api/system/sys";
+import { getSubjectId, getSubjectType } from "@/utils/storage";
+
 export default {
   name: "Aside",
+  data() {
+    return {
+      menus: [],
+      id: 0,
+      type: "",
+    };
+  },
+  methods: {
+    getData() {
+      getMenus(this.type, this.id).then((resp) => {
+        this.menus = resp.obj;
+      });
+    },
+  },
+  created() {
+    this.id = getSubjectId();
+    this.type = getSubjectType();
+    this.getData();
+  },
 };
 </script>
 
