@@ -77,7 +77,29 @@
             title="意向工作岗位统计"
           ></Radar>
         </el-col>
-        <el-col :span="12"> </el-col>
+        <el-col :span="12" class="analysis">
+          <ul v-if="work.most">
+            <li>
+              最多人想从事的工作岗位是：{{ work.most.work_name }}，一共有{{
+                work.most.total_people
+              }}人选择，在全部就业岗位中占比{{ work.most.empl_rate }}%。
+            </li>
+            <li>
+              最多女生想从事的工作岗位是：{{
+                work.female_most.work_name
+              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{
+                work.female_second.work_name
+              }}，一共有{{ work.female_second.total_people }}人选择。
+            </li>
+            <li>
+              最多男生想从事的工作岗位是：{{
+                work.male_most.work_name
+              }}，一共有{{ work.male_most.total_people }}人选择，其次是：{{
+                work.male_second.work_name
+              }}，一共有{{ work.male_second.total_people }}人选择。
+            </li>
+          </ul>
+        </el-col>
       </el-row>
     </el-card>
   </div>
@@ -114,6 +136,7 @@ export default {
         grade: new Date().getFullYear() - 4,
       },
       city: [],
+      work: {},
     };
   },
   methods: {
@@ -134,18 +157,19 @@ export default {
       });
       //获取意向岗位选择信息
       getIntentionWorkInfo(this.params).then((resp) => {
-        let data = resp.obj;
-        let works = [];
+        let data = resp.obj.results;
+        let most = resp.obj.most;
+        //格式化数据
         let peoples = [];
         data.forEach((element) => {
-          works.push(element.work_name);
+          this.workData.name.push({
+            name: element.work_name,
+            max: most.total_people,
+          });
           peoples.push(element.total_people);
         });
-        let max = Math.max.apply(null, peoples);
-        works.forEach((element) => {
-          this.workData.name.push({ name: element, max: max });
-        });
         this.workData.data.push({ value: peoples, name: "就业岗位" });
+        this.work = resp.obj;
       });
       //获取年级信息
       getGrade().then((resp) => {
@@ -189,4 +213,7 @@ export default {
 </script>
 
 <style>
+.analysis li {
+  padding-bottom: 20px;
+}
 </style>
