@@ -65,19 +65,19 @@
         <el-col :span="12" class="analysis">
           <ul>
             <li>
-              最多人选择的工作岗位是：{{ work.max.work_name }}，一共有{{
-                work.max.total_people
-              }}人选择。
+              最多人选择的工作岗位是：{{ work.most.work_name }}，一共有{{
+                work.most.total_people
+              }}人选择，在全部就业岗位中占比{{work.most.empl_rate}}%。
             </li>
             <li>
               最多女生选择的工作岗位是：{{
-                work.female_max.work_name
-              }}，一共有{{ work.female_max.total_people }}人选择。
+                work.female_most.work_name
+              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{work.female_second.work_name}}，一共有{{work.female_second.total_people}}人选择。
             </li>
             <li>
-              最多男生选择的工作岗位是：{{ work.male_max.work_name }}，一共有{{
-                work.male_max.total_people
-              }}人选择。
+              最多男生选择的工作岗位是：{{ work.male_most.work_name }}，一共有{{
+                work.male_most.total_people
+              }}人选择，其次是：{{work.male_second.work_name}}，一共有{{work.male_second.total_people}}人选择。
             </li>
           </ul>
         </el-col>
@@ -148,7 +148,7 @@ export default {
       this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
-        let data = resp.obj;
+        let data = resp.obj.results;
         //格式化数据
         let cities = [];
         let peoples = [];
@@ -163,25 +163,25 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
-        let max = resp.obj.max;
+        let most = resp.obj.most;
         //格式化数据
         let peoples = [];
         data.forEach((element) => {
           this.workData.name.push({
             name: element.work_name,
-            max: max.total_people,
+            max: most.total_people,
           });
           peoples.push(element.total_people);
         });
         this.workData.data.push({ value: peoples, name: "就业岗位" });
         this.work = resp.obj;
-        console.log(this.work);
       });
       //获取未就业学生计划信息
       getStudentPlan(this.params).then((resp) => {
+        let data = resp.obj.results;
         let planList = [];
         let peoples = [];
-        resp.obj.forEach((element) => {
+        data.forEach((element) => {
           planList.push(element.plan);
           peoples.push(element.total_people);
         });
