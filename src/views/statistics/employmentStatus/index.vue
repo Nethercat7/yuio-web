@@ -41,17 +41,12 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <Bar
-            id="empl-city"
-            :data="cityData"
-            title="就业城市统计"
-            suffix="人"
-          ></Bar>
+          <ScatterMap id="empl-city" :data="cityData" title="毕业生就业去向" roam></ScatterMap>
         </el-col>
         <el-col :span="12">
-          <el-table :data="cityTableData">
-            <el-table-column label="城市" prop="city_name"></el-table-column>
-            <el-table-column label="人数" prop="total_people"></el-table-column>
+          <el-table :data="city">
+            <el-table-column prop="city_name" label="城市名称"></el-table-column>
+            <el-table-column prop="total_people" label="总人数"></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -63,21 +58,25 @@
           <Radar id="empl-work" :data="workData" title="就业岗位"></Radar>
         </el-col>
         <el-col :span="12" class="analysis">
-          <ul>
+          <ul v-if="work.most">
             <li>
               最多人选择的工作岗位是：{{ work.most.work_name }}，一共有{{
                 work.most.total_people
-              }}人选择，在全部就业岗位中占比{{work.most.empl_rate}}%。
+              }}人选择，在全部就业岗位中占比{{ work.most.empl_rate }}%。
             </li>
             <li>
               最多女生选择的工作岗位是：{{
                 work.female_most.work_name
-              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{work.female_second.work_name}}，一共有{{work.female_second.total_people}}人选择。
+              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{
+                work.female_second.work_name
+              }}，一共有{{ work.female_second.total_people }}人选择。
             </li>
             <li>
               最多男生选择的工作岗位是：{{ work.male_most.work_name }}，一共有{{
                 work.male_most.total_people
-              }}人选择，其次是：{{work.male_second.work_name}}，一共有{{work.male_second.total_people}}人选择。
+              }}人选择，其次是：{{ work.male_second.work_name }}，一共有{{
+                work.male_second.total_people
+              }}人选择。
             </li>
           </ul>
         </el-col>
@@ -95,7 +94,29 @@
             suffix="人"
           ></Bar>
         </el-col>
-        <el-col :span="12"> </el-col>
+        <el-col :span="12" class="analysis">
+          <ul v-if="plan.most">
+            <li>
+              最多人选择的计划是：{{ plan.most.plan }}，一共有{{
+                plan.most.total_people
+              }}人选择。
+            </li>
+            <li>
+              最多女生选择的计划是：{{ plan.female_most.plan }}，一共有{{
+                plan.female_most.total_people
+              }}人选择，其次是：{{ plan.female_second.plan }}，一共有{{
+                plan.female_second.total_people
+              }}人选择。
+            </li>
+            <li>
+              最多男生选择的计划是：{{ plan.male_most.plan }}，一共有{{
+                plan.male_most.total_people
+              }}人选择，其次是：{{ plan.male_second.plan }}，一共有{{
+                plan.male_second.total_people
+              }}人选择。
+            </li>
+          </ul>
+        </el-col>
       </el-row>
     </el-card>
   </div>
@@ -104,6 +125,8 @@
 <script>
 import Bar from "@/components/charts/bar";
 import Radar from "@/components/charts/radar";
+import ScatterMap from "@/components/charts/scatterMap";
+import { convertData } from "@/utils/yuio";
 import { getGrade, getCompleteOrg } from "@/api/system/sys";
 import {
   getEmplCityInfo,
@@ -116,12 +139,11 @@ export default {
   components: {
     Bar,
     Radar,
+    ScatterMap,
   },
   data() {
     return {
-      cityData: {
-        series: [],
-      },
+      cityData: [],
       workData: {
         name: [],
         data: [],
@@ -139,26 +161,26 @@ export default {
       params: {
         grade: new Date().getFullYear() - 4,
       },
-      cityTableData: [],
+      city: [],
       work: {},
+      plan: {},
     };
   },
   methods: {
-    getData(r) {
-      this.reset(r);
+    getData() {
+      //this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
         let data = resp.obj.results;
         //格式化数据
-        let cities = [];
-        let peoples = [];
-        data.forEach((element) => {
-          cities.push(element.city_name);
-          peoples.push(element.total_people);
+        let cities = data.map((item) => {
+          return {
+            name: item.city_name,
+            value: item.total_people,
+          };
         });
-        this.cityData.name = cities;
-        this.cityData.series.push({ data: peoples, type: "bar" });
-        this.cityTableData = data;
+        this.cityData = convertData(cities);
+        this.city = data;
       });
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
@@ -185,10 +207,31 @@ export default {
           planList.push(element.plan);
           peoples.push(element.total_people);
         });
+        this.plan = resp.obj;
         //字典转换
         this.getDictData("stats_stdnt_plan").then((resp) => {
           this.planData.name = this.selectDictLabels(resp.obj, planList);
           this.planData.series.push({ data: peoples, type: "bar" });
+          this.plan.most.plan = this.selectDictLabel(
+            resp.obj,
+            this.plan.most.plan
+          );
+          this.plan.female_most.plan = this.selectDictLabel(
+            resp.obj,
+            this.plan.female_most.plan
+          );
+          this.plan.female_second.plan = this.selectDictLabel(
+            resp.obj,
+            this.plan.female_second.plan
+          );
+          this.plan.male_most.plan = this.selectDictLabel(
+            resp.obj,
+            this.plan.male_most.plan
+          );
+          this.plan.male_second.plan = this.selectDictLabel(
+            resp.obj,
+            this.plan.male_second.plan
+          );
         });
       });
       //获取年级信息
@@ -204,9 +247,7 @@ export default {
       this.getOrg();
     },
     reset(r) {
-      this.cityData = {
-        series: [],
-      };
+      this.cityData = [];
       this.workData = {
         name: [],
         data: [],
