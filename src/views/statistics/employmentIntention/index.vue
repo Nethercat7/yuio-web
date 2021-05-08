@@ -38,17 +38,33 @@
       </el-row>
     </el-card>
 
-    <el-card class="mb-20" :shadow="cardShadow">
+    <el-card class="mb-20" :shadow="cardShadow" style="max-height: 800px">
       <el-row class="mb-20">
         <el-col :span="12">
-          <Bar
+          <ScatterMap
             id="intention-city"
             :data="cityData"
-            title="意向工作城市统计"
-            suffix="人"
-          ></Bar>
+            title="意向城市人数分布"
+            height="700px"
+          ></ScatterMap>
         </el-col>
-        <el-col :span="12"></el-col>
+        <el-col :span="12">
+          <el-table
+            :data="city"
+            :default-sort="{ prop: 'total_people', order: 'descending' }"
+            style="overflow: auto"
+          >
+            <el-table-column type="index"></el-table-column>
+            <el-table-column
+              label="城市名称"
+              prop="city_name"
+            ></el-table-column>
+            <el-table-column
+              label="总人数"
+              prop="total_people"
+            ></el-table-column>
+          </el-table>
+        </el-col>
       </el-row>
     </el-card>
 
@@ -68,22 +84,21 @@
 </template>
 
 <script>
-import Bar from "@/components/charts/bar";
 import Radar from "@/components/charts/radar";
+import ScatterMap from "@/components/charts/scatterMap";
 import { getGrade, getCompleteOrg } from "@/api/system/sys";
 import {
   getIntentionCityInfo,
   getIntentionWorkInfo,
 } from "@/api/statistics/intention";
+import { convertData } from "@/utils/yuio";
 
 export default {
   name: "EmploymentIntention",
-  components: { Bar, Radar },
+  components: { Radar, ScatterMap },
   data() {
     return {
-      cityData: {
-        series: [],
-      },
+      cityData: [],
       workData: {
         name: [],
         data: [],
@@ -98,6 +113,7 @@ export default {
       params: {
         grade: new Date().getFullYear() - 4,
       },
+      city: [],
     };
   },
   methods: {
@@ -107,13 +123,14 @@ export default {
       getIntentionCityInfo(this.params).then((resp) => {
         let data = resp.obj;
         let cities = [];
-        let peoples = [];
-        data.forEach((element) => {
-          cities.push(element.city_name);
-          peoples.push(element.total_people);
+        cities = data.map((item) => {
+          return {
+            name: item.city_name,
+            value: item.total_people,
+          };
         });
-        this.cityData.name = cities;
-        this.cityData.series.push({ data: peoples, type: "bar" });
+        this.cityData = convertData(cities);
+        this.city = data;
       });
       //获取意向岗位选择信息
       getIntentionWorkInfo(this.params).then((resp) => {
@@ -129,18 +146,6 @@ export default {
           this.workData.name.push({ name: element, max: max });
         });
         this.workData.data.push({ value: peoples, name: "就业岗位" });
-        // let data = [];
-        // resp.obj.forEach((element) => {
-        //   this.workData.name.push({
-        //     name: element.type,
-        //     max: resp.obj[0].people,
-        //   });
-        //   data.push(element.people);
-        // });
-        // this.workData.data.push({
-        //   value: data,
-        //   name: "意向工作岗位统计",
-        // });
       });
       //获取年级信息
       getGrade().then((resp) => {
@@ -159,14 +164,11 @@ export default {
         this.params = {};
         this.params.grade = new Date().getFullYear() - 4;
       }
-      this.cityData = {
-        series: [],
-      };
       this.workData = {
         name: [],
         data: [],
       };
-      this.gradeList=[];
+      this.gradeList = [];
     },
     setParams() {
       let arr = this.$refs.cascader.getCheckedNodes()[0].path;

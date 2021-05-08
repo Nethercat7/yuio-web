@@ -73,10 +73,7 @@ export default {
             type: "scatter",
             coordinateSystem: "geo",
             data: data,
-            symbolSize: function (val) {
-              if (val[2] > 100) {
-                return val[2] / 10;
-              }
+            symbolSize: function () {
               return 10;
             },
             encode: {
