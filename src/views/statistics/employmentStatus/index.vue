@@ -38,7 +38,7 @@
       </el-row>
     </el-card>
 
-    <el-card class="mb-20" :shadow="cardShadow">
+    <el-card class="mb-20" :shadow="cardShadow" style="max-height: 800px">
       <el-row>
         <el-col :span="12">
           <ScatterMap
@@ -46,10 +46,16 @@
             :data="cityData"
             title="毕业生就业去向"
             roam
+            height="700px"
           ></ScatterMap>
         </el-col>
         <el-col :span="12">
-          <el-table :data="city">
+          <el-table
+            :data="city"
+            :default-sort="{ prop: 'total_people', order: 'descending' }"
+            style="overflow: auto"
+          >
+            <el-table-column type="index"> </el-table-column>
             <el-table-column
               prop="city_name"
               label="城市名称"
