@@ -41,12 +41,23 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <ScatterMap id="empl-city" :data="cityData" title="毕业生就业去向" roam></ScatterMap>
+          <ScatterMap
+            id="empl-city"
+            :data="cityData"
+            title="毕业生就业去向"
+            roam
+          ></ScatterMap>
         </el-col>
         <el-col :span="12">
           <el-table :data="city">
-            <el-table-column prop="city_name" label="城市名称"></el-table-column>
-            <el-table-column prop="total_people" label="总人数"></el-table-column>
+            <el-table-column
+              prop="city_name"
+              label="城市名称"
+            ></el-table-column>
+            <el-table-column
+              prop="total_people"
+              label="总人数"
+            ></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -167,8 +178,8 @@ export default {
     };
   },
   methods: {
-    getData() {
-      //this.reset(r);
+    getData(r) {
+      this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
         let data = resp.obj.results;
@@ -247,7 +258,7 @@ export default {
       this.getOrg();
     },
     reset(r) {
-      this.cityData = [];
+      //this.cityData = [];
       this.workData = {
         name: [],
         data: [],

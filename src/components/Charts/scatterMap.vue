@@ -53,10 +53,11 @@ export default {
       this.setOptions(this.data);
     },
     setOptions(data) {
+      this.chart.clear();
       this.chart.setOption({
         title: {
           text: this.title,
-          left:"center"
+          left: "center",
         },
         tooltip: {
           trigger: "item",
@@ -73,7 +74,10 @@ export default {
             coordinateSystem: "geo",
             data: data,
             symbolSize: function (val) {
-              return val[2] / 7;
+              if (val[2] > 100) {
+                return val[2] / 10;
+              }
+              return 10;
             },
             encode: {
               value: 2,
@@ -87,7 +91,6 @@ export default {
     data: {
       deep: true,
       handler(val) {
-        console.log(val);
         this.setOptions(val);
       },
     },
