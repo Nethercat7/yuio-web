@@ -52,7 +52,7 @@
           <el-table
             :data="city"
             :default-sort="{ prop: 'total_people', order: 'descending' }"
-            style="overflow: auto"
+            style="height:700px;overflow: auto"
           >
             <el-table-column type="index"></el-table-column>
             <el-table-column

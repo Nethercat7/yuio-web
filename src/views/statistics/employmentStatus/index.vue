@@ -44,7 +44,7 @@
           <ScatterMap
             id="empl-city"
             :data="cityData"
-            title="毕业生就业去向"
+            title="就业城市人数分布"
             roam
             height="700px"
           ></ScatterMap>
@@ -53,7 +53,7 @@
           <el-table
             :data="city"
             :default-sort="{ prop: 'total_people', order: 'descending' }"
-            style="overflow: auto"
+            style="height:700px;overflow: auto"
           >
             <el-table-column type="index"> </el-table-column>
             <el-table-column
