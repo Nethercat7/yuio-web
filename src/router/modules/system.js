@@ -67,6 +67,11 @@ const system = {
         component: () => import('@/views/system/test/'),
         name: 'Test',
         meta: { title: '功能测试' }
+    }, {
+        path: "student/profile",
+        component: () => import("@/views/system/student/components/profile/"),
+        name:"StudentProfile",
+        meta:{title:"信息浏览"}
     }]
 }
 

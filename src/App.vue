@@ -74,9 +74,18 @@ body {
 
 /* 
 表格行颜色样式
-aberrant-row：状态为禁用或者停用时使用
+aberrant-row：未填写就业情况信息
+submited:已签约并提交三方
  */
  .el-table .aberrant-row {
   background-color: oldlace;
+}
+
+.el-table .submited{
+  background: #f0f9eb;
+}
+
+.el-table .kihada{
+  background: #fbe151b0;
 }
 </style>

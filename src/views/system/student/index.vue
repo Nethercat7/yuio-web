@@ -86,6 +86,7 @@
                 currentPage * pageSize
               )
             "
+            :row-class-name="color"
           >
             <el-table-column label="姓名" prop="name" sortable>
             </el-table-column>
@@ -144,7 +145,18 @@
                   <el-button size="mini" type="primary">更多</el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <span @click="resetPwd(scope.row.id)">重置密码</span>
+                      <span
+                        @click="
+                          $router.push({
+                            name: 'StudentProfile',
+                            query: { obj: JSON.stringify(scope.row) },
+                          })
+                        "
+                        >查看资料</span
+                      >
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="resetPwd(scope.row.id)">
+                      重置密码
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -494,6 +506,16 @@ export default {
     },
     protocolFormatter(row) {
       return this.selectDictLabel(this.protocolOptions, row.empl_protocol);
+    },
+    //表格上色
+    color({ row }) {
+      if (row.empl_status == "0") {
+        return "aberrant-row";
+      } else if (row.empl_status == "1" && row.empl_protocol == "2") {
+        return "submited";
+      } else if (row.empl_status == "1" && row.empl_protocol == "0") {
+        return "kihada";
+      }
     },
   },
   mounted() {
