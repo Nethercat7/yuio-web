@@ -510,11 +510,17 @@ export default {
     //表格上色
     color({ row }) {
       if (row.empl_status == "0") {
-        return "aberrant-row";
-      } else if (row.empl_status == "1" && row.empl_protocol == "2") {
-        return "submited";
-      } else if (row.empl_status == "1" && row.empl_protocol == "0") {
-        return "kihada";
+        return "un_empl";
+      } else if (row.empl_status == "1") {
+        if (row.empl_protocol == "0") {
+          return "un_sign";
+        } else if (row.empl_protocol == "1") {
+          return "signed";
+        } else if (row.empl_protocol == "2") {
+          return "finlish";
+        }
+      } else if (row.empl_write == "0") {
+        return "un_write";
       }
     },
   },

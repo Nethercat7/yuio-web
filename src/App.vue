@@ -51,7 +51,7 @@ body {
   text-align: right;
 }
 
-.text-center{
+.text-center {
   display: block;
   text-align: center;
 }
@@ -68,24 +68,30 @@ body {
   background-color: #fff;
 }
 
-.mb-20{
+.mb-20 {
   margin-bottom: 20px;
 }
 
 /* 
 表格行颜色样式
-aberrant-row：未填写就业情况信息
-submited:已签约并提交三方
  */
- .el-table .aberrant-row {
-  background-color: oldlace;
+.el-table .un_empl {
+  background-color: #f8e3c4;
 }
 
-.el-table .submited{
-  background: #f0f9eb;
+.el-table .un_sign {
+  background-color: #faf6cf;
 }
 
-.el-table .kihada{
-  background: #fbe151b0;
+.el-table .signed {
+  background-color: #e9e9eb;
+}
+
+.el-table .finlish {
+  background-color: #e1f3d8;
+}
+
+.el-table .un_write {
+  background-color: #fde2e2;
 }
 </style>
