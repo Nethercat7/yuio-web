@@ -3,9 +3,9 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="success" @click="openDialog('add')"
+          <!-- <el-button size="mini" type="success" @click="openDialog('add')"
             >添加</el-button
-          >
+          > -->
           <el-button size="mini" type="primary">导入</el-button>
           <el-button size="mini" type="warning">导出</el-button>
         </el-col>
@@ -110,7 +110,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="上级城市">
+        <!-- <el-form-item label="上级城市">
           <el-cascader
             v-model="form.pid"
             :options="tableData"
@@ -120,7 +120,7 @@
             ref="cascader"
             :show-all-levels="false"
           ></el-cascader>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog()">取 消</el-button>
