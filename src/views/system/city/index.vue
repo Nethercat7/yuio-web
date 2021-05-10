@@ -39,16 +39,7 @@
           >
             <el-table-column label="名称" prop="name"></el-table-column>
             <el-table-column label="层级" prop="level"></el-table-column>
-            <el-table-column
-              label="状态"
-              prop="status"
-              :formatter="statusFormatter"
-            ></el-table-column>
-            <el-table-column
-              label="创建时间"
-              prop="create_time"
-            ></el-table-column>
-            <el-table-column label="操作" fixed="right" width="250px">
+            <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
                   size="mini"

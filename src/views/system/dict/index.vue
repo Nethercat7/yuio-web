@@ -79,7 +79,7 @@
               :formatter="statusFormatter"
             ></el-table-column>
             <el-table-column label="备注" prop="remark"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
                   type="primary"
