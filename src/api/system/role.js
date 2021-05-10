@@ -29,3 +29,11 @@ export function updRole(params){
         data:params
     })
 }
+
+export function outputRoles() {
+    return request({
+        url: "sys/role/output",
+        method: "get",
+        responseType: "blob",
+    })
+}

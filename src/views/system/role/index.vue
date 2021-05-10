@@ -7,7 +7,7 @@
             >添加</el-button
           >
           <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning">导出</el-button>
+          <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
           <el-autocomplete
@@ -135,7 +135,7 @@
 
 <script>
 import Pager from "@/components/pager";
-import { addRole, getRoles, delRole, updRole } from "@/api/system/role";
+import { addRole, getRoles, delRole, updRole,outputRoles } from "@/api/system/role";
 import { getPerms } from "@/api/system/perms";
 
 export default {
@@ -273,6 +273,11 @@ export default {
     statusFormatter(row) {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
+    output(){
+      outputRoles().then(resp=>{
+        this.fileDownload(resp,"角色数据.xlsx");
+      })
+    }
   },
   mounted() {
     this.getData();
