@@ -1,48 +1,48 @@
 import request from "@/utils/request"
 
-export function addStudent(params){
+export function addStudent(params) {
     return request({
-        url:'sys/student/add',
-        method:'post',
-        data:params
+        url: 'sys/student/add',
+        method: 'post',
+        data: params
     })
 }
 
-export function getStudents(params){
+export function getStudents(params) {
     return request({
-        url:'sys/student/get',
-        method:'post',
-        data:params
+        url: 'sys/student/get',
+        method: 'post',
+        data: params
     })
 }
 
-export function delStudent(id){
+export function delStudent(id) {
     return request({
-        url:'sys/student/del?id='+id,
-        method:'delete'
+        url: 'sys/student/del?id=' + id,
+        method: 'delete'
     })
 }
 
-export function updStudent(params){
+export function updStudent(params) {
     return request({
-        url:'sys/student/upd',
-        method:'put',
-        data:params
+        url: 'sys/student/upd',
+        method: 'put',
+        data: params
     })
 }
 
-export function getWithEStatusInfo(params){
+export function getWithEStatusInfo(params) {
     return request({
-        url:'sys/student/getWithEStatusInfo',
-        method:'post',
-        data:params
+        url: 'sys/student/getWithEStatusInfo',
+        method: 'post',
+        data: params
     })
 }
 
-export function getStudentById(param){
+export function getStudentById(param) {
     return request({
-        url:"sys/student/getById?id="+param,
-        method:"get"
+        url: "sys/student/getById?id=" + param,
+        method: "get"
     })
 }
 
@@ -58,6 +58,15 @@ export function changeStudentPwd(params) {
     return request({
         url: "sys/student/changePwd",
         method: "put",
+        data: params
+    })
+}
+
+export function outputStudents(params) {
+    return request({
+        url: "sys/student/output",
+        method: "post",
+        responseType: "blob",
         data: params
     })
 }

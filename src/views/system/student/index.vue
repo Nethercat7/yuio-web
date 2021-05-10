@@ -69,7 +69,7 @@
             >添加</el-button
           >
           <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning">导出</el-button>
+          <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -257,6 +257,7 @@ import {
   delStudent,
   updStudent,
   getStudents,
+  outputStudents
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
@@ -523,6 +524,11 @@ export default {
         return "un_write";
       }
     },
+    output(){
+      outputStudents(this.params).then(resp=>{
+        this.fileDownload(resp,"学生数据.xlsx")
+      })
+    }
   },
   mounted() {
     this.getData();
