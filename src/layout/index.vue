@@ -7,6 +7,7 @@
         text-color="#fff"
         active-text-color="#ffd04b"
         :collapse="collapse"
+        :default-active="catalogActive"
       >
         <!-- 图表 -->
         <div>
@@ -16,7 +17,7 @@
         <el-menu-item
           v-for="menu in children"
           :key="menu.id"
-          :index="menu.id"
+          :index="menu.url"
           @click="$router.push(menu.url)"
         >
           <i :class="menu.icon"></i>
@@ -25,13 +26,13 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header" style="padding:0">
+      <el-header class="header" style="padding: 0">
         <el-menu
           mode="horizontal"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
-          :default-active="active"
+          :default-active="menuActive"
         >
           <!-- 折叠按钮 -->
           <li class="collapse" @click="switchCollapse">
@@ -42,7 +43,7 @@
           <el-menu-item
             v-for="menu in menus"
             :key="menu.id"
-            :index="menu.id"
+            :index="menu.url"
             @click="setChildren(menu.children)"
           >
             <template slot="title">
@@ -87,17 +88,26 @@ export default {
       id: 0,
       type: "",
       children: [],
-      active: "",
       collapse: false,
       collapseIcon: "el-icon-s-fold",
+      menuActive: "",
+      catalogActive: "",
     };
   },
   methods: {
     getData() {
       getMenus(this.type, this.id).then((resp) => {
         this.menus = resp.obj;
-        this.active = resp.obj[0].id;
         this.children = resp.obj[0].children;
+        //设置菜单和目录默认激活状态
+        this.catalogActive = this.$route.path;
+        this.menuActive = this.$route.matched[0].path;
+        //因为目录是菜单点击之后传入的参数设置的，在开始会默认传入第一个菜单的值，所以要循环遍历与当前的路由URL比较，然后传入当前菜单的值。
+        this.menus.forEach((element) => {
+          if (element.url == this.menuActive) {
+            this.setChildren(element.children);
+          }
+        });
       });
     },
     exit() {
@@ -117,7 +127,14 @@ export default {
       }
     },
   },
-  created() {
+  watch: {
+    //监听路由变化设置目录的激活状态
+    $route(to) {
+      this.catalogActive = to.path;
+      this.menuActive = to.matched[0].path;
+    },
+  },
+  mounted() {
     this.subject = getSubject();
     this.id = getSubjectId();
     this.type = getSubjectType();
