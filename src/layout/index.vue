@@ -6,6 +6,7 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
+        :collapse="collapse"
       >
         <!-- 图表 -->
         <div>
@@ -18,15 +19,13 @@
           :index="menu.id"
           @click="$router.push(menu.url)"
         >
-          <template slot="title">
-            <i :class="menu.icon"></i>
-            <span>{{ menu.name }}</span>
-          </template>
+          <i :class="menu.icon"></i>
+          <span slot="title">{{ menu.name }}</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header">
+      <el-header class="header" style="padding:0">
         <el-menu
           mode="horizontal"
           background-color="#545c64"
@@ -34,6 +33,12 @@
           active-text-color="#ffd04b"
           :default-active="active"
         >
+          <!-- 折叠按钮 -->
+          <li class="collapse" @click="switchCollapse">
+            <span :class="collapseIcon"></span>
+          </li>
+
+          <!-- 菜单 -->
           <el-menu-item
             v-for="menu in menus"
             :key="menu.id"
@@ -46,6 +51,7 @@
             </template>
           </el-menu-item>
 
+          <!-- 个人资料 -->
           <el-submenu index="1" style="float: right">
             <template slot="title">{{ subject.name }}</template>
             <el-menu-item index="1-1" @click="$router.push('/profile')"
@@ -82,6 +88,8 @@ export default {
       type: "",
       children: [],
       active: "",
+      collapse: false,
+      collapseIcon: "el-icon-s-fold",
     };
   },
   methods: {
@@ -99,6 +107,15 @@ export default {
     setChildren(params) {
       this.children = params;
     },
+    switchCollapse() {
+      if (this.collapse) {
+        this.collapse = false;
+        this.collapseIcon = "el-icon-s-fold";
+      } else {
+        this.collapse = true;
+        this.collapseIcon = "el-icon-s-unfold";
+      }
+    },
   },
   created() {
     this.subject = getSubject();
@@ -110,4 +127,13 @@ export default {
 </script>
 
 <style>
+.collapse {
+  display: inline;
+  float: left;
+  padding: 0px 15px;
+}
+.collapse:hover {
+  cursor: pointer;
+  background-color: #434a50;
+}
 </style>
