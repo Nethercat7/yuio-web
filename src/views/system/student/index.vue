@@ -149,7 +149,7 @@
                         @click="
                           $router.push({
                             name: 'StudentProfile',
-                            query: { obj: JSON.stringify(scope.row) },
+                            query: { id: scope.row.id },
                           })
                         "
                         >查看资料</span

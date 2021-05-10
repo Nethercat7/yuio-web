@@ -175,11 +175,7 @@ export default {
       //获取字典数据
       this.getDictData("sys_user_gender").then((resp) => {
         this.genderList = resp.obj;
-        resp.obj.forEach((element) => {
-          if (this.profile.gender == element.value) {
-            this.profile.genderText = element.label;
-          }
-        });
+        this.profile.genderText=this.selectDictLabel(resp.obj,this.profile.gender);
       });
     },
     submit() {
