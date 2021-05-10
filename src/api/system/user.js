@@ -59,3 +59,11 @@ export function changeUserPwd(params) {
         data: params
     })
 }
+
+export function outputUsers() {
+    return request({
+        url: "sys/user/output",
+        method: "get",
+        responseType: "blob",
+    })
+}

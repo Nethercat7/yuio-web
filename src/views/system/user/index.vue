@@ -7,7 +7,7 @@
             >添加</el-button
           >
           <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning">导出</el-button>
+          <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
           <el-input
@@ -175,6 +175,7 @@ import {
   delUser,
   updUser,
   getUserByKeyword,
+  outputUsers,
 } from "@/api/system/user";
 import { getRoles } from "@/api/system/role";
 import { resetPwd } from "@/api/system/sys";
@@ -343,6 +344,11 @@ export default {
       getUserByKeyword(this.keyword).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
+      });
+    },
+    output() {
+      outputUsers(this.outputOptions).then((resp) => {
+        this.fileDownload(resp, "用户数据.xlsx");
       });
     },
   },
