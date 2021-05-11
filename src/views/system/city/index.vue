@@ -109,7 +109,7 @@
             >
           </el-radio-group>
         </el-form-item>
-         <el-form-item label="备注">
+        <el-form-item label="备注">
           <el-input type="textarea" v-model="form.remark"></el-input>
         </el-form-item>
         <!-- <el-form-item label="上级城市">
@@ -320,7 +320,17 @@ export default {
       var formData = new FormData();
       formData.append("file", data.file);
       //Send Request
-      uploadCitiesExcel(formData);
+      uploadCitiesExcel(formData).then((resp) => {
+        if (resp.status == null) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+          this.dialogVisible2 = false;
+          formData = null;
+          this.getData();
+        }
+      });
     },
     upload() {
       this.$refs.upload.submit();

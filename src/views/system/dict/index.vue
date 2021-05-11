@@ -284,7 +284,17 @@ export default {
       var formData = new FormData();
       formData.append("file", data.file);
       //Send Request
-      uploadDictTypeExcel(formData);
+      uploadDictTypeExcel(formData).then((resp) => {
+        if (resp.status == null) {
+          this.$message({
+            message: resp.msg,
+            type: resp.type,
+          });
+        }
+        this.dialogVisible2 = false;
+        formData = null;
+        this.getData();
+      });
     },
     upload() {
       this.$refs.upload.submit();
