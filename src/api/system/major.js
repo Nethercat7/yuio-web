@@ -36,3 +36,20 @@ export function getMajorByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputMajors() {
+    return request({
+        url: "sys/major/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadMajorsExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/major/upload",
+        method: "post",
+        data: params,
+    })
+}
