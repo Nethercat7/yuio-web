@@ -36,3 +36,20 @@ export function getCollegeByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputColleges() {
+    return request({
+        url: "sys/dict/data/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadCollegesExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/college/upload",
+        method: "post",
+        data: params,
+    })
+}
