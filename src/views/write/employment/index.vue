@@ -185,6 +185,9 @@ export default {
           if (!this.update) {
             addEmplInfo(this.params).then((resp) => {
               if (resp.status == null) {
+                if (resp.code == 0) {
+                  this.update = true;
+                }
                 this.$message({
                   message: resp.msg,
                   type: resp.type,
