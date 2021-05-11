@@ -45,3 +45,12 @@ export function downloadRoleExcelTemplate(type) {
         responseType: "blob",
     })
 }
+
+export function uploadRolesExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/role/upload",
+        method: "post",
+        data: params,
+    })
+}

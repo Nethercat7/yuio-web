@@ -182,6 +182,7 @@ import {
   updRole,
   outputRoles,
   downloadRoleExcelTemplate,
+  uploadRolesExcel,
 } from "@/api/system/role";
 import { getPerms } from "@/api/system/perms";
 
@@ -331,7 +332,7 @@ export default {
       var formData = new FormData();
       formData.append("file", data.file);
       //Send Request
-      //uploadUsersExcel(formData);
+      uploadRolesExcel(formData);
     },
     upload() {
       this.$refs.upload.submit();
