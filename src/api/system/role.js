@@ -37,3 +37,11 @@ export function outputRoles() {
         responseType: "blob",
     })
 }
+
+export function downloadRoleExcelTemplate(type) {
+    return request({
+        url: "sys/role/download?type=" + type,
+        method: "get",
+        responseType: "blob",
+    })
+}
