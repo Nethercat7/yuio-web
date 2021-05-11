@@ -342,7 +342,4 @@ export default {
 </script>
 
 <style>
-.analysis li {
-  padding-bottom: 20px;
-}
 </style>
