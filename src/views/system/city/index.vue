@@ -327,7 +327,7 @@ export default {
             type: resp.type,
           });
           this.dialogVisible2 = false;
-          formData = null;
+          this.$refs.upload.clearFiles();
           this.getData();
         }
       });

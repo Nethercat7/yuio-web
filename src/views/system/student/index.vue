@@ -530,7 +530,6 @@ export default {
           this.orgList = resp.obj;
         });
       } else {
-        console.log(this.form.grade);
         getCompleteOrg(this.form.grade).then((resp) => {
           this.orgList2 = resp.obj;
         });
@@ -585,7 +584,7 @@ export default {
           });
         }
         this.dialogVisible2 = false;
-        formData = null;
+        this.$refs.upload.clearFiles();
         this.getData();
       });
     },

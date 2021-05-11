@@ -358,7 +358,7 @@ export default {
           });
         }
         this.dialogVisible2 = false;
-        formData = null;
+        this.$refs.upload.clearFiles();
         this.getData();
       });
     },
