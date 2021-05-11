@@ -36,3 +36,11 @@ export function getPermsByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputPerms() {
+    return request({
+        url: "sys/perms/output",
+        method: "get",
+        responseType: "blob",
+    })
+}

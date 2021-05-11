@@ -7,7 +7,7 @@
             >添加</el-button
           >
           <el-button size="mini" type="primary">导入</el-button>
-          <el-button size="mini" type="warning">导出</el-button>
+          <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
           <el-input
@@ -167,6 +167,7 @@ import {
   delPerms,
   updPerms,
   getPermsByKeyword,
+  outputPerms
 } from "@/api/system/perms";
 
 export default {
@@ -221,7 +222,7 @@ export default {
   },
   methods: {
     getData() {
-      this.keyword="";
+      this.keyword = "";
       getPerms().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
@@ -309,6 +310,11 @@ export default {
       getPermsByKeyword(this.keyword).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
+      });
+    },
+    output() {
+      outputPerms().then((resp) => {
+        this.fileDownload(resp,"系统权限数据.xlsx");
       });
     },
   },
