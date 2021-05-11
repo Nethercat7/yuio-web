@@ -86,14 +86,6 @@ body {
   background-color: #c8c8c8;
 }
 
-.card {
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px rgb(0 0 0 / 20%);
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #fff;
-}
-
 .mb-20 {
   margin-bottom: 20px;
 }
