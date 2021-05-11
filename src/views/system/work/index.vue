@@ -88,7 +88,7 @@
 
     <!-- 表单 -->
     <el-dialog
-      :title="type == 'add' ? '新增菜单' : '修改菜单'"
+      :title="type == 'add' ? '新增岗位' : '修改岗位'"
       :visible.sync="dialogVisible"
       :before-close="closeDialog"
     >
@@ -113,7 +113,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="上级城市">
+        <el-form-item label="上级岗位">
           <el-cascader
             v-model="form.pid"
             :options="tableData"
