@@ -72,6 +72,15 @@ body {
   margin-bottom: 20px;
 }
 
+.download {
+  color: #0000ee;
+}
+
+.download:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 /* 
 表格行颜色样式
  */

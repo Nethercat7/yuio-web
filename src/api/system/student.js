@@ -79,3 +79,11 @@ export function uploadStudentsExcel(params) {
         data: params,
     })
 }
+
+export function downloadStudentExcelTemplate(type) {
+    return request({
+        url: "sys/student/download?type=" + type,
+        method: "get",
+        responseType: "blob",
+    })
+}

@@ -263,6 +263,23 @@
         <el-button slot="trigger" size="small" type="primary"
           >选取文件</el-button
         >
+        <div slot="tip" class="el-upload__tip">
+          请使用本系统提供的模板进行填写导入，否者可能会出现导入错误等情况。
+        </div>
+        <div slot="tip" class="el-upload__tip">
+          如果您的Excel版本为2007及以上，<span
+            class="download"
+            @click="download('xlsx')"
+            >下载此模板。</span
+          >
+        </div>
+        <div slot="tip" class="el-upload__tip">
+          如果您的Excel版本低于2007，<span
+            class="download"
+            @click="download('xls')"
+            >下载此模板。</span
+          >
+        </div>
       </el-upload>
 
       <span slot="footer" class="dialog-footer">
@@ -282,6 +299,7 @@ import {
   getStudents,
   outputStudents,
   uploadStudentsExcel,
+  downloadStudentExcelTemplate,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
@@ -557,13 +575,18 @@ export default {
     },
     uploadFile(data) {
       //Add file data
-      var formData=new FormData();
-      formData.append("file",data.file);
+      var formData = new FormData();
+      formData.append("file", data.file);
       //Send Request
-      uploadStudentsExcel(formData)
+      uploadStudentsExcel(formData);
     },
     upload() {
       this.$refs.upload.submit();
+    },
+    download(type) {
+      downloadStudentExcelTemplate(type).then((resp) => {
+        this.fileDownload(resp,"学生数据上传模板."+type);
+      });
     },
   },
   mounted() {
