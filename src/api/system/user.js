@@ -67,3 +67,20 @@ export function outputUsers() {
         responseType: "blob",
     })
 }
+
+export function downloadUserExcelTemplate(type) {
+    return request({
+        url: "sys/user/download?type=" + type,
+        method: "get",
+        responseType: "blob",
+    })
+}
+
+export function uploadUsersExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/user/upload",
+        method: "post",
+        data: params,
+    })
+}
