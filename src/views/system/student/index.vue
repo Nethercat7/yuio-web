@@ -68,7 +68,9 @@
           <el-button size="mini" @click="openDialog('add')" type="success"
             >添加</el-button
           >
-          <el-button size="mini" type="primary">导入</el-button>
+          <el-button size="mini" type="primary" @click="dialogVisible2 = true"
+            >导入</el-button
+          >
           <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
       </el-row>
@@ -247,6 +249,27 @@
         <el-button type="primary" @click="submitDialog()">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="上传数据" :visible.sync="dialogVisible2">
+      <el-upload
+        class="upload-demo"
+        ref="upload"
+        action
+        :auto-upload="false"
+        :http-request="uploadFile"
+        accept=".xls,.xlsx"
+        :limit="1"
+      >
+        <el-button slot="trigger" size="small" type="primary"
+          >选取文件</el-button
+        >
+      </el-upload>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="upload">上传</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -257,7 +280,8 @@ import {
   delStudent,
   updStudent,
   getStudents,
-  outputStudents
+  outputStudents,
+  uploadStudentsExcel,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
@@ -266,6 +290,8 @@ export default {
   components: { Pager },
   data() {
     return {
+      fileList: [],
+      dialogVisible2: false,
       tableData: [],
       keyword: "",
       dialogVisible: false,
@@ -524,11 +550,21 @@ export default {
         return "un_write";
       }
     },
-    output(){
-      outputStudents(this.params).then(resp=>{
-        this.fileDownload(resp,"学生数据.xlsx")
-      })
-    }
+    output() {
+      outputStudents(this.params).then((resp) => {
+        this.fileDownload(resp, "学生数据.xlsx");
+      });
+    },
+    uploadFile(data) {
+      //Add file data
+      var formData=new FormData();
+      formData.append("file",data.file);
+      //Send Request
+      uploadStudentsExcel(formData)
+    },
+    upload() {
+      this.$refs.upload.submit();
+    },
   },
   mounted() {
     this.getData();

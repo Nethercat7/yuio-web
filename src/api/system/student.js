@@ -70,3 +70,12 @@ export function outputStudents(params) {
         data: params
     })
 }
+
+export function uploadStudentsExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/student/upload",
+        method: "post",
+        data: params,
+    })
+}
