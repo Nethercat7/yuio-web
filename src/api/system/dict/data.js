@@ -36,3 +36,20 @@ export function getDictDataByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputDictData() {
+    return request({
+        url: "sys/dict/data/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadDictDataExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/dict/data/upload",
+        method: "post",
+        data: params,
+    })
+}
