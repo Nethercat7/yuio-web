@@ -1,32 +1,32 @@
 import request from "@/utils/request"
 
-export function addDictType(data){
+export function addDictType(data) {
     return request({
-        url:'sys/dict/type/add',
-        method:'post',
-        data:data
+        url: 'sys/dict/type/add',
+        method: 'post',
+        data: data
     })
 }
 
-export function getDict(){
+export function getDict() {
     return request({
-        url:'sys/dict/type/get',
-        method:'get'
+        url: 'sys/dict/type/get',
+        method: 'get'
     })
 }
 
-export function delDict(id){
+export function delDict(id) {
     return request({
-        url:'sys/dict/type/del?id='+id,
-        method:'delete'
+        url: 'sys/dict/type/del?id=' + id,
+        method: 'delete'
     })
 }
 
-export function updDictType(data){
+export function updDictType(data) {
     return request({
-        url:'sys/dict/type/upd',
-        method:'put',
-        data:data
+        url: 'sys/dict/type/upd',
+        method: 'put',
+        data: data
     })
 }
 
@@ -34,5 +34,13 @@ export function getDictTypeByKeyword(param) {
     return request({
         url: "sys/dict/type/getByKeyword?keyword=" + param,
         method: "get"
+    })
+}
+
+export function outputDictType() {
+    return request({
+        url: "sys/dict/type/output",
+        method: "get",
+        responseType: "blob"
     })
 }

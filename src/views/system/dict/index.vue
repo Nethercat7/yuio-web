@@ -6,6 +6,8 @@
           <el-button type="success" size="mini" @click="openDialog(0)"
             >添加</el-button
           >
+          <el-button type="primary" size="mini" @click="dialogVisible2=true">导入</el-button>
+          <el-button type="warning" size="mini" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
           <el-input
@@ -122,6 +124,43 @@
         </el-col>
       </el-row>
     </el-card>
+
+    <el-dialog title="上传数据" :visible.sync="dialogVisible2">
+      <el-upload
+        class="upload-demo"
+        ref="upload"
+        action
+        :auto-upload="false"
+        :http-request="uploadFile"
+        accept=".xls,.xlsx"
+        :limit="1"
+      >
+        <el-button slot="trigger" size="small" type="primary"
+          >选取文件</el-button
+        >
+        <div slot="tip" class="el-upload__tip">
+          请使用本系统提供的模板进行填写导入，否者可能会出现导入错误等情况。
+        </div>
+        <div slot="tip" class="el-upload__tip">
+          如果您的Excel版本为2007及以上，<span
+            class="download"
+            @click="getTemplate('xlsx')"
+            >下载此模板。</span
+          >
+        </div>
+        <div slot="tip" class="el-upload__tip">
+          如果您的Excel版本低于2007，<span
+            class="download"
+            @click="getTemplate('xls')"
+            >下载此模板。</span
+          >
+        </div>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="upload">上传</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -132,6 +171,7 @@ import {
   delDict,
   updDictType,
   getDictTypeByKeyword,
+  outputDictType,
 } from "@/api/system/dict/type";
 import Pager from "@/components/pager";
 
@@ -140,6 +180,7 @@ export default {
   components: { Pager },
   data() {
     return {
+      dialogVisible2: false,
       form: {},
       dialogVisible: false,
       type: null,
@@ -224,6 +265,26 @@ export default {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
       });
+    },
+    output() {
+      outputDictType().then((resp) => {
+        this.fileDownloader(resp, "字典类型数据.xlsx");
+      });
+    },
+    getTemplate(type) {
+      this.getExcelTemplate("dict_type", type).then((resp) => {
+        this.fileDownloader(resp,"字典类型导入模板."+type);
+      });
+    },
+    uploadFile(data) {
+      //Add file data
+      var formData = new FormData();
+      formData.append("file", data.file);
+      //Send Request
+      //uploadPermsExcel(formData);
+    },
+    upload() {
+      this.$refs.upload.submit();
     },
   },
   mounted() {
