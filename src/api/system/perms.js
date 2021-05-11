@@ -44,3 +44,12 @@ export function outputPerms() {
         responseType: "blob",
     })
 }
+
+export function uploadPermsExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/perms/upload",
+        method: "post",
+        data: params,
+    })
+}

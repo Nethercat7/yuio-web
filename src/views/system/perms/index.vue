@@ -190,6 +190,10 @@
           >
         </div>
       </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="upload">上传</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -203,6 +207,7 @@ import {
   updPerms,
   getPermsByKeyword,
   outputPerms,
+  uploadPermsExcel,
 } from "@/api/system/perms";
 
 export default {
@@ -363,7 +368,7 @@ export default {
       var formData = new FormData();
       formData.append("file", data.file);
       //Send Request
-      //uploadStudentsExcel(formData);
+      uploadPermsExcel(formData);
     },
     upload() {
       this.$refs.upload.submit();
