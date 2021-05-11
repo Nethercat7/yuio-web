@@ -38,7 +38,7 @@
       </el-row>
     </el-card>
 
-    <el-card class="mb-20" :shadow="cardShadow" style="max-height: 800px">
+    <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
           <ScatterMap
@@ -53,7 +53,8 @@
           <el-table
             :data="city"
             :default-sort="{ prop: 'total_people', order: 'descending' }"
-            style="height:700px;overflow: auto"
+            height="700"
+            stripe
           >
             <el-table-column type="index"> </el-table-column>
             <el-table-column
@@ -63,6 +64,7 @@
             <el-table-column
               prop="total_people"
               label="总人数"
+              sortable
             ></el-table-column>
           </el-table>
         </el-col>
@@ -72,30 +74,61 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <Radar id="empl-work" :data="workData" title="就业岗位"></Radar>
+          <Radar
+            id="empl-work"
+            :data="workData"
+            title="就业岗位人数分布"
+            height="700px"
+          ></Radar>
         </el-col>
-        <el-col :span="12" class="analysis">
-          <ul v-if="work.most">
-            <li>
-              最多人选择的工作岗位是：{{ work.most.work_name }}，一共有{{
-                work.most.total_people
-              }}人选择，在全部就业岗位中占比{{ work.most.empl_rate }}%。
-            </li>
-            <li>
-              最多女生选择的工作岗位是：{{
-                work.female_most.work_name
-              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{
-                work.female_second.work_name
-              }}，一共有{{ work.female_second.total_people }}人选择。
-            </li>
-            <li>
-              最多男生选择的工作岗位是：{{ work.male_most.work_name }}，一共有{{
-                work.male_most.total_people
-              }}人选择，其次是：{{ work.male_second.work_name }}，一共有{{
-                work.male_second.total_people
-              }}人选择。
-            </li>
-          </ul>
+        <el-col :span="12">
+          <el-row :gutter="24">
+            <el-col :span="8">
+              <h3 style="text-align: center">总排行</h3>
+              <el-table :data="work.total_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">女生排行</h3>
+              <el-table :data="work.female_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">男生排行</h3>
+              <el-table :data="work.male_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </el-card>
@@ -106,33 +139,60 @@
           <Bar
             id="plan"
             :data="planData"
-            title="未就业的学生接下来的打算"
+            title="未就业学生的计划"
             horizontal
             suffix="人"
+            height="700px"
           ></Bar>
         </el-col>
-        <el-col :span="12" class="analysis">
-          <ul v-if="plan.most">
-            <li>
-              最多人选择的计划是：{{ plan.most.plan }}，一共有{{
-                plan.most.total_people
-              }}人选择。
-            </li>
-            <li>
-              最多女生选择的计划是：{{ plan.female_most.plan }}，一共有{{
-                plan.female_most.total_people
-              }}人选择，其次是：{{ plan.female_second.plan }}，一共有{{
-                plan.female_second.total_people
-              }}人选择。
-            </li>
-            <li>
-              最多男生选择的计划是：{{ plan.male_most.plan }}，一共有{{
-                plan.male_most.total_people
-              }}人选择，其次是：{{ plan.male_second.plan }}，一共有{{
-                plan.male_second.total_people
-              }}人选择。
-            </li>
-          </ul>
+        <el-col :span="12">
+          <el-row :gutter="24">
+            <el-col :span="8">
+              <h3 style="text-align: center">总排行</h3>
+              <el-table :data="plan.total_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">女生排行</h3>
+              <el-table :data="plan.female_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">男生排行</h3>
+              <el-table :data="plan.male_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </el-card>
@@ -181,6 +241,7 @@ export default {
       city: [],
       work: {},
       plan: {},
+      planList: [],
     };
   },
   methods: {
@@ -188,7 +249,7 @@ export default {
       this.reset(r);
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
-        let data = resp.obj.results;
+        let data = resp.obj;
         //格式化数据
         let cities = data.map((item) => {
           return {
@@ -202,13 +263,12 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
-        let most = resp.obj.most;
         //格式化数据
         let peoples = [];
         data.forEach((element) => {
           this.workData.name.push({
             name: element.work_name,
-            max: most.total_people,
+            max: resp.obj.max,
           });
           peoples.push(element.total_people);
         });
@@ -227,28 +287,9 @@ export default {
         this.plan = resp.obj;
         //字典转换
         this.getDictData("stats_stdnt_plan").then((resp) => {
+          this.planList = resp.obj;
           this.planData.name = this.selectDictLabels(resp.obj, planList);
           this.planData.series.push({ data: peoples, type: "bar" });
-          this.plan.most.plan = this.selectDictLabel(
-            resp.obj,
-            this.plan.most.plan
-          );
-          this.plan.female_most.plan = this.selectDictLabel(
-            resp.obj,
-            this.plan.female_most.plan
-          );
-          this.plan.female_second.plan = this.selectDictLabel(
-            resp.obj,
-            this.plan.female_second.plan
-          );
-          this.plan.male_most.plan = this.selectDictLabel(
-            resp.obj,
-            this.plan.male_most.plan
-          );
-          this.plan.male_second.plan = this.selectDictLabel(
-            resp.obj,
-            this.plan.male_second.plan
-          );
         });
       });
       //获取年级信息
@@ -289,6 +330,9 @@ export default {
       getCompleteOrg(this.params.grade).then((resp) => {
         this.orgList = resp.obj;
       });
+    },
+    planFormatter(row) {
+      return this.selectDictLabel(this.planList, row.plan);
     },
   },
   mounted() {

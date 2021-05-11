@@ -52,7 +52,8 @@
           <el-table
             :data="city"
             :default-sort="{ prop: 'total_people', order: 'descending' }"
-            style="height:700px;overflow: auto"
+            stripe
+            height="700"
           >
             <el-table-column type="index"></el-table-column>
             <el-table-column
@@ -62,6 +63,7 @@
             <el-table-column
               label="总人数"
               prop="total_people"
+              sortable
             ></el-table-column>
           </el-table>
         </el-col>
@@ -74,31 +76,58 @@
           <Radar
             id="intention-work"
             :data="workData"
-            title="意向工作岗位统计"
+            title="意向岗位人数分布"
+            height="700px"
           ></Radar>
         </el-col>
-        <el-col :span="12" class="analysis">
-          <ul v-if="work.most">
-            <li>
-              最多人想从事的工作岗位是：{{ work.most.work_name }}，一共有{{
-                work.most.total_people
-              }}人选择，在全部就业岗位中占比{{ work.most.empl_rate }}%。
-            </li>
-            <li>
-              最多女生想从事的工作岗位是：{{
-                work.female_most.work_name
-              }}，一共有{{ work.female_most.total_people }}人选择，其次是：{{
-                work.female_second.work_name
-              }}，一共有{{ work.female_second.total_people }}人选择。
-            </li>
-            <li>
-              最多男生想从事的工作岗位是：{{
-                work.male_most.work_name
-              }}，一共有{{ work.male_most.total_people }}人选择，其次是：{{
-                work.male_second.work_name
-              }}，一共有{{ work.male_second.total_people }}人选择。
-            </li>
-          </ul>
+        <el-col :span="12">
+          <el-row :gutter="24">
+            <el-col :span="8">
+              <h3 style="text-align: center">总排行</h3>
+              <el-table :data="work.total_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">女生排行</h3>
+              <el-table :data="work.female_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">男生排行</h3>
+              <el-table :data="work.male_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="岗位名称"
+                  prop="work_name"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                  sortable
+                ></el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
     </el-card>
@@ -158,13 +187,12 @@ export default {
       //获取意向岗位选择信息
       getIntentionWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
-        let most = resp.obj.most;
         //格式化数据
         let peoples = [];
         data.forEach((element) => {
           this.workData.name.push({
             name: element.work_name,
-            max: most.total_people,
+            max: resp.max,
           });
           peoples.push(element.total_people);
         });

@@ -45,6 +45,7 @@ export default {
       this.chart.setOption({
         title: {
           text: this.title,
+          left:"center"
         },
         radar: {
           indicator: name,
