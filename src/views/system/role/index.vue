@@ -181,7 +181,6 @@ import {
   delRole,
   updRole,
   outputRoles,
-  downloadRoleExcelTemplate,
   uploadRolesExcel,
 } from "@/api/system/role";
 import { getPerms } from "@/api/system/perms";
@@ -324,7 +323,7 @@ export default {
     },
     output() {
       outputRoles().then((resp) => {
-        this.fileDownload(resp, "角色数据.xlsx");
+        this.fileDownloader(resp, "角色数据.xlsx");
       });
     },
     uploadFile(data) {
@@ -338,8 +337,8 @@ export default {
       this.$refs.upload.submit();
     },
     download(type) {
-      downloadRoleExcelTemplate(type).then((resp) => {
-        this.fileDownload(resp, "角色数据上传模板." + type);
+      this.getExcelTemplate("role",type).then((resp) => {
+        this.fileDownloader(resp, "角色数据上传模板." + type);
       });
     },
   },

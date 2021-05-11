@@ -14,7 +14,7 @@ export function convertData(data) {
     return res;
 }
 
-export function fileDownload(stream, filename) {
+export function fileDownloader(stream, filename) {
     let blob = new Blob([stream], { type: "application/xlsx" });
     let url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");

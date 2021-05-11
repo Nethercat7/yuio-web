@@ -38,14 +38,6 @@ export function outputRoles() {
     })
 }
 
-export function downloadRoleExcelTemplate(type) {
-    return request({
-        url: "sys/role/download?type=" + type,
-        method: "get",
-        responseType: "blob",
-    })
-}
-
 export function uploadRolesExcel(params) {
     return request({
         headers: { 'Content-Type': 'multipart/form-data' },

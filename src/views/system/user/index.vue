@@ -216,8 +216,7 @@ import {
   updUser,
   getUserByKeyword,
   outputUsers,
-  downloadUserExcelTemplate,
-  uploadUsersExcel
+  uploadUsersExcel,
 } from "@/api/system/user";
 import { getRoles } from "@/api/system/role";
 import { resetPwd } from "@/api/system/sys";
@@ -391,7 +390,7 @@ export default {
     },
     output() {
       outputUsers(this.outputOptions).then((resp) => {
-        this.fileDownload(resp, "用户数据.xlsx");
+        this.fileDownloader(resp, "用户数据.xlsx");
       });
     },
     uploadFile(data) {
@@ -405,8 +404,8 @@ export default {
       this.$refs.upload.submit();
     },
     download(type) {
-      downloadUserExcelTemplate(type).then((resp) => {
-        this.fileDownload(resp, "用户数据上传模板." + type);
+      this.getExcelTemplate("user", type).then((resp) => {
+        this.fileDownloader(resp, "用户数据上传模板." + type);
       });
     },
   },

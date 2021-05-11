@@ -11,7 +11,7 @@ export default {
   methods: {
     download() {
       output().then((resp) => {
-        this.fileDownload(resp,"测试.xlsx");
+        this.fileDownloader(resp,"测试.xlsx");
       });
     },
   },

@@ -51,3 +51,11 @@ export function getMenus(type, id) {
         method: "get"
     })
 }
+
+export function getExcelTemplate(template, type) {
+    return request({
+        url: "sys/getTemplate?template=" + template + "&type=" + type,
+        method: "get",
+        responseType: "blob"
+    })
+}

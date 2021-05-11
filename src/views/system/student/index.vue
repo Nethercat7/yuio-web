@@ -299,7 +299,6 @@ import {
   getStudents,
   outputStudents,
   uploadStudentsExcel,
-  downloadStudentExcelTemplate,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 
@@ -570,7 +569,7 @@ export default {
     },
     output() {
       outputStudents(this.params).then((resp) => {
-        this.fileDownload(resp, "学生数据.xlsx");
+        this.fileDownloader(resp, "学生数据.xlsx");
       });
     },
     uploadFile(data) {
@@ -584,8 +583,8 @@ export default {
       this.$refs.upload.submit();
     },
     download(type) {
-      downloadStudentExcelTemplate(type).then((resp) => {
-        this.fileDownload(resp,"学生数据上传模板."+type);
+      this.getExcelTemplate("student",type).then((resp) => {
+        this.fileDownloader(resp,"学生数据上传模板."+type);
       });
     },
   },
