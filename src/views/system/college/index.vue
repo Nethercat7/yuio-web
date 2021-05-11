@@ -7,7 +7,9 @@
           <el-button size="mini" @click="openDialog('add')" type="success"
             >添加</el-button
           >
-          <el-button size="mini" type="primary" @click="dialogVisible2=true">导入</el-button>
+          <el-button size="mini" type="primary" @click="dialogVisible2 = true"
+            >导入</el-button
+          >
           <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
@@ -49,6 +51,7 @@
               label="创建时间"
               prop="create_time"
             ></el-table-column>
+            <el-table-column label="备注" prop="remark"></el-table-column>
             <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <el-button
@@ -161,7 +164,7 @@ import {
   updCollege,
   getCollegeByKeyword,
   uploadCollegesExcel,
-  outputColleges
+  outputColleges,
 } from "@/api/system/college";
 
 export default {
@@ -169,7 +172,7 @@ export default {
   components: { Pager },
   data() {
     return {
-      dialogVisible2:false,
+      dialogVisible2: false,
       tableData: [],
       dialogVisible: false,
       type: "",
@@ -281,12 +284,12 @@ export default {
     },
     output() {
       outputColleges().then((resp) => {
-        this.fileDownloader(resp, "字典类型数据.xlsx");
+        this.fileDownloader(resp, "院系数据.xlsx");
       });
     },
     getTemplate(type) {
-      this.getExcelTemplate("dict_data", type).then((resp) => {
-        this.fileDownloader(resp, "字典数据导入模板." + type);
+      this.getExcelTemplate("college", type).then((resp) => {
+        this.fileDownloader(resp, "院系导入模板." + type);
       });
     },
     uploadFile(data) {

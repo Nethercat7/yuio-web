@@ -39,7 +39,7 @@ export function getCollegeByKeyword(param) {
 
 export function outputColleges() {
     return request({
-        url: "sys/dict/data/output",
+        url: "sys/college/output",
         method: "get",
         responseType: "blob"
     })
