@@ -36,3 +36,20 @@ export function getCityByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputCities() {
+    return request({
+        url: "sys/city/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadCitiesExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/city/upload",
+        method: "post",
+        data: params,
+    })
+}
