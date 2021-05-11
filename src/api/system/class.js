@@ -36,3 +36,20 @@ export function getClassByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputClasses() {
+    return request({
+        url: "sys/class/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadClassesExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/class/upload",
+        method: "post",
+        data: params,
+    })
+}
