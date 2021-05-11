@@ -6,7 +6,9 @@
           <el-button type="success" size="mini" @click="openDialog(0)"
             >添加</el-button
           >
-          <el-button type="primary" size="mini" @click="dialogVisible2=true">导入</el-button>
+          <el-button type="primary" size="mini" @click="dialogVisible2 = true"
+            >导入</el-button
+          >
           <el-button type="warning" size="mini" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
@@ -172,6 +174,7 @@ import {
   updDictType,
   getDictTypeByKeyword,
   outputDictType,
+  uploadDictTypeExcel,
 } from "@/api/system/dict/type";
 import Pager from "@/components/pager";
 
@@ -273,7 +276,7 @@ export default {
     },
     getTemplate(type) {
       this.getExcelTemplate("dict_type", type).then((resp) => {
-        this.fileDownloader(resp,"字典类型导入模板."+type);
+        this.fileDownloader(resp, "字典类型导入模板." + type);
       });
     },
     uploadFile(data) {
@@ -281,7 +284,7 @@ export default {
       var formData = new FormData();
       formData.append("file", data.file);
       //Send Request
-      //uploadPermsExcel(formData);
+      uploadDictTypeExcel(formData);
     },
     upload() {
       this.$refs.upload.submit();

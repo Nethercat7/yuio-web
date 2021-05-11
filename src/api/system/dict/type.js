@@ -44,3 +44,12 @@ export function outputDictType() {
         responseType: "blob"
     })
 }
+
+export function uploadDictTypeExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/dict/type/upload",
+        method: "post",
+        data: params,
+    })
+}
