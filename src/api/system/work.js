@@ -36,3 +36,20 @@ export function getWorkByKeyword(param) {
         method: "get"
     })
 }
+
+export function outputWorks() {
+    return request({
+        url: "sys/work/output",
+        method: "get",
+        responseType: "blob"
+    })
+}
+
+export function uploadWorksExcel(params) {
+    return request({
+        headers: { 'Content-Type': 'multipart/form-data' },
+        url: "sys/work/upload",
+        method: "post",
+        data: params,
+    })
+}

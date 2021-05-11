@@ -109,6 +109,9 @@
             >
           </el-radio-group>
         </el-form-item>
+         <el-form-item label="备注">
+          <el-input type="textarea" v-model="form.remark"></el-input>
+        </el-form-item>
         <!-- <el-form-item label="上级城市">
           <el-cascader
             v-model="form.pid"
