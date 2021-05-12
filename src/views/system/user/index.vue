@@ -38,7 +38,7 @@
             "
           >
             <el-table-column label="姓名" prop="name"></el-table-column>
-            <el-table-column label="账号" prop="code"></el-table-column>
+            <el-table-column label="工号" prop="code"></el-table-column>
             <el-table-column
               label="性别"
               prop="gender"
@@ -114,7 +114,7 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="账号" prop="code">
+        <el-form-item label="工号" prop="code">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
@@ -254,7 +254,7 @@ export default {
           { required: true, message: "请选择一个状态", trigger: "change" },
         ],
         code: [
-          { required: true, message: "请输入账号", trigger: "blur" },
+          { required: true, message: "请输入工号", trigger: "blur" },
           {
             min: 1,
             max: 30,
