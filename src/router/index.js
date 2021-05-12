@@ -29,6 +29,12 @@ const constantRoutes = [
                 component:()=>import("@/layout/components/profile"),
                 name:"Profile",
                 meta:{name:"个人资料"}
+            },
+            {
+                path:"introduction",
+                component:()=>import("@/layout/components/introduction"),
+                name:"Introduction",
+                meta:{name:"系统介绍"}
             }
         ]
     },
