@@ -140,7 +140,7 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色" prop="roles">
           <el-select
             v-model="form.roles"
             multiple
@@ -266,6 +266,9 @@ export default {
           { required: true, message: "请选择一个性别", trigger: "change" },
         ],
         phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
+        roles: [
+          { required: true, message: "请选择至少一个角色", trigger: "blur" },
+        ],
       },
     };
   },
