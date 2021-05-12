@@ -18,9 +18,6 @@
             </el-form-item>
             <el-form-item>
               <el-row>
-                <el-col :span="12">
-                  <el-checkbox v-model="remember">记住我</el-checkbox>
-                </el-col>
                 <el-col :span="12" style="text-align: right">
                   <el-button type="primary" @click="login()">登录</el-button>
                 </el-col>
@@ -45,7 +42,6 @@ export default {
       form: {
         isUser: true,
       },
-      remember: false,
     };
   },
   methods: {
@@ -54,7 +50,7 @@ export default {
         if (resp.code === 0) {
           setSubject(resp.obj);
           this.$router.push("/");
-        } else if(resp.status!=500) {
+        } else if (resp.status != 500) {
           this.$message({
             message: resp.msg,
             type: resp.type,
@@ -62,7 +58,7 @@ export default {
         }
       });
     },
-  }
+  },
 };
 </script>
 
