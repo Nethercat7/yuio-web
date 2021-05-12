@@ -104,12 +104,6 @@
         <el-col :span="24">
           <el-table :data="tableData">
             <el-table-column
-              type="selection"
-              width="55"
-              :show-overflow-tooltip="true"
-            >
-            </el-table-column>
-            <el-table-column
               prop="college_name"
               label="学院名称"
             ></el-table-column>

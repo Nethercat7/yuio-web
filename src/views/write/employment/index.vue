@@ -49,18 +49,16 @@
                 </el-select>
               </el-form-item>
             </div>
-            <div v-if="params.status === '0'">
-              <el-form-item label="接下来打算" prop="plan">
-                <el-select v-model="params.plan">
-                  <el-option
-                    v-for="item in planList"
-                    :key="item.id"
-                    :value="item.value"
-                    :label="item.label"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </div>
+            <el-form-item label="接下来打算" prop="plan">
+              <el-select v-model="params.plan">
+                <el-option
+                  v-for="item in planList"
+                  :key="item.id"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
             <h3>就业意向</h3>
             <el-divider></el-divider>
             <el-form-item label="意向的工作地点" prop="intention_cities">

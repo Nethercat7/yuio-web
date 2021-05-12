@@ -45,12 +45,9 @@
               <el-form-item label="是否落实工作单位">
                 <span>{{ student.empl_status_text }}</span>
               </el-form-item>
-              <!-- 未就业展示的信息 -->
-              <template v-if="student.empl_status == '0'">
-                <el-form-item label="接下来的打算">
-                  <span>{{ student.empl_plan_text }}</span>
-                </el-form-item>
-              </template>
+              <el-form-item label="接下来的打算">
+                <span>{{ student.empl_plan_text }}</span>
+              </el-form-item>
               <template v-if="student.empl_status == '1'">
                 <el-form-item label="单位名称">
                   <span>{{ student.empl_company }}</span>
