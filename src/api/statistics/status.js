@@ -16,9 +16,17 @@ export function getEmplWorkInfo(params) {
     })
 }
 
-export function getStudentPlan(params) {
+export function getUnEmplStudentPlan(params) {
     return request({
-        url: '/stats/status/getStudentPlan',
+        url: '/stats/status/getUnEmplStudentPlan',
+        method: "post",
+        data: params
+    })
+}
+
+export function getEmplStudentPlan(params) {
+    return request({
+        url: '/stats/status/getEmplStudentPlan',
         method: "post",
         data: params
     })

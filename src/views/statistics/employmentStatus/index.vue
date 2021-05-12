@@ -133,13 +133,13 @@
       </el-row>
     </el-card>
 
-    <el-card :shadow="cardShadow">
+    <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
           <Bar
-            id="plan"
-            :data="planData"
-            title="未就业学生的计划"
+            id="empl-plan"
+            :data="emplPlanData"
+            title="已就业学生的计划"
             horizontal
             suffix="人"
             height="700px"
@@ -149,7 +149,7 @@
           <el-row :gutter="24">
             <el-col :span="8">
               <h3 style="text-align: center">总排行</h3>
-              <el-table :data="plan.total_rank" stripe height="700">
+              <el-table :data="emplPlan.total_rank" stripe height="700">
                 <el-table-column type="index"> </el-table-column>
                 <el-table-column
                   label="计划名称"
@@ -164,7 +164,7 @@
             </el-col>
             <el-col :span="8">
               <h3 style="text-align: center">女生排行</h3>
-              <el-table :data="plan.female_rank" stripe height="700">
+              <el-table :data="emplPlan.female_rank" stripe height="700">
                 <el-table-column type="index"> </el-table-column>
                 <el-table-column
                   label="计划名称"
@@ -179,7 +179,71 @@
             </el-col>
             <el-col :span="8">
               <h3 style="text-align: center">男生排行</h3>
-              <el-table :data="plan.male_rank" stripe height="700">
+              <el-table :data="emplPlan.male_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <el-col :span="12">
+          <Bar
+            id="unempl-plan"
+            :data="unEmplPlanData"
+            title="未就业学生的计划"
+            horizontal
+            suffix="人"
+            height="700px"
+          ></Bar>
+        </el-col>
+        <el-col :span="12">
+          <el-row :gutter="24">
+            <el-col :span="8">
+              <h3 style="text-align: center">总排行</h3>
+              <el-table :data="unEmplPlan.total_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">女生排行</h3>
+              <el-table :data="unEmplPlan.female_rank" stripe height="700">
+                <el-table-column type="index"> </el-table-column>
+                <el-table-column
+                  label="计划名称"
+                  prop="plan"
+                  :formatter="planFormatter"
+                ></el-table-column>
+                <el-table-column
+                  label="总人数"
+                  prop="total_people"
+                ></el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="8">
+              <h3 style="text-align: center">男生排行</h3>
+              <el-table :data="unEmplPlan.male_rank" stripe height="700">
                 <el-table-column type="index"> </el-table-column>
                 <el-table-column
                   label="计划名称"
@@ -208,7 +272,8 @@ import { getGrade, getCompleteOrg } from "@/api/system/sys";
 import {
   getEmplCityInfo,
   getEmplWorkInfo,
-  getStudentPlan,
+  getUnEmplStudentPlan,
+  getEmplStudentPlan,
 } from "@/api/statistics/status";
 
 export default {
@@ -225,7 +290,10 @@ export default {
         name: [],
         data: [],
       },
-      planData: {
+      unEmplPlanData: {
+        series: [],
+      },
+      emplPlanData: {
         series: [],
       },
       gradeList: [],
@@ -240,7 +308,8 @@ export default {
       },
       city: [],
       work: {},
-      plan: {},
+      emplPlan: {},
+      unEmplPlan: {},
       planList: [],
     };
   },
@@ -276,7 +345,7 @@ export default {
         this.work = resp.obj;
       });
       //获取未就业学生计划信息
-      getStudentPlan(this.params).then((resp) => {
+      getUnEmplStudentPlan(this.params).then((resp) => {
         let data = resp.obj.results;
         let planList = [];
         let peoples = [];
@@ -284,12 +353,29 @@ export default {
           planList.push(element.plan);
           peoples.push(element.total_people);
         });
-        this.plan = resp.obj;
+        this.unEmplPlan = resp.obj;
         //字典转换
         this.getDictData("stats_stdnt_plan").then((resp) => {
           this.planList = resp.obj;
-          this.planData.name = this.selectDictLabels(resp.obj, planList);
-          this.planData.series.push({ data: peoples, type: "bar" });
+          this.unEmplPlanData.name = this.selectDictLabels(resp.obj, planList);
+          this.unEmplPlanData.series.push({ data: peoples, type: "bar" });
+        });
+      });
+      //获取就业学生计划信息
+      getEmplStudentPlan(this.params).then((resp) => {
+        let data = resp.obj.results;
+        let planList = [];
+        let peoples = [];
+        data.forEach((element) => {
+          planList.push(element.plan);
+          peoples.push(element.total_people);
+        });
+        this.emplPlan = resp.obj;
+        console.log(this.emplPlan)
+        //字典转换
+        this.getDictData("stats_stdnt_plan").then((resp) => {
+          this.emplPlanData.name = this.selectDictLabels(resp.obj, planList);
+          this.emplPlanData.series.push({ data: peoples, type: "bar" });
         });
       });
       //获取年级信息
@@ -310,7 +396,10 @@ export default {
         name: [],
         data: [],
       };
-      this.planData = {
+      this.emplPlanData = {
+        series: [],
+      };
+      this.unEmplPlanData = {
         series: [],
       };
       if (r) {
