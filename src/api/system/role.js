@@ -46,3 +46,10 @@ export function uploadRolesExcel(params) {
         data: params,
     })
 }
+
+export function getRoleByKeyword(param) {
+    return request({
+        url: "sys/role/getByKeyword?keyword=" + param,
+        method: "get"
+    })
+}

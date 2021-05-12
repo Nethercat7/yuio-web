@@ -12,16 +12,14 @@
           <el-button size="mini" type="warning" @click="output">导出</el-button>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <el-autocomplete
+          <el-input
+            v-model="keyword"
             placeholder="请输入内容"
             size="mini"
-            style="margin-right: 10px"
-            :trigger-on-focus="false"
-            value-key="name"
-            v-model="keyword"
-          ></el-autocomplete>
-          <el-button size="mini" type="success">搜索</el-button>
-          <el-button size="mini" type="danger">重置</el-button>
+            style="width: 200px; margin-right: 10px"
+          ></el-input>
+          <el-button size="mini" type="success" @click="search">搜索</el-button>
+          <el-button size="mini" type="danger" @click="getData">重置</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -182,6 +180,7 @@ import {
   updRole,
   outputRoles,
   uploadRolesExcel,
+  getRoleByKeyword,
 } from "@/api/system/role";
 import { getPerms } from "@/api/system/perms";
 
@@ -224,6 +223,7 @@ export default {
   },
   methods: {
     getData() {
+      this.keyword="";
       getRoles().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
@@ -349,6 +349,12 @@ export default {
     download(type) {
       this.getExcelTemplate("role", type).then((resp) => {
         this.fileDownloader(resp, "角色数据上传模板." + type);
+      });
+    },
+    search() {
+      getRoleByKeyword(this.keyword).then((resp) => {
+        this.total = resp.obj.length;
+        this.tableData = resp.obj;
       });
     },
   },
