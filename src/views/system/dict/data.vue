@@ -36,14 +36,15 @@
         label-position="left"
         label-suffix=":"
         label-width="90px"
+        :rules="rules"
       >
-        <el-form-item label="标签">
+        <el-form-item label="标签" prop="label">
           <el-input v-model="form.label"></el-input>
         </el-form-item>
-        <el-form-item label="键值">
+        <el-form-item label="键值" prop="value">
           <el-input v-model="form.value"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
               v-for="item in statusOptions"
@@ -187,6 +188,13 @@ export default {
       dictType: null,
       statusOptions: [],
       keyword: "",
+      rules: {
+        label: [{ required: true, message: "请输入字典标签", trigger: "blur" }],
+        value: [{ required: true, message: "请输入字典键值", trigger: "blur" }],
+        status: [
+          { required: true, message: "请选择一个状态", trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
@@ -200,36 +208,43 @@ export default {
       }
     },
     submitDialog() {
-      if (this.type === 0) {
-        addDictData(this.form).then((resp) => {
-          if (resp.code === 0) this.getData();
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.type === 0) {
+            addDictData(this.form).then((resp) => {
+              if (resp.code === 0) {
+                this.getData();
+                this.form = {};
+                this.$refs["form"].resetFields();
+              }
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
+            });
+          } else {
+            updDictData(this.form).then((resp) => {
+              if (resp.code === 0) this.getData();
+              if (resp.status == null) {
+                this.$message({
+                  message: resp.msg,
+                  type: resp.type,
+                });
+              }
             });
           }
-        });
-      } else {
-        updDictData(this.form).then((resp) => {
-          if (resp.code === 0) this.getData();
-          if (resp.status == null) {
-            this.$message({
-              message: resp.msg,
-              type: resp.type,
-            });
-          }
-        });
-        this.dialogVisible = false;
-      }
-      this.form = {};
-      this.form.type = this.$route.query.type;
+          this.form.type = this.$route.query.type;
+        }
+      });
     },
     closeDialog() {
       this.$confirm("编写的数据将丢失，确认关闭吗？")
         .then(() => {
           this.dialogVisible = false;
           this.form = {};
+          this.$refs["form"].resetFields();
         })
         .catch(() => {});
     },
