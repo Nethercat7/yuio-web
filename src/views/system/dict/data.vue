@@ -274,10 +274,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getDictDataByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getDictDataByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputDictData().then((resp) => {

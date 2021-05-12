@@ -279,10 +279,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getDictTypeByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getDictTypeByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputDictType().then((resp) => {

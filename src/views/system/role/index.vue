@@ -223,7 +223,7 @@ export default {
   },
   methods: {
     getData() {
-      this.keyword="";
+      this.keyword = "";
       getRoles().then((resp) => {
         this.tableData = resp.obj;
         this.tableDataBak = resp.obj;
@@ -352,10 +352,12 @@ export default {
       });
     },
     search() {
-      getRoleByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getRoleByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
   },
   mounted() {

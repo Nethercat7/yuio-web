@@ -331,10 +331,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
+       if (!this.keyword == "") {
       getClassByKeyword(this.keyword).then((resp) => {
         this.total = resp.obj.length;
         this.tableData = resp.obj;
       });
+       }
     },
     output() {
       outputClasses().then((resp) => {

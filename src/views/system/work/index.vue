@@ -303,10 +303,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getWorkByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getWorkByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputWorks().then((resp) => {

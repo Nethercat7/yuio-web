@@ -349,10 +349,12 @@ export default {
       return this.selectDictLabel(this.typeOptions, row.type);
     },
     search() {
-      getPermsByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getPermsByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputPerms().then((resp) => {

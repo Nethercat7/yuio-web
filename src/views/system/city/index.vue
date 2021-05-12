@@ -300,10 +300,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getCityByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getCityByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+     });   
+      }
     },
     output() {
       outputCities().then((resp) => {

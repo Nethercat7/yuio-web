@@ -386,10 +386,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-      getUserByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
+      if (!this.keyword == "") {
+        getUserByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputUsers(this.outputOptions).then((resp) => {
