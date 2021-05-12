@@ -263,7 +263,6 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
-        console.log(data);
         //格式化数据
         let peoples = [];
         data.forEach((element) => {

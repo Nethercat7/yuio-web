@@ -435,7 +435,6 @@ export default {
         if (valid) {
           if (this.type == "add") {
             addStudent(this.form).then((resp) => {
-              console.log(this.form);
               if (resp.status == null) {
                 this.$message({
                   message: resp.msg,

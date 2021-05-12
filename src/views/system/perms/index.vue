@@ -112,7 +112,7 @@
         <el-form-item label="标识" prop="mark">
           <el-input v-model="form.mark"></el-input>
         </el-form-item>
-        <el-form-item label="请求地址">
+        <el-form-item label="请求地址" prop="url">
           <el-input v-model="form.url"></el-input>
         </el-form-item>
         <el-form-item label="图标">
@@ -258,6 +258,7 @@ export default {
         type: [
           { required: true, message: "请选择一个类型", trigger: "change" },
         ],
+        url: [{ required: true, message: "请输入请求地址", trigger: "blur" }],
       },
     };
   },
