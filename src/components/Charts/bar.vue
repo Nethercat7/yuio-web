@@ -127,7 +127,7 @@ export default {
         tooltip: {
           show: this.showTooltip,
           trigger: "axis",
-          formatter: "{b}： {c}" + this.suffix,
+          //formatter: "{b}： {c}" + this.suffix,
         },
         series: series,
       });

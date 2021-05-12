@@ -82,6 +82,8 @@
           ></Radar>
         </el-col>
         <el-col :span="12">
+          <!-- <el-button size="mini" type="success">切换至就业行业统计</el-button>
+          <el-divider></el-divider> -->
           <el-row :gutter="24">
             <el-col :span="8">
               <h3 style="text-align: center">总排行</h3>
@@ -311,6 +313,10 @@ export default {
       emplPlan: {},
       unEmplPlan: {},
       planList: [],
+      // industryData: {
+      //   name: [],
+      //   data: [],
+      // },
     };
   },
   methods: {
@@ -332,16 +338,33 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
-        //格式化数据
-        let peoples = [];
+        // //格式化行业数据
+        // let peoples1 = [];
+        // data.forEach((element) => {
+        //   this.industryData.name.push({
+        //     name: element.work_name,
+        //     max: resp.obj.max,
+        //   });
+        //   peoples1.push(element.total_people);
+        //   this.industryData.data.push({
+        //     value: peoples1,
+        //     name: "就业行业人数分布",
+        //   });
+        // });
+        //格式化岗位数据
+        let peoples2 = [];
         data.forEach((element) => {
           this.workData.name.push({
             name: element.work_name,
             max: resp.obj.max,
           });
-          peoples.push(element.total_people);
-          this.workData.data.push({ value: peoples, name: "就业岗位" });
+          peoples2.push(element.total_people);
+          this.workData.data.push({
+            value: peoples2,
+            name: "就业岗位人数分布",
+          });
         });
+
         this.work = resp.obj;
       });
       //获取未就业学生计划信息
@@ -391,6 +414,10 @@ export default {
     },
     reset(r) {
       //this.cityData = [];
+      // this.industryData = {
+      //   name: [],
+      //   data: [],
+      // };
       this.workData = {
         name: [],
         data: [],

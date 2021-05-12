@@ -38,7 +38,7 @@
       </el-row>
     </el-card>
 
-    <el-card class="mb-20" :shadow="cardShadow" style="max-height: 800px">
+    <el-card class="mb-20" :shadow="cardShadow">
       <el-row class="mb-20">
         <el-col :span="12">
           <ScatterMap
