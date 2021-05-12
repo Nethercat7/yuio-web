@@ -11,7 +11,14 @@
       >
         <!-- 图表 -->
         <div>
-          <img class="logo" src="../assets/logo.png" alt="Logo" />
+          <el-row>
+            <el-image
+              class="logo"
+              :src="require('@/assets/logo.png')"
+              alt="Logo"
+              fit="contain"
+            />
+          </el-row>
         </div>
         <!-- 目录 -->
         <el-menu-item
@@ -65,7 +72,9 @@
       <el-main>
         <router-view></router-view>
       </el-main>
-      <el-footer class="footer"></el-footer>
+      <el-footer class="footer">
+        <span class="text-center">Copyright © 2021 by Nethercat7</span>
+      </el-footer>
     </el-container>
   </el-container>
 </template>

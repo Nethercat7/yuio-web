@@ -12,11 +12,11 @@
       </el-row>
 
       <el-row type="flex" justify="center">
-        <el-col span="12">
+        <el-col :span="12">
           <h1>技术选型</h1>
           <el-divider></el-divider>
           <el-row>
-            <el-col span="12">
+            <el-col :span="12">
               <h3>前端</h3>
               <ul>
                 <li>
@@ -47,7 +47,7 @@
                 </li>
               </ul>
             </el-col>
-            <el-col span="12">
+            <el-col :span="12">
               <h3>后台</h3>
               <ul>
                 <li>
@@ -84,6 +84,17 @@
               </ul>
             </el-col>
           </el-row>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="center">
+        <el-col :span="12">
+          <h3>系统功能结构</h3>
+          <el-divider></el-divider>
+          <el-image
+            :src="require('@/assets/系统功能模块结构图ver01.png')"
+            fit="contain"
+          ></el-image>
         </el-col>
       </el-row>
     </el-card>

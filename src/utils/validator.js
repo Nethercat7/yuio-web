@@ -6,8 +6,17 @@ const cnReg = /^[\u4e00-\u9fa5]+$/
 const emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
 // 手机号
 const phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
-//密码
-const passwordReg = /^[A-Za-z0-9]+$/
+//英文和数字
+const wordAndNumberReg = /^[A-Za-z0-9]+$/
+
+//英文和数字
+export function validateWaN(rule,value,callback){
+    if (!numberReg.test(value)) {
+        callback(new Error('只能是英文字母和数字'))
+    } else {
+        callback()
+    }
+}
 
 // 数字验证
 export function validateNumber(rule, value, callback) {
@@ -70,9 +79,10 @@ export function validatePhone(rule, value, callback) {
 
 //密码验证
 export function validatePassword(rule, value, callback) {
-    if (!passwordReg.test(value)) {
+    if (!wordAndNumberReg.test(value)) {
         callback(new Error("密码只能由数字和26个英文字母组成"));
     } else {
         callback();
     }
 }
+

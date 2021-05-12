@@ -301,6 +301,7 @@ import {
   uploadStudentsExcel,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
+import { validateWaN } from "@/utils/validator";
 
 export default {
   name: "studentManagement",
@@ -368,6 +369,10 @@ export default {
             message: "长度在 1 到 30 个字符",
             trigger: "blur",
           },
+          {
+            validator: validateWaN,
+            trigger: "blur",
+          },
         ],
         gender: [
           { required: true, message: "请选择一个性别", trigger: "change" },
@@ -404,7 +409,7 @@ export default {
         this.gradeList2 = grade;
       });
       //获取数据字典
-      this.getDictData("sys_stdnt_status").then((resp) => {
+      this.getDictData("sys_uvsl_status").then((resp) => {
         this.statusOptions = resp.obj;
       });
       this.getDictData("sys_user_gender").then((resp) => {
