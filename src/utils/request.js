@@ -1,19 +1,20 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
-import {getStorage} from "./storage";
+import { Message } from 'element-ui'
+import router from '../router';
+import { getStorage } from "./storage";
 
 //创建实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, 
-  timeout: 5000 
+  baseURL: process.env.VUE_APP_BASE_API,
+  timeout: 5000
 })
 
 //配置请求拦截器
-service.interceptors.request.use(config=>{
+service.interceptors.request.use(config => {
   //设置请求头
   const token = getStorage("token")
-  if(token){
-    config.headers.token= token;
+  if (token) {
+    config.headers.token = token;
   }
   return config
 }, error => {
@@ -21,20 +22,21 @@ service.interceptors.request.use(config=>{
 })
 
 //配置响应拦截器
-service.interceptors.response.use(resp=>{
+service.interceptors.response.use(resp => {
   return resp.data
-},error=>{
+}, error => {
   /***** 接收到异常响应的处理开始 *****/
   if (error && error.response) {
     // 1.公共错误处理
     // 2.根据响应码具体处理
     switch (error.response.status) {
       case 400:
-        error.message = '错误请求'
+        error.message = '未登录'
+        router.push("/login")
         break;
       case 401:
-        error.message = '未授权，请重新登录'
-        window.location.href="#/user/login"
+        error.message = '登录信息已过期，请重新登录'
+        router.push("/login")
         break;
       case 403:
         error.message = '拒绝访问'

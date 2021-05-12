@@ -135,10 +135,15 @@ export default {
     },
   },
   mounted() {
-    this.subject = getSubject();
-    this.id = getSubjectId();
-    this.type = getSubjectType();
-    this.getData();
+    //如果Token为空的话就跳转到登录页面
+    if (localStorage.getItem("token") == null) {
+      this.$router.push("/login");
+    } else {
+      this.subject = getSubject();
+      this.id = getSubjectId();
+      this.type = getSubjectType();
+      this.getData();
+    }
   },
 };
 </script>

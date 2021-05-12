@@ -263,6 +263,7 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
+        console.log(data);
         //格式化数据
         let peoples = [];
         data.forEach((element) => {
@@ -271,8 +272,8 @@ export default {
             max: resp.obj.max,
           });
           peoples.push(element.total_people);
+          this.workData.data.push({ value: peoples, name: "就业岗位" });
         });
-        this.workData.data.push({ value: peoples, name: "就业岗位" });
         this.work = resp.obj;
       });
       //获取未就业学生计划信息

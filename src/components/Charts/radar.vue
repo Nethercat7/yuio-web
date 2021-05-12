@@ -30,6 +30,10 @@ export default {
       type: String,
       default: null,
     },
+    tooltip: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -45,7 +49,7 @@ export default {
       this.chart.setOption({
         title: {
           text: this.title,
-          left:"center"
+          left: "center",
         },
         radar: {
           indicator: name,
@@ -58,6 +62,7 @@ export default {
           },
         ],
         tooltip: {
+          show: this.tooltip,
           trigger: "item",
         },
       });
