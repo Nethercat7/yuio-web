@@ -371,7 +371,6 @@ export default {
           peoples.push(element.total_people);
         });
         this.emplPlan = resp.obj;
-        console.log(this.emplPlan)
         //字典转换
         this.getDictData("stats_stdnt_plan").then((resp) => {
           this.emplPlanData.name = this.selectDictLabels(resp.obj, planList);
