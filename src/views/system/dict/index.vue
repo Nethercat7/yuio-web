@@ -142,7 +142,7 @@
           >选取文件</el-button
         >
         <div slot="tip" class="el-upload__tip">
-          请使用本系统提供的模板进行填写导入，否者可能会出现导入错误等情况。
+          请使用本系统提供的模板进行填写导入，否者导入会出现错误。
         </div>
         <div slot="tip" class="el-upload__tip">
           如果您的Excel版本为2007及以上，<span
@@ -158,6 +158,7 @@
             >下载此模板。</span
           >
         </div>
+        <ImportText />
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
@@ -168,6 +169,7 @@
 </template>
 
 <script>
+import ImportText from "../components/importText";
 import {
   addDictType,
   getDict,
@@ -181,7 +183,7 @@ import Pager from "@/components/pager";
 
 export default {
   name: "DictType",
-  components: { Pager },
+  components: { Pager,ImportText },
   data() {
     return {
       dialogVisible2: false,

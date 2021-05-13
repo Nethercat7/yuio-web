@@ -280,6 +280,7 @@
             >下载此模板。</span
           >
         </div>
+        <ImportText />
       </el-upload>
 
       <span slot="footer" class="dialog-footer">
@@ -291,6 +292,7 @@
 </template>
 
 <script>
+import ImportText from "../components/importText";
 import Pager from "@/components/pager";
 import {
   addStudent,
@@ -305,7 +307,7 @@ import { validateWaN } from "@/utils/validator";
 
 export default {
   name: "studentManagement",
-  components: { Pager },
+  components: { Pager,ImportText },
   data() {
     return {
       fileList: [],

@@ -166,6 +166,7 @@
             >下载此模板。</span
           >
         </div>
+        <ImportText />
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
@@ -176,6 +177,7 @@
 </template>
 
 <script>
+import ImportText from "../components/importText";
 import Pager from "@/components/pager";
 import {
   addClass,
@@ -190,7 +192,7 @@ import { getCollegeAndMajor } from "@/api/system/sys";
 
 export default {
   name: "classManagement",
-  components: { Pager },
+  components: { Pager, ImportText },
   data() {
     return {
       dialogVisible2: false,
@@ -331,12 +333,12 @@ export default {
       return this.selectDictLabel(this.statusOptions, row.status);
     },
     search() {
-       if (!this.keyword == "") {
-      getClassByKeyword(this.keyword).then((resp) => {
-        this.total = resp.obj.length;
-        this.tableData = resp.obj;
-      });
-       }
+      if (!this.keyword == "") {
+        getClassByKeyword(this.keyword).then((resp) => {
+          this.total = resp.obj.length;
+          this.tableData = resp.obj;
+        });
+      }
     },
     output() {
       outputClasses().then((resp) => {

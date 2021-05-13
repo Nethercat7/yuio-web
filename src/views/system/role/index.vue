@@ -161,6 +161,7 @@
             >下载此模板。</span
           >
         </div>
+        <ImportText />
       </el-upload>
 
       <span slot="footer" class="dialog-footer">
@@ -172,6 +173,7 @@
 </template>
 
 <script>
+import ImportText from "../components/importText";
 import Pager from "@/components/pager";
 import {
   addRole,
@@ -186,7 +188,7 @@ import { getPerms } from "@/api/system/perms";
 
 export default {
   name: "roleManagement",
-  components: { Pager },
+  components: { Pager,ImportText },
   data() {
     return {
       dialogVisible2: false,

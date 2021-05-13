@@ -160,6 +160,7 @@
             >下载此模板。</span
           >
         </div>
+        <ImportText />
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
@@ -170,6 +171,7 @@
 </template>
 
 <script>
+import ImportText from "../components/importText";
 import Pager from "@/components/pager";
 import {
   addCity,
@@ -183,7 +185,7 @@ import {
 
 export default {
   name: "cityManagement",
-  components: { Pager },
+  components: { Pager, ImportText },
   data() {
     return {
       dialogVisible2: false,
@@ -304,7 +306,7 @@ export default {
         getCityByKeyword(this.keyword).then((resp) => {
           this.total = resp.obj.length;
           this.tableData = resp.obj;
-     });   
+        });
       }
     },
     output() {

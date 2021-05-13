@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item label="登录类型">
               <el-radio-group v-model="form.isUser">
-                <el-radio :label="true">管理员</el-radio>
+                <el-radio :label="true">职工</el-radio>
                 <el-radio :label="false">学生</el-radio>
               </el-radio-group>
             </el-form-item>
@@ -36,7 +36,8 @@
                <li>管理员：具有院系、专业、班级、学生、城市、岗位管理模块的全部权限。</li>
                <li>用户：具有就业率、就业情况、就业意向统计模块的全部权限。</li>
                <li>学生：仅具有数据填写模块的全部权限。</li>
-               <li style="color:red">演示账号：super，密码：asd123，登录类型：管理员</li>
+               <li style="color:red">演示账号：super，密码：asd123，登录类型：职工。</li>
+               <li style="color:red">演示账号非实际学生用户，请勿提交就业信息数据。</li>
              </ul>
           </el-col>
         </el-row>
