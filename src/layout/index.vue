@@ -9,7 +9,7 @@
         :collapse="collapse"
         :default-active="catalogActive"
       >
-        <!-- 图表 -->
+        <!-- 图标 -->
         <div>
           <el-row>
             <el-image

@@ -32,7 +32,7 @@ service.interceptors.response.use(resp => {
     switch (error.response.status) {
       case 400:
         error.message = '未登录'
-        router.push("/login")
+        // router.push("/login")
         break;
       case 401:
         error.message = '登录信息已过期，请重新登录'
