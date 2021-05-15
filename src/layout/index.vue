@@ -73,7 +73,11 @@
         <router-view :screenWidth="screenWidth"></router-view>
       </el-main>
       <el-footer class="footer">
-        <span class="text-center">Copyright © 2021 by Nethercat7</span>
+        <el-row type="flex" justify="center">
+          <el-col :xs="24" :lg="12">
+            <span class="text-center" style="font-size:85%">Copyright © 2021 by Nethercat7</span>
+          </el-col>
+        </el-row>
       </el-footer>
     </el-container>
   </el-container>
@@ -139,7 +143,7 @@ export default {
     },
     //动态切换侧边栏折叠状态
     adapter() {
-      if (this.screenWidth <= 425) {
+      if (this.screenWidth <= 768) {
         if (!this.collapse) {
           this.collapse = true;
           this.collapseIcon = "el-icon-s-unfold";
@@ -174,7 +178,7 @@ export default {
       this.getData();
     }
     //设置侧边栏在初始化时的折叠状态
-    if (this.screenWidth <= 425) {
+    if (this.screenWidth < 768) {
       this.adapter();
     }
     //返回窗口宽高

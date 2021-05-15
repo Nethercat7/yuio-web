@@ -100,12 +100,6 @@ import { getSubjectId } from "@/utils/storage";
 
 export default {
   name: "EmploymentStatusWrite",
-  props: {
-    screenWidth: {
-      type: Number,
-      default: 0,
-    },
-  },
   data() {
     return {
       params: {
@@ -216,11 +210,6 @@ export default {
   },
   created() {
     this.getData();
-  },
-  watch: {
-    screenWidth(val) {
-      console.log(val);
-    },
   },
 };
 </script>
