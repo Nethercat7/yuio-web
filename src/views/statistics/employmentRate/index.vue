@@ -59,7 +59,7 @@
       <el-col :span="6">
         <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
-            <span>就业人数</span>
+            <span>未就业人数</span>
           </div>
           <div>{{ total.un_empl_people }}</div>
         </el-card>
