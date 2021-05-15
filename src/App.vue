@@ -27,7 +27,6 @@ body {
 }
 
 .menu {
-  width: 200px;
   height: 100%;
   min-height: 100vh;
   border-right: 0 !important;

@@ -11,7 +11,7 @@
       >
         <!-- 图标 -->
         <div>
-          <el-row>
+          <el-row style="height:60px">
             <el-image
               class="logo"
               :src="require('@/assets/logo.png')"
