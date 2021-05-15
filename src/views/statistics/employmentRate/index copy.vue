@@ -155,7 +155,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
-import { getEmplInfo, getCollegeEmplInfo, test } from "@/api/statistics/rate";
+import { getEmplInfo, getCollegeEmplInfo} from "@/api/statistics/rate";
 import { getCollegeAndMajor } from "@/api/system/sys";
 
 export default {

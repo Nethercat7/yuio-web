@@ -4,7 +4,7 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <el-form :model="params" ref="form" :rules="rules">
-            <h3>就业情况</h3>
+            <h3>就业情况填写</h3>
             <el-divider></el-divider>
             <el-form-item label="是否就业" prop="status">
               <el-radio-group v-model="params.status">
@@ -59,7 +59,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <h3>就业意向</h3>
+            <h3>就业意向填写</h3>
             <el-divider></el-divider>
             <el-form-item label="意向的工作地点" prop="intention_cities">
               <el-cascader
