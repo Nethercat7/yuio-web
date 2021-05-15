@@ -3,6 +3,7 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="24" style="text-align: right">
+          <span>就业情况查询：</span>
           <el-select
             size="mini"
             style="margin-right: 20px"
@@ -29,7 +30,7 @@
             @change="setParams"
           ></el-cascader>
           <el-button size="mini" type="success" @click="getData()"
-            >切换</el-button
+            >确定</el-button
           >
           <el-button size="mini" type="danger" @click="getData(true)"
             >重置</el-button

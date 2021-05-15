@@ -29,7 +29,7 @@
             @change="setParams"
           ></el-cascader>
           <el-button size="mini" type="success" @click="getData()"
-            >切换</el-button
+            >确定</el-button
           >
           <el-button size="mini" type="danger" @click="getData(true)"
             >重置</el-button

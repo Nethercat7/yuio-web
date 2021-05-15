@@ -44,8 +44,7 @@ export default {
   methods: {
     inital() {
       this.chart = echarts.init(document.getElementById(this.id));
-        this.setOptions(this.data);
-
+      this.setOptions(this.data);
     },
     setOptions({ name, series } = {}) {
       this.chart.setOption({

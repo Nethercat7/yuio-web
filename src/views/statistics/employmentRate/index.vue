@@ -3,9 +3,12 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning" @click="output">导出</el-button>
+          <el-button size="mini" type="warning" @click="output"
+            >导出当前</el-button
+          >
         </el-col>
         <el-col :span="12" style="text-align: right">
+          <span>毕业届别：</span>
           <el-select
             size="mini"
             style="margin-right: 20px"
@@ -18,6 +21,8 @@
               :label="item.label"
             ></el-option>
           </el-select>
+
+          <span>专业班级：</span>
           <el-cascader
             ref="cascader"
             :options="orgList"
@@ -30,7 +35,7 @@
           >
           </el-cascader>
           <el-button size="mini" type="success" @click="getData()"
-            >切换</el-button
+            >确定</el-button
           >
           <el-button size="mini" type="danger" @click="getData(true)"
             >重置</el-button
@@ -78,13 +83,13 @@
       <el-row>
         <!-- 就业率 -->
         <el-col :span="24">
-          <Bar
+          <LineChart
             id="empl-rate"
             :data="rateData"
             title="就业率"
             width="100%"
             suffix="%"
-          ></Bar>
+          ></LineChart>
         </el-col>
       </el-row>
     </el-card>
@@ -166,6 +171,7 @@
 </template>
 
 <script>
+import LineChart from "@/components/charts/line";
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
 import { test, outputRates } from "@/api/statistics/rate";
@@ -174,7 +180,7 @@ import Pager from "@/components/pager";
 
 export default {
   name: "EmploymentRate",
-  components: { Bar, Pager },
+  components: { Bar, Pager, LineChart },
   data() {
     return {
       rateData: {
@@ -222,7 +228,7 @@ export default {
           unEmplPeople.push(element.un_empl_people);
         });
         this.rateData.name = names;
-        this.rateData.series.push({ data: emplRate, type: "bar" });
+        this.rateData.series.push({ data: emplRate, type: "line" });
         this.emplData.name = names;
         this.emplData.series.push({ data: emplPeople, type: "bar" });
         this.unEmplData.name = names;

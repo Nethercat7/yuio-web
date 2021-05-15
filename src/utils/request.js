@@ -40,6 +40,7 @@ service.interceptors.response.use(resp => {
         break;
       case 403:
         error.message = '拒绝访问'
+        router.push("/error")
         break;
       case 404:
         error.message = '请求错误,未找到该资源'

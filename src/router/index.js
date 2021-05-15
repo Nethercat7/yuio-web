@@ -35,6 +35,12 @@ const constantRoutes = [
                 component:()=>import("@/layout/components/introduction"),
                 name:"Introduction",
                 meta:{name:"系统介绍"}
+            },
+            {
+                path:"error",
+                component:()=>import("@/layout/components/error"),
+                name:"Error",
+                metda:{name:"错误页面"}
             }
         ]
     },
