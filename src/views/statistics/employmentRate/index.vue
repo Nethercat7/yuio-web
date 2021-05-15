@@ -83,13 +83,13 @@
       <el-row>
         <!-- 就业率 -->
         <el-col :span="24">
-          <LineChart
+          <Bar
             id="empl-rate"
             :data="rateData"
             title="就业率"
             width="100%"
             suffix="%"
-          ></LineChart>
+          ></Bar>
         </el-col>
       </el-row>
     </el-card>
@@ -171,7 +171,6 @@
 </template>
 
 <script>
-import LineChart from "@/components/charts/line";
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
 import { test, outputRates } from "@/api/statistics/rate";
@@ -180,7 +179,7 @@ import Pager from "@/components/pager";
 
 export default {
   name: "EmploymentRate",
-  components: { Bar, Pager, LineChart },
+  components: { Bar, Pager },
   data() {
     return {
       rateData: {
