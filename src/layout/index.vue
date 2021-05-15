@@ -152,7 +152,6 @@ export default {
       this.id = getSubjectId();
       this.type = getSubjectType();
       this.getData();
-      this.$router.push("/introduction")
     }
   },
 };

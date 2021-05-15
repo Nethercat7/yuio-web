@@ -227,7 +227,7 @@ export default {
           unEmplPeople.push(element.un_empl_people);
         });
         this.rateData.name = names;
-        this.rateData.series.push({ data: emplRate, type: "line" });
+        this.rateData.series.push({ data: emplRate, type: "bar" });
         this.emplData.name = names;
         this.emplData.series.push({ data: emplPeople, type: "bar" });
         this.unEmplData.name = names;
