@@ -33,7 +33,7 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header class="header" style="padding: 0">
+      <el-header class="header" style="padding: 0; height: atuo">
         <el-menu
           mode="horizontal"
           background-color="#545c64"
@@ -70,7 +70,7 @@
         </el-menu>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <router-view :screenWidth="screenWidth"></router-view>
       </el-main>
       <el-footer class="footer">
         <span class="text-center">Copyright © 2021 by Nethercat7</span>
@@ -101,6 +101,8 @@ export default {
       collapseIcon: "el-icon-s-fold",
       menuActive: "",
       catalogActive: "",
+      screenWidth: document.body.clientWidth,
+      screenHeight: document.body.clientHeight,
     };
   },
   methods: {
@@ -135,12 +137,30 @@ export default {
         this.collapseIcon = "el-icon-s-unfold";
       }
     },
+    //动态切换侧边栏折叠状态
+    adapter() {
+      if (this.screenWidth <= 425) {
+        if (!this.collapse) {
+          this.collapse = true;
+          this.collapseIcon = "el-icon-s-unfold";
+        }
+      } else {
+        if (this.collapse) {
+          this.collapse = false;
+          this.collapseIcon = "el-icon-s-fold";
+        }
+      }
+    },
   },
   watch: {
     //监听路由变化设置目录的激活状态
     $route(to) {
       this.catalogActive = to.path;
       this.menuActive = to.matched[0].path;
+    },
+    //监听窗口变化
+    screenWidth() {
+      this.adapter();
     },
   },
   mounted() {
@@ -153,6 +173,17 @@ export default {
       this.type = getSubjectType();
       this.getData();
     }
+    //设置侧边栏在初始化时的折叠状态
+    if (this.screenWidth <= 425) {
+      this.adapter();
+    }
+    //返回窗口宽高
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = document.body.clientWidth;
+        this.screenHeight = document.body.clientHeight;
+      })();
+    };
   },
 };
 </script>

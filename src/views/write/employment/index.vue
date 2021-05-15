@@ -2,7 +2,7 @@
   <div>
     <el-card :shadow="cardShadow">
       <el-row type="flex" justify="center">
-        <el-col :span="12">
+        <el-col :xs="24" :lg="12">
           <el-form :model="params" ref="form" :rules="rules">
             <h3>就业情况填写</h3>
             <el-divider></el-divider>
@@ -100,6 +100,12 @@ import { getSubjectId } from "@/utils/storage";
 
 export default {
   name: "EmploymentStatusWrite",
+  props: {
+    screenWidth: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       params: {
@@ -211,8 +217,18 @@ export default {
   created() {
     this.getData();
   },
+  watch: {
+    screenWidth(val) {
+      console.log(val);
+    },
+  },
 };
 </script>
 
 <style>
+@media screen and (max-width: 425px) {
+  .el-main{
+    padding:0
+  }
+}
 </style>

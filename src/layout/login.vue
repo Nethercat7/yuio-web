@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="7" class="login">
+      <el-col :xs="24" :sm="10" :lg="7"  class="login">
         <div class="login-form">
           <el-form label-suffix=":">
             <el-form-item label="账号">
@@ -26,9 +26,9 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span="17">
+      <el-col :xs="24" :sm="14" :lg="17">
         <el-row type="flex" justify="center">
-          <el-col :span="12">
+          <el-col :xs="24" :sm="16"> 
             <h1 style="text-align: center">系统默认角色</h1>
             <el-divider></el-divider>
             <ul>

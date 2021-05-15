@@ -16,6 +16,9 @@ Vue.prototype.cardShadow = "never"
 Vue.prototype.fileDownloader = fileDownloader
 Vue.prototype.getExcelTemplate = getExcelTemplate
 
+Vue.prototype.screenWidth = 0
+Vue.prototype.screenHeight = 0
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
