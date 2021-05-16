@@ -160,6 +160,11 @@
               sortable
             ></el-table-column>
             <el-table-column
+              prop="protocol_number"
+              :label="type + '已交三方人数'"
+              sortable
+            ></el-table-column>
+            <el-table-column
               prop="empl_rate"
               :label="type + '就业率'"
               :formatter="formatterRate"
@@ -279,7 +284,6 @@ export default {
       }
     },
     reset(flag) {
-      console.log(flag);
       this.rateData = {
         series: [],
       };
@@ -296,7 +300,6 @@ export default {
       }
     },
     output() {
-      console.log(this.params);
       outputRates(this.params).then((resp) => {
         this.fileDownloader(resp, "就业率数据.xlsx");
       });
