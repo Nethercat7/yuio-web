@@ -45,34 +45,42 @@
     </el-card>
 
     <el-row :gutter="24" class="mb-20">
-      <el-col :span="6">
+      <el-col :span="5">
         <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
-            <span>总人数</span>
+            <span>{{ type }}总人数</span>
           </div>
           <div>{{ total.total_people }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="5">
         <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
-            <span>就业人数</span>
+            <span>{{ type }}就业人数</span>
           </div>
           <div>{{ total.empl_people }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="5">
         <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
-            <span>未就业人数</span>
+            <span>{{ type }}未就业人数</span>
           </div>
           <div>{{ total.un_empl_people }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="5">
         <el-card class="text-center" :shadow="cardShadow">
           <div slot="header">
-            <span>就业率</span>
+            <span>{{ type }}已交三方人数</span>
+          </div>
+          <div>{{ total.protocol_number }}</div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card class="text-center" :shadow="cardShadow">
+          <div slot="header">
+            <span>{{ type }}就业率</span>
           </div>
           <div>{{ total.empl_rate }}%</div>
         </el-card>
@@ -101,7 +109,7 @@
           <Bar
             id="empl-people"
             :data="emplData"
-            title="就业人数"
+            :title="type + '就业人数'"
             width="100%"
             suffix="人"
             horizontal
@@ -113,7 +121,7 @@
           <Bar
             id="un-empl-people"
             :data="unEmplData"
-            title="未就业人数"
+            :title="type + '就业人数'"
             width="100%"
             suffix="人"
             horizontal
@@ -135,25 +143,25 @@
             :default-sort="{ prop: 'empl_rate', order: 'descending' }"
           >
             <el-table-column type="index"></el-table-column>
-            <el-table-column prop="college_name" label="名称"></el-table-column>
+            <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column
               prop="total_people"
-              label="总人数"
+              :label="type + '总人数'"
               sortable
             ></el-table-column>
             <el-table-column
               prop="empl_people"
-              label="就业人数"
+              :label="type + '就业人数'"
               sortable
             ></el-table-column>
             <el-table-column
               prop="un_empl_people"
-              label="未就业人数"
+              :label="type + '未就业人数'"
               sortable
             ></el-table-column>
             <el-table-column
               prop="empl_rate"
-              label="就业率"
+              :label="type + '就业率'"
               :formatter="formatterRate"
               sortable
             ></el-table-column>
@@ -173,7 +181,7 @@
 <script>
 import Bar from "@/components/charts/bar";
 import { getGrade } from "@/api/system/sys";
-import { test, outputRates } from "@/api/statistics/rate";
+import { getEmplInfo, outputRates } from "@/api/statistics/rate";
 import { getCollegeAndMajor } from "@/api/system/sys";
 import Pager from "@/components/pager";
 
@@ -206,12 +214,13 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalPage: 0,
+      type: "",
     };
   },
   methods: {
     getData(flag) {
       this.reset(flag);
-      test(this.params).then((resp) => {
+      getEmplInfo(this.params).then((resp) => {
         this.total = resp.obj;
         this.tableData = resp.obj.results;
         this.totalPage = resp.obj.results.length;
@@ -221,7 +230,7 @@ export default {
         let emplPeople = [];
         let unEmplPeople = [];
         resp.obj.results.forEach((element) => {
-          names.push(element.college_name);
+          names.push(element.name);
           emplRate.push(element.empl_rate);
           emplPeople.push(element.empl_people);
           unEmplPeople.push(element.un_empl_people);
@@ -232,6 +241,14 @@ export default {
         this.emplData.series.push({ data: emplPeople, type: "bar" });
         this.unEmplData.name = names;
         this.unEmplData.series.push({ data: unEmplPeople, type: "bar" });
+
+        if (resp.obj.level == 1) {
+          this.type = "院系";
+        } else if (resp.obj.level == 2) {
+          this.type = "专业";
+        } else {
+          this.type = "班级";
+        }
       });
       if (this.gradeList.length == 0) {
         //获取年级信息

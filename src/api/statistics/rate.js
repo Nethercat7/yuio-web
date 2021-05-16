@@ -1,22 +1,8 @@
 import request from "@/utils/request";
 
-export function getEmplInfo(grade) {
+export function getEmplInfo(params) {
     return request({
-        url: '/stats/rate/getEmplInfo?grade=' + grade,
-        method: "get"
-    })
-}
-
-export function getCollegeEmplInfo(grade) {
-    return request({
-        url: '/stats/rate/getCollegeEmplInfo?grade=' + grade,
-        method: "get"
-    })
-}
-
-export function test(params) {
-    return request({
-        url: '/stats/rate/getEmplInfoBy',
+        url: '/stats/rate/getEmplInfo',
         method: "post",
         data: params
     })
