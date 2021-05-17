@@ -76,3 +76,10 @@ export function uploadUsersExcel(params) {
         data: params,
     })
 }
+
+export function getUsersByCollege(id) {
+    return request({
+        url: "sys/user/getByCollege?id=" + id,
+        method: "get"
+    })
+}

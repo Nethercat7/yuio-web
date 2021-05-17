@@ -226,12 +226,24 @@
         </el-form-item>
         <el-form-item label="所属班级" prop="class_id">
           <el-cascader
+            ref="cascader2"
             v-model="form.class_id"
             :options="orgList2"
             :props="cascaderProps"
             :show-all-levels="false"
+            @change="getTutor"
           >
           </el-cascader>
+        </el-form-item>
+        <el-form-item label="指导老师" prop="teacher_code">
+          <el-select v-model="form.teacher_code" multiple>
+            <el-option
+              v-for="item in users"
+              :key="item.id"
+              :value="item.code"
+              :label="item.name"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
@@ -308,6 +320,7 @@ import {
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 import { validateWaN } from "@/utils/validator";
+import { getUsersByCollege } from "@/api/system/user";
 
 export default {
   name: "studentManagement",
@@ -384,6 +397,7 @@ export default {
           { required: true, message: "请选择一个性别", trigger: "change" },
         ],
       },
+      users: [],
     };
   },
   methods: {
@@ -622,6 +636,12 @@ export default {
             type: "error",
           });
         }
+      });
+    },
+    getTutor() {
+      let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
+      getUsersByCollege(collegeId).then((resp) => {
+        this.users = resp.obj;
       });
     },
   },
