@@ -121,7 +121,7 @@
 import { getCities } from "@/api/system/city";
 import { getWorks } from "@/api/system/work";
 import { addEmplInfo, getEmplInfo, updEmplInfo } from "@/api/write/empl";
-import { getSubjectId, getSubjectName } from "@/utils/storage";
+import { getSubjectId } from "@/utils/storage";
 
 export default {
   name: "EmploymentStatusWrite",
@@ -129,7 +129,6 @@ export default {
     return {
       params: {
         student_id: getSubjectId(),
-        student_name: getSubjectName(),
         status: "0",
       },
       cityList: [],
