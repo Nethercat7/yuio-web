@@ -276,7 +276,7 @@ export default {
     },
     setParam() {
       let arr = this.$refs.cascader.getCheckedNodes()[0];
-      this.params.id = arr.value;
+      this.params.org_id = arr.value;
       if (arr.level == 1) {
         this.params.type = "college";
       } else {

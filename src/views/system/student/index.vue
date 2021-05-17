@@ -524,14 +524,10 @@ export default {
     setParams() {
       //判断是选择还是清空
       if (this.$refs.cascader.getCheckedNodes().length != 0) {
-        let arr = this.$refs.cascader.getCheckedNodes()[0].path;
-        this.params.college_id = arr[0];
-        this.params.major_id = arr[1];
-        this.params.class_id = arr[2];
+        let arr = this.$refs.cascader.getCheckedNodes()[0];
+        this.params.org_id = arr.value;
       } else {
-        this.params.college_id = null;
-        this.params.major_id = null;
-        this.params.class_id = null;
+        this.params.org_id = null;
       }
     },
     getOrg(query) {

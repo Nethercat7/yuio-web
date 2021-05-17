@@ -223,10 +223,8 @@ export default {
       this.gradeList = [];
     },
     setParams() {
-      let arr = this.$refs.cascader.getCheckedNodes()[0].path;
-      this.params.college_id = arr[0];
-      this.params.major_id = arr[1];
-      this.params.class_id = arr[2];
+      let arr = this.$refs.cascader.getCheckedNodes()[0];
+      this.params.org_id = arr.value;
     },
     getOrg() {
       getCompleteOrg(this.params.grade).then((resp) => {
