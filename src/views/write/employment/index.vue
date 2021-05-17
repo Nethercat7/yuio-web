@@ -4,6 +4,29 @@
       <el-row type="flex" justify="center">
         <el-col :xs="24" :lg="12">
           <el-form :model="params" ref="form" :rules="rules">
+            <h3>就业意向填写</h3>
+            <el-divider></el-divider>
+            <el-form-item label="意向的工作地点" prop="intention_cities">
+              <el-cascader
+                v-model="params.intention_cities"
+                :options="cityList"
+                :props="cascaderProps2"
+                collapse-tags
+                :show-all-levels="false"
+                clearable
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item label="意向的工作岗位" prop="intention_works">
+              <el-cascader
+                v-model="params.intention_works"
+                :options="workList"
+                :props="cascaderProps2"
+                collapse-tags
+                :show-all-levels="false"
+                clearable
+              ></el-cascader>
+            </el-form-item>
+
             <h3>就业情况填写</h3>
             <el-divider></el-divider>
             <el-form-item label="是否就业" prop="status">
@@ -48,6 +71,30 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item v-if="params.protocol == '2'" label="上传三方协议">
+                <span
+                  v-text="
+                    params.protocol_file ? '已上传三方协议' : '未上传三方协议'
+                  "
+                ></span>
+                <el-upload
+                  ref="upload"
+                  action
+                  :limit="1"
+                  accept=".pdf"
+                  :auto-upload="false"
+                  :on-change="setFile"
+                  :on-remove="removeFile"
+                  :on-exceed="handleExceed"
+                >
+                  <el-button
+                    size="small"
+                    type="primary"
+                    style="margin-top: 20px; text-align: center"
+                    v-text="params.protocol_file ? '重新上传' : '点击上传'"
+                  ></el-button>
+                </el-upload>
+              </el-form-item>
             </div>
             <el-form-item label="接下来打算" prop="plan">
               <el-select v-model="params.plan">
@@ -59,30 +106,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <h3>就业意向填写</h3>
             <el-divider></el-divider>
-            <el-form-item label="意向的工作地点" prop="intention_cities">
-              <el-cascader
-                v-model="params.intention_cities"
-                :options="cityList"
-                :props="cascaderProps2"
-                collapse-tags
-                :show-all-levels="false"
-                clearable
-              ></el-cascader>
-            </el-form-item>
-            <el-form-item label="意向的工作岗位" prop="intention_works">
-              <el-cascader
-                v-model="params.intention_works"
-                :options="workList"
-                :props="cascaderProps2"
-                collapse-tags
-                :show-all-levels="false"
-                clearable
-              ></el-cascader>
-            </el-form-item>
-            <el-divider></el-divider>
-            <div>
+            <div class="text-center">
               <el-button type="primary" @click="submit">提交</el-button>
             </div>
           </el-form>
@@ -96,7 +121,7 @@
 import { getCities } from "@/api/system/city";
 import { getWorks } from "@/api/system/work";
 import { addEmplInfo, getEmplInfo, updEmplInfo } from "@/api/write/empl";
-import { getSubjectId } from "@/utils/storage";
+import { getSubjectId, getSubjectName } from "@/utils/storage";
 
 export default {
   name: "EmploymentStatusWrite",
@@ -104,6 +129,7 @@ export default {
     return {
       params: {
         student_id: getSubjectId(),
+        student_name: getSubjectName(),
         status: "0",
       },
       cityList: [],
@@ -149,6 +175,7 @@ export default {
           { required: true, message: "请选择意向就业岗位", trigger: "change" },
         ],
       },
+      protocolFile: null,
     };
   },
   methods: {
@@ -170,6 +197,9 @@ export default {
         this.planList = resp.obj;
       });
       //获取已填写的内容
+      this.getEmplWriteInfo();
+    },
+    getEmplWriteInfo() {
       getEmplInfo(this.params.student_id).then((resp) => {
         if (resp.code === 0) {
           this.update = true;
@@ -178,13 +208,39 @@ export default {
       });
     },
     submit() {
+      if (
+        this.params.protocol == "2" &&
+        !this.params.protocol_file &&
+        this.protocolFile == null
+      ) {
+        this.$message({
+          message: "请上传三方协议文件",
+          type: "error",
+        });
+        return false;
+      }
       this.$refs["form"].validate((valid) => {
         if (valid) {
+          var formData = new FormData();
+          //格式化表单其他数据
+          formData.append(
+            "params",
+            new Blob([JSON.stringify(this.params)], {
+              type: "application/json",
+            })
+          );
+
+          if (this.protocolFile) {
+            //添加三方协议文件
+            formData.append("file", this.protocolFile.raw);
+          }
+
           if (!this.update) {
-            addEmplInfo(this.params).then((resp) => {
+            addEmplInfo(formData).then((resp) => {
               if (resp.status == null) {
                 if (resp.code == 0) {
                   this.update = true;
+                  this.getEmplWriteInfo();
                 }
                 this.$message({
                   message: resp.msg,
@@ -193,18 +249,33 @@ export default {
               }
             });
           } else {
-            updEmplInfo(this.params).then((resp) => {
+            updEmplInfo(formData).then((resp) => {
               if (resp.status == null) {
                 this.$message({
                   message: resp.msg,
                   type: resp.type,
                 });
+                if (resp.code == 0) {
+                  this.getEmplWriteInfo();
+                }
               }
             });
           }
         } else {
           return false;
         }
+      });
+    },
+    setFile(file) {
+      this.protocolFile = file;
+    },
+    removeFile() {
+      this.protocolFile = null;
+    },
+    handleExceed() {
+      this.$message({
+        message: "超出可上传的文件数量限制",
+        type: "error",
       });
     },
   },
@@ -215,9 +286,12 @@ export default {
 </script>
 
 <style>
+.el-upload button {
+  margin-top: 0 !important;
+}
 @media screen and (max-width: 425px) {
-  .el-main{
-    padding:0
+  .el-main {
+    padding: 0;
   }
 }
 </style>
