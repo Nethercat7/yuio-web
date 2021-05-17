@@ -79,3 +79,11 @@ export function uploadStudentsExcel(params) {
         data: params,
     })
 }
+
+export function downloadProtocol(id) {
+    return request({
+        url: "sys/student/downloadProtocol?id=" + id,
+        method: "get",
+        responseType: "blob"
+    })
+}

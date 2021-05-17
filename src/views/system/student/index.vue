@@ -94,8 +94,6 @@
             </el-table-column>
             <el-table-column label="学号" prop="code" sortable>
             </el-table-column>
-            <el-table-column label="所属院系" prop="college_name" sortable>
-            </el-table-column>
             <el-table-column label="所属专业" prop="major_name" sortable>
             </el-table-column>
             <el-table-column
@@ -157,8 +155,13 @@
                         >查看资料</span
                       >
                     </el-dropdown-item>
-                    <el-dropdown-item @click="resetPwd(scope.row.id)">
-                      重置密码
+
+                    <el-dropdown-item>
+                      <span @click="resetPwd(scope.row.id)">重置密码</span>
+                    </el-dropdown-item>
+
+                    <el-dropdown-item v-if="scope.row.empl_protocol_file">
+                      <span @click="downProtocol(scope.row)">下载三方协议</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -301,13 +304,14 @@ import {
   getStudents,
   outputStudents,
   uploadStudentsExcel,
+  downloadProtocol,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 import { validateWaN } from "@/utils/validator";
 
 export default {
   name: "studentManagement",
-  components: { Pager,ImportText },
+  components: { Pager, ImportText },
   data() {
     return {
       fileList: [],
@@ -600,6 +604,28 @@ export default {
     download(type) {
       this.getExcelTemplate("student", type).then((resp) => {
         this.fileDownloader(resp, "学生数据上传模板." + type);
+      });
+    },
+    //下载三方协议
+    downProtocol(row) {
+      downloadProtocol(row.id).then((resp) => {
+        if (resp.size != 0) {
+          let filename =
+            row.college_name +
+            "_" +
+            row.major_name +
+            "_" +
+            row.class_name +
+            "_" +
+            row.name +
+            "_三方协议.pdf";
+          this.fileDownloader(resp, filename);
+        } else {
+          this.$message({
+            message: "文件不存在",
+            type: "error",
+          });
+        }
       });
     },
   },
