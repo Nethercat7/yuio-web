@@ -11,7 +11,7 @@
       >
         <!-- 图标 -->
         <div>
-          <el-row style="height:60px">
+          <el-row style="height: 60px">
             <el-image
               class="logo"
               :src="require('@/assets/logo.png')"
@@ -75,7 +75,11 @@
       <el-footer class="footer">
         <el-row type="flex" justify="center">
           <el-col :xs="24" :lg="12">
-            <span class="text-center" style="font-size:85%">Copyright © 2021 by Nethercat7</span>
+            <span class="text-center" style="font-size: 85%"
+              >Copyright © 2021 by
+              <a href="https://gitee.com/nethercat7" style="color:#fff;text-decoration: none;" target="_blank">Nethercat7</a></span
+              
+            >
           </el-col>
         </el-row>
       </el-footer>
