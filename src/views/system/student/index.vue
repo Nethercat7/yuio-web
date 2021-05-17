@@ -94,8 +94,14 @@
             </el-table-column>
             <el-table-column label="学号" prop="code" sortable>
             </el-table-column>
-            <el-table-column label="所属专业" prop="major_name" sortable>
+            <el-table-column label="所属专业" prop="major.name" sortable>
             </el-table-column>
+            <el-table-column
+              label="导师"
+              prop="tutors_name"
+              :formatter="tutorsFormatter"
+              sortable
+            ></el-table-column>
             <el-table-column
               label="状态"
               prop="status"
@@ -105,7 +111,7 @@
             </el-table-column>
             <el-table-column
               label="就业信息填写"
-              prop="empl_write"
+              prop="student_empl_write"
               sortable
               :formatter="writeFormatter"
             ></el-table-column>
@@ -235,8 +241,8 @@
           >
           </el-cascader>
         </el-form-item>
-        <el-form-item label="指导老师" prop="teacher_code">
-          <el-select v-model="form.teacher_code" multiple>
+        <el-form-item label="指导老师" prop="tutors_code">
+          <el-select v-model="form.tutors_code" multiple>
             <el-option
               v-for="item in users"
               :key="item.id"
@@ -321,6 +327,7 @@ import {
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 import { validateWaN } from "@/utils/validator";
 import { getUsersByCollege } from "@/api/system/user";
+import { getSubjectCode } from "@/utils/storage";
 
 export default {
   name: "studentManagement",
@@ -355,6 +362,7 @@ export default {
       },
       params: {
         grade: new Date().getFullYear() - 4,
+        user_code: getSubjectCode(),
       },
       statusOptions: [],
       genderOptions: [],
@@ -396,6 +404,13 @@ export default {
         gender: [
           { required: true, message: "请选择一个性别", trigger: "change" },
         ],
+        tutors_code: [
+          {
+            required: true,
+            message: "请选择至少一个指导老师",
+            trigger: "change",
+          },
+        ],
       },
       users: [],
     };
@@ -406,6 +421,7 @@ export default {
       if (r) {
         this.params = {};
         this.params.grade = grade;
+        this.params.user_code = getSubjectCode();
       }
       this.keyword = "";
       this.currentPage = 1;
@@ -569,6 +585,9 @@ export default {
     },
     protocolFormatter(row) {
       return this.selectDictLabel(this.protocolOptions, row.empl_protocol);
+    },
+    tutorsFormatter(row) {
+      return row.tutors_name.join("，");
     },
     //表格上色
     color({ row }) {
