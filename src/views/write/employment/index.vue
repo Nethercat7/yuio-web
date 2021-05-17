@@ -14,6 +14,7 @@
                 collapse-tags
                 :show-all-levels="false"
                 clearable
+                filterable
               ></el-cascader>
             </el-form-item>
             <el-form-item label="意向的工作岗位" prop="intention_works">
@@ -24,6 +25,7 @@
                 collapse-tags
                 :show-all-levels="false"
                 clearable
+                filterable
               ></el-cascader>
             </el-form-item>
 
@@ -50,6 +52,7 @@
                   :props="cascaderProps"
                   clearable
                   :show-all-levels="false"
+                  filterable
                 ></el-cascader>
               </el-form-item>
               <el-form-item label="岗位类型" prop="work_id">
@@ -59,6 +62,7 @@
                   :props="cascaderProps"
                   clearable
                   :show-all-levels="false"
+                  filterable
                 ></el-cascader>
               </el-form-item>
               <el-form-item label="协议状况" prop="protocol">
