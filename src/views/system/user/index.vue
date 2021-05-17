@@ -157,6 +157,16 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="所属学院" prop="college_id">
+          <el-select v-model="form.college_id" placeholder="请选择">
+            <el-option
+              v-for="item in collegeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注">
           <el-input type="textarea" v-model="form.remark"></el-input>
         </el-form-item>
@@ -223,6 +233,7 @@ import {
 import { getRoles } from "@/api/system/role";
 import { resetPwd } from "@/api/system/sys";
 import { validatePhone } from "@/utils/validator";
+import { getColleges } from "@/api/system/college";
 
 export default {
   name: "userManagement",
@@ -271,7 +282,11 @@ export default {
         roles: [
           { required: true, message: "请选择至少一个角色", trigger: "blur" },
         ],
+        college_id: [
+          { required: true, message: "请选择一个学院", trigger: "change" },
+        ],
       },
+      collegeList: [],
     };
   },
   methods: {
@@ -291,6 +306,10 @@ export default {
       });
       this.getDictData("sys_uvsl_status").then((resp) => {
         this.statusOptions = resp.obj;
+      });
+      //获取学院数据
+      getColleges().then((resp) => {
+        this.collegeList = resp.obj;
       });
     },
     openDialog(type, row) {
