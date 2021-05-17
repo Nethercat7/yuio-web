@@ -23,16 +23,16 @@
 
           <el-col :span="8">
             <el-form-item label="所属学院">
-              <span>{{ student.college_name }}</span>
+              <span v-text="student.college.name">院系名称</span>
             </el-form-item>
             <el-form-item label="所属专业">
-              <span>{{ student.major_name }}</span>
+              <span v-text="student.major.name">专业名称</span>
             </el-form-item>
             <el-form-item label="所属年级">
-              <span>{{ student.grade }}</span>
+              <span v-text="student.grade"></span>
             </el-form-item>
             <el-form-item label="所属班级">
-              <span>{{ student.class_name }}</span>
+              <span v-text="student.class.name">班级名称</span>
             </el-form-item>
           </el-col>
 
@@ -48,15 +48,15 @@
               <el-form-item label="接下来的打算">
                 <span>{{ student.empl_plan_text }}</span>
               </el-form-item>
-              <template v-if="student.empl_status == '1'">
+              <template v-if="student.empl_info.status == '1'">
                 <el-form-item label="单位名称">
-                  <span>{{ student.empl_company }}</span>
+                  <span>{{ student.empl_info.company }}</span>
                 </el-form-item>
                 <el-form-item label="岗位类型">
-                  <span>{{ student.empl_work_name }}</span>
+                  <span>{{ student.work.name }}</span>
                 </el-form-item>
                 <el-form-item label="单位所在城市">
-                  <span>{{ student.empl_city_name }}</span>
+                  <span>{{ student.city.name }}</span>
                 </el-form-item>
                 <el-form-item label="协议状况">
                   <span>{{ student.empl_protocol_text }}</span>
@@ -119,21 +119,21 @@ export default {
       this.getDictData("sys_empl_status").then((resp) => {
         this.student.empl_status_text = this.selectDictLabel(
           resp.obj,
-          this.student.empl_status
+          this.student.empl_info.status
         );
         this.key += 1;
       });
       this.getDictData("stats_stdnt_plan").then((resp) => {
         this.student.empl_plan_text = this.selectDictLabel(
           resp.obj,
-          this.student.empl_plan
+          this.student.empl_info.plan
         );
         this.key += 1;
       });
       this.getDictData("sys_protocol_status").then((resp) => {
         this.student.empl_protocol_text = this.selectDictLabel(
           resp.obj,
-          this.student.empl_protocol
+          this.student.empl_info.protocol
         );
         this.key += 1;
       });

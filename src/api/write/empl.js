@@ -8,9 +8,9 @@ export function addEmplInfo(params) {
     })
 }
 
-export function getEmplInfo(id) {
+export function getEmplInfo(code) {
     return request({
-        url: "/write/empl/get?code=" + id,
+        url: "/write/empl/get?code=" + code,
         method: "get"
     })
 }

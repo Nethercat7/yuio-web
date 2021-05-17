@@ -111,21 +111,21 @@
             </el-table-column>
             <el-table-column
               label="就业信息填写"
-              prop="student_empl_write"
+              prop="empl_write"
               sortable
               :formatter="writeFormatter"
             ></el-table-column>
             <el-table-column
               label="就业情况"
-              prop="empl_status"
+              prop="empl_info.status"
               sortable
               :formatter="emplFormatter"
             ></el-table-column>
             <el-table-column
               label="协议情况"
-              prop="empl_protocol"
-              :formatter="protocolFormatter"
+              prop="empl_info.protocol"
               sortable
+              :formatter="protocolFormatter"
             >
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="250px">
@@ -166,8 +166,13 @@
                       <span @click="resetPwd(scope.row.id)">重置密码</span>
                     </el-dropdown-item>
 
-                    <el-dropdown-item v-if="scope.row.empl_protocol_file">
-                      <span @click="downProtocol(scope.row)">下载三方协议</span>
+                    <el-dropdown-item
+                      v-if="
+                        scope.row.empl_info != null &&
+                        scope.row.empl_info.protocol_file
+                      "
+                    >
+                      <span @click="downProtocol(scope)">下载三方协议</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -571,34 +576,34 @@ export default {
         });
       }
     },
-    statusFormatter(row) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+    statusFormatter(row, column, cellValue) {
+      return this.selectDictLabel(this.statusOptions, cellValue);
     },
-    genderFormatter(row) {
-      return this.selectDictLabel(this.genderOptions, row.gender);
+    genderFormatter(row, column, cellValue) {
+      return this.selectDictLabel(this.genderOptions, cellValue);
     },
-    writeFormatter(row) {
-      return this.selectDictLabel(this.writeOptions, row.empl_write);
+    writeFormatter(row, column, cellValue) {
+      return this.selectDictLabel(this.writeOptions, cellValue);
     },
-    emplFormatter(row) {
-      return this.selectDictLabel(this.emplOptions, row.empl_status);
+    emplFormatter(row, column, cellValue) {
+      return this.selectDictLabel(this.emplOptions, cellValue);
     },
-    protocolFormatter(row) {
-      return this.selectDictLabel(this.protocolOptions, row.empl_protocol);
+    protocolFormatter(row, column, cellValue) {
+      return this.selectDictLabel(this.protocolOptions, cellValue);
     },
-    tutorsFormatter(row) {
-      return row.tutors_name.join("，");
+    tutorsFormatter(row, column, cellValue) {
+      return cellValue.join("，");
     },
     //表格上色
     color({ row }) {
-      if (row.empl_status == "0") {
+      if (row.empl_info != null && row.empl_info.status == "0") {
         return "un_empl";
-      } else if (row.empl_status == "1") {
-        if (row.empl_protocol == "0") {
+      } else if (row.empl_info != null && row.empl_info.status == "1") {
+        if (row.empl_info.protocol == "0") {
           return "un_sign";
-        } else if (row.empl_protocol == "1") {
+        } else if (row.empl_info.protocol == "1") {
           return "signed";
-        } else if (row.empl_protocol == "2") {
+        } else if (row.empl_info.protocol == "2") {
           return "finlish";
         }
       } else if (row.empl_write == "0") {
@@ -636,22 +641,22 @@ export default {
       });
     },
     //下载三方协议
-    downProtocol(row) {
-      downloadProtocol(row.id).then((resp) => {
+    downProtocol({ row }) {
+      downloadProtocol(row.code).then((resp) => {
         if (resp.size != 0) {
           let filename =
-            row.college_name +
+            row.college.name +
             "_" +
-            row.major_name +
+            row.major.name +
             "_" +
-            row.class_name +
+            row.class.name +
             "_" +
             row.name +
             "_三方协议.pdf";
           this.fileDownloader(resp, filename);
         } else {
           this.$message({
-            message: "文件不存在",
+            message: "下载失败，文件可能不存在",
             type: "error",
           });
         }

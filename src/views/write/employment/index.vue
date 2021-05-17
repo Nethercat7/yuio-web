@@ -110,16 +110,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="指导老师" prop="teacher_code">
-              <el-select v-model="params.teacher_code" multiple collapse-tags>
-                <el-option
-                  v-for="item in users"
-                  :key="item.id"
-                  :value="item.code"
-                  :label="item.name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+
             <el-divider></el-divider>
             <div class="text-center">
               <el-button type="primary" @click="submit">提交</el-button>
@@ -134,17 +125,16 @@
 <script>
 import { getCities } from "@/api/system/city";
 import { getWorks } from "@/api/system/work";
-import { addEmplInfo, getEmplInfo, updEmplInfo } from "@/api/write/empl";
+import { addEmplInfo, updEmplInfo } from "@/api/write/empl";
 import { getSubjectId, getSubjectCode } from "@/utils/storage";
-import { getUsersByCollege } from "@/api/system/user";
 import { getStudentById } from "@/api/system/student";
+import { getEmplInfo } from "@/api/write/empl";
 
 export default {
   name: "EmploymentStatusWrite",
   data() {
     return {
       params: {
-        student_id: getSubjectId(),
         student_code: getSubjectCode(),
         status: "0",
       },
@@ -190,13 +180,6 @@ export default {
         intention_works: [
           { required: true, message: "请选择意向就业岗位", trigger: "change" },
         ],
-        teacher_code: [
-          {
-            required: true,
-            message: "请选择至少一个指导老师",
-            trigger: "change",
-          },
-        ],
       },
       protocolFile: null,
       users: [],
@@ -208,10 +191,6 @@ export default {
       //获取学生信息
       getStudentById(getSubjectId()).then((resp) => {
         this.student = resp.obj;
-        //获取导师
-        getUsersByCollege(this.student.college_id).then((resp) => {
-          this.users = resp.obj;
-        });
       });
       //获取城市
       getCities().then((resp) => {
@@ -229,7 +208,7 @@ export default {
       this.getDictData("stats_stdnt_plan").then((resp) => {
         this.planList = resp.obj;
       });
-      //获取已填写的内容
+      //获取就业情况填写信息
       this.getEmplWriteInfo();
     },
     getEmplWriteInfo() {
@@ -273,7 +252,6 @@ export default {
               if (resp.status == null) {
                 if (resp.code == 0) {
                   this.update = true;
-                  this.getEmplWriteInfo();
                 }
                 this.$message({
                   message: resp.msg,
@@ -288,9 +266,6 @@ export default {
                   message: resp.msg,
                   type: resp.type,
                 });
-                if (resp.code == 0) {
-                  this.getEmplWriteInfo();
-                }
               }
             });
           }
