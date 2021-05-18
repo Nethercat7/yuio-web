@@ -253,6 +253,7 @@
               :key="item.id"
               :value="item.code"
               :label="item.name"
+              :disabled="item.disabled"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -666,6 +667,7 @@ export default {
       let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
       getUsersByCollege(collegeId).then((resp) => {
         this.users = resp.obj;
+        console.log(this.users);
       });
     },
   },

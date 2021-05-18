@@ -188,7 +188,7 @@ import { getPerms } from "@/api/system/perms";
 
 export default {
   name: "roleManagement",
-  components: { Pager,ImportText },
+  components: { Pager, ImportText },
   data() {
     return {
       dialogVisible2: false,
