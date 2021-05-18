@@ -121,7 +121,7 @@
           <Bar
             id="un-empl-people"
             :data="unEmplData"
-            :title="type + '就业人数'"
+            :title="type + '未就业人数'"
             width="100%"
             suffix="人"
             horizontal
