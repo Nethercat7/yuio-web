@@ -2,14 +2,14 @@
   <div>
     <el-card>
       <el-row type="flex" justify="center">
-        <el-col :span="12">
-          <el-tabs tab-position="left" style="height: 100%">
+        <el-col :xs="24" :lg="12">
+          <el-tabs tab-position="top" style="height: 100%">
             <el-tab-pane label="个人资料">
               <el-form
                 ref="profile"
                 v-model="profile"
                 label-suffix=":"
-                label-width="100px"
+                label-width="auto"
               >
                 <el-form-item label="名称">
                   <span>{{ profile.name }}</span>
@@ -25,13 +25,13 @@
                 </el-form-item>
                 <template v-if="!isUser">
                   <el-form-item label="所属院系">
-                    <span>{{ profile.college_name }}</span>
+                    <span>{{ profile.college.name }}</span>
                   </el-form-item>
                   <el-form-item label="所属专业">
-                    <span>{{ profile.major_name }}</span>
+                    <span>{{ profile.major.name }}</span>
                   </el-form-item>
                   <el-form-item label="所属班级">
-                    <span>{{ profile.class_name }}</span>
+                    <span>{{ profile.class.name }}</span>
                   </el-form-item>
                   <el-form-item label="所属年级">
                     <span>{{ profile.grade }}</span>
@@ -46,7 +46,7 @@
                 :model="profile"
                 :rules="rules"
                 label-suffix=":"
-                label-width="100px"
+                label-width="auto"
               >
                 <el-form-item label="性别" prop="gender">
                   <el-radio-group v-model="profile.gender">
@@ -61,6 +61,21 @@
                 <el-form-item label="手机号码" prop="phone">
                   <el-input v-model="profile.phone"></el-input>
                 </el-form-item>
+                <el-form-item v-if="type=='student'" label="指导老师" prop="tutors_code">
+                  <el-select
+                    v-model="profile.tutors_code"
+                    multiple
+                    collapse-tags
+                  >
+                    <el-option
+                      v-for="item in users"
+                      :key="item.id"
+                      :value="item.code"
+                      :label="item.name"
+                      :disabled="item.disabled"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
                 <el-divider></el-divider>
                 <el-form-item style="text-align: center">
                   <el-button type="primary" @click="submit()">提交</el-button>
@@ -74,7 +89,7 @@
                 :model="pwd"
                 :rules="rules"
                 label-suffix=":"
-                label-width="100px"
+                label-width="auto"
               >
                 <el-form-item label="旧密码" prop="oldPwd">
                   <el-input
@@ -116,6 +131,7 @@ import { getStudentById, updStudentProfile } from "@/api/system/student";
 import { changePwd } from "@/api/system/sys";
 import { getSubjectId, getSubjectType, delSubject } from "@/utils/storage";
 import { validatePhone, validatePassword } from "@/utils/validator";
+import { getUsersByCollege } from "@/api/system/user";
 
 export default {
   name: "Profile",
@@ -157,7 +173,15 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { validator: this.validateRepeat, trigger: "blur" },
         ],
+        tutors_code: [
+          {
+            required: true,
+            message: "请选择至少一个指导老师",
+            trigger: "change",
+          },
+        ],
       },
+      users: [],
     };
   },
   methods: {
@@ -170,12 +194,19 @@ export default {
         await getStudentById(this.id).then((resp) => {
           this.profile = resp.obj;
           this.isUser = false;
+          getUsersByCollege(this.profile.college.id).then((resp) => {
+            console.log(resp.obj);
+            this.users = resp.obj;
+          });
         });
       }
       //获取字典数据
       this.getDictData("sys_user_gender").then((resp) => {
         this.genderList = resp.obj;
-        this.profile.genderText=this.selectDictLabel(resp.obj,this.profile.gender);
+        this.profile.genderText = this.selectDictLabel(
+          resp.obj,
+          this.profile.gender
+        );
       });
     },
     submit() {
