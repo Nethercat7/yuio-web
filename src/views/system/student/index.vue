@@ -644,6 +644,9 @@ export default {
     //下载三方协议
     downProtocol({ row }) {
       downloadProtocol(row.code).then((resp) => {
+        let suffix = row.empl_info.protocol_file.substr(
+          row.empl_info.protocol_file.lastIndexOf(".")
+        );
         if (resp.size != 0) {
           let filename =
             row.college.name +
@@ -653,7 +656,8 @@ export default {
             row.class.name +
             "_" +
             row.name +
-            "_三方协议.pdf";
+            "_三方协议" +
+            suffix;
           this.fileDownloader(resp, filename);
         } else {
           this.$message({
