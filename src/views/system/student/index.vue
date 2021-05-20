@@ -151,15 +151,17 @@
                   <el-button size="mini" type="primary">更多</el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <span
-                        @click="
-                          $router.push({
+                      <span>
+                        <router-link
+                          target="_blank"
+                          :to="{
                             name: 'StudentProfile',
                             query: { id: scope.row.id },
-                          })
-                        "
-                        >查看资料</span
-                      >
+                          }"
+                          style="text-decoration: none"
+                          >编辑</router-link
+                        >
+                      </span>
                     </el-dropdown-item>
 
                     <el-dropdown-item>
@@ -671,7 +673,6 @@ export default {
       let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
       getUsersByCollege(collegeId).then((resp) => {
         this.users = resp.obj;
-        console.log(this.users);
       });
     },
   },
