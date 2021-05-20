@@ -26,8 +26,9 @@
           </el-form>
         </div>
       </el-col>
+
       <el-col :xs="24" :sm="14" :lg="17">
-        <el-row type="flex" justify="center">
+        <!-- <el-row type="flex" justify="center">
           <el-col :xs="24" :sm="16"> 
             <h1 style="text-align: center">系统默认角色</h1>
             <el-divider></el-divider>
@@ -54,7 +55,8 @@
               <li>所有新添加的用户默认初始密码都是：123456</li>
             </ul>
           </el-col>
-        </el-row>
+        </el-row> -->
+        <!-- <el-row class="temp" style="min-height:100vh"></el-row> -->
       </el-col>
     </el-row>
   </div>
@@ -104,5 +106,17 @@ export default {
   width: 70%;
   margin: auto;
   padding-top: 50%;
+}
+.temp{
+  background:linear-gradient(to right,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+  background-size: 500%;
+}
+.temp:hover{
+  animation:light 7s linear infinite;
+}
+@keyframes light {
+  100%{
+    background-position: 500% 0;
+  }
 }
 </style>

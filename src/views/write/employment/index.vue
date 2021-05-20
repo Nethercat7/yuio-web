@@ -85,7 +85,6 @@
                   ref="upload"
                   action
                   :limit="1"
-                  accept=".pdf"
                   :auto-upload="false"
                   :on-change="setFile"
                   :on-remove="removeFile"

@@ -9,7 +9,7 @@
                 ref="profile"
                 v-model="profile"
                 label-suffix=":"
-                label-width="auto"
+                
               >
                 <el-form-item label="名称">
                   <span>{{ profile.name }}</span>
@@ -46,7 +46,7 @@
                 :model="profile"
                 :rules="rules"
                 label-suffix=":"
-                label-width="auto"
+               
               >
                 <el-form-item label="性别" prop="gender">
                   <el-radio-group v-model="profile.gender">
@@ -89,7 +89,7 @@
                 :model="pwd"
                 :rules="rules"
                 label-suffix=":"
-                label-width="auto"
+                
               >
                 <el-form-item label="旧密码" prop="oldPwd">
                   <el-input
@@ -173,13 +173,13 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { validator: this.validateRepeat, trigger: "blur" },
         ],
-        tutors_code: [
-          {
-            required: true,
-            message: "请选择至少一个指导老师",
-            trigger: "change",
-          },
-        ],
+        // tutors_code: [
+        //   {
+        //     required: true,
+        //     message: "请选择至少一个指导老师",
+        //     trigger: "change",
+        //   },
+        // ],
       },
       users: [],
     };
