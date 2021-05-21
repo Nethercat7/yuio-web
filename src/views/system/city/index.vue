@@ -2,16 +2,16 @@
   <div>
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
-        <el-col :span="12">
-          <!-- <el-button size="mini" type="success" @click="openDialog('add')"
+        <!-- <el-col :span="12">
+          <el-button size="mini" type="success" @click="openDialog('add')"
             >添加</el-button
-          > -->
+          >
           <el-button size="mini" type="primary" @click="dialogVisible2 = true"
             >导入</el-button
           >
           <el-button size="mini" type="warning" @click="output">导出</el-button>
-        </el-col>
-        <el-col :span="12" style="text-align: right">
+        </el-col> -->
+        <el-col :span="24" style="text-align: right">
           <el-input
             v-model="keyword"
             placeholder="请输入内容"
