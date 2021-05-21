@@ -151,17 +151,15 @@
                   <el-button size="mini" type="primary">更多</el-button>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <span>
-                        <router-link
-                          target="_blank"
-                          :to="{
-                            name: 'StudentProfile',
-                            query: { id: scope.row.id },
-                          }"
-                          style="text-decoration: none"
-                          >编辑</router-link
-                        >
-                      </span>
+                      <router-link
+                        class="link-router"
+                        target="_blank"
+                        :to="{
+                          name: 'StudentProfile',
+                          query: { id: scope.row.id },
+                        }"
+                        >查看资料</router-link
+                      >
                     </el-dropdown-item>
 
                     <el-dropdown-item>
@@ -692,5 +690,9 @@ export default {
   font-size: 14px;
   color: #303133;
   margin-right: 10px;
+}
+.link-router {
+  text-decoration: none;
+  color: #606266;
 }
 </style>
