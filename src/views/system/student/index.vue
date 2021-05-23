@@ -47,6 +47,12 @@
             </el-select>
           </div>
           <div>
+            <span class="label">协议状况</span>
+            <el-select v-model="params.empl_protocol" size="mini" clearable>
+              <el-option v-for="item in protocolOptions" :key="item.id" :value="item.value" :label="item.label"></el-option>
+            </el-select>
+          </div>
+          <div>
             <span class="label"> 姓名</span>
             <el-input
               v-model="params.name"
