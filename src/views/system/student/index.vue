@@ -33,10 +33,20 @@
             ></el-cascader>
           </div>
           <div>
-            <span class="label">就业情况</span>
-            <el-select v-model="params.empl_status" size="mini" clearable>
-              <el-option value="0" label="未就业"></el-option>
-              <el-option value="1" label="已就业"></el-option>
+            <span class="label">指导老师</span>
+            <el-select
+              ref="tutorSelect"
+              v-model="params.tutor_code"
+              size="mini"
+              clearable
+            >
+              <el-option
+                v-for="item in users2"
+                :key="item.id"
+                :value="item.code"
+                :label="item.name"
+                :disabled="item.disabled"
+              ></el-option>
             </el-select>
           </div>
           <div>
@@ -47,9 +57,21 @@
             </el-select>
           </div>
           <div>
+            <span class="label">就业情况</span>
+            <el-select v-model="params.empl_status" size="mini" clearable>
+              <el-option value="0" label="未就业"></el-option>
+              <el-option value="1" label="已就业"></el-option>
+            </el-select>
+          </div>
+          <div>
             <span class="label">协议状况</span>
             <el-select v-model="params.empl_protocol" size="mini" clearable>
-              <el-option v-for="item in protocolOptions" :key="item.id" :value="item.value" :label="item.label"></el-option>
+              <el-option
+                v-for="item in protocolOptions"
+                :key="item.id"
+                :value="item.value"
+                :label="item.label"
+              ></el-option>
             </el-select>
           </div>
           <div>
@@ -425,6 +447,7 @@ export default {
         ],
       },
       users: [],
+      users2: [],
     };
   },
   methods: {
@@ -568,6 +591,7 @@ export default {
       if (this.$refs.cascader.getCheckedNodes().length != 0) {
         let arr = this.$refs.cascader.getCheckedNodes()[0];
         this.params.org_id = arr.value;
+        this.getTutor(true);
       } else {
         this.params.org_id = null;
       }
@@ -673,11 +697,18 @@ export default {
         }
       });
     },
-    getTutor() {
-      let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
-      getUsersByCollege(collegeId).then((resp) => {
-        this.users = resp.obj;
-      });
+    getTutor(query) {
+      if (query) {
+        let collegeId = this.$refs.cascader.getCheckedNodes()[0].path[0];
+        getUsersByCollege(collegeId).then((resp) => {
+          this.users2 = resp.obj;
+        });
+      } else {
+        let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
+        getUsersByCollege(collegeId).then((resp) => {
+          this.users = resp.obj;
+        });
+      }
     },
   },
   mounted() {
