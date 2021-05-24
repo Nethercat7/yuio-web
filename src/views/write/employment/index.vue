@@ -99,6 +99,28 @@
                 </el-upload>
               </el-form-item>
             </div>
+            <el-form-item
+              v-if="params.status == '0' || params.protocol == '0'"
+              label="预计签约月份"
+              prop="date"
+            >
+              <el-date-picker
+                v-model="params.date"
+                type="month"
+                placeholder="请选择"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item
+              v-if="params.status == '0'"
+              label="是否下载就业APP"
+              prop="app"
+            >
+              <el-select v-model="params.app">
+                <el-option :value="0" label="否"></el-option>
+                <el-option :value="1" label="是"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="接下来打算" prop="plan">
               <el-select v-model="params.plan">
                 <el-option
@@ -108,6 +130,9 @@
                   :label="item.label"
                 ></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input v-model="params.remark" style="width: 300px"></el-input>
             </el-form-item>
 
             <el-divider></el-divider>
@@ -179,6 +204,10 @@ export default {
         intention_works: [
           { required: true, message: "请选择意向就业岗位", trigger: "change" },
         ],
+        date: [
+          { required: true, message: "请选择预计签约月份", trigger: "change" },
+        ],
+        app: [{ required: true, message: "请选择", trigger: "change" }],
       },
       protocolFile: null,
       users: [],
