@@ -22,7 +22,7 @@
             ></el-option>
           </el-select>
 
-          <span>专业班级：</span>
+          <span>院系专业：</span>
           <el-cascader
             ref="cascader"
             :options="orgList"
@@ -209,6 +209,9 @@ export default {
       gradeList: [],
       params: {
         grade: new Date().getFullYear() - 4,
+        org_id: "500291302093488128",
+        temp: "500291302093488128",
+        type: "college",
       },
       orgList: [],
       cascader: {
@@ -295,8 +298,9 @@ export default {
       };
       if (flag) {
         this.params.id = null;
-        this.params.type = null;
-        this.params.temp = null;
+        this.params.type = "college";
+        this.params.org_id = "500291302093488128";
+        this.params.temp = "500291302093488128";
       }
     },
     output() {

@@ -308,6 +308,8 @@ export default {
       },
       params: {
         grade: new Date().getFullYear() - 4,
+        org_id: "500291302093488128",
+        temp: "500291302093488128",
       },
       city: [],
       work: {},
@@ -430,9 +432,8 @@ export default {
         series: [],
       };
       if (r) {
-        this.params = {
-          grade: new Date().getFullYear() - 4,
-        };
+        this.params.org_id = "500291302093488128";
+        this.params.temp = "500291302093488128";
       }
       this.gradeList = [];
     },

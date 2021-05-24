@@ -22,7 +22,7 @@
             <span class="label">专业班级</span>
             <el-cascader
               size="mini"
-              v-model="params.org_id"
+              v-model="params.temp"
               :options="orgList"
               :props="orgProps"
               filterable
@@ -399,6 +399,7 @@ export default {
         grade: new Date().getFullYear() - 4,
         user_code: getSubjectCode(),
         org_id: "500291302093488128",
+        temp:"500291302093488128"
       },
       statusOptions: [],
       genderOptions: [],
@@ -460,6 +461,7 @@ export default {
         this.params.grade = grade;
         this.params.user_code = getSubjectCode();
         this.params.org_id = "500291302093488128";
+        this.params.temp = "500291302093488128";
       }
       this.keyword = "";
       this.currentPage = 1;
