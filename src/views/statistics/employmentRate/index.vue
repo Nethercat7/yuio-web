@@ -89,49 +89,6 @@
 
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
-        <!-- 就业率 -->
-        <el-col :span="24">
-          <Bar
-            id="empl-rate"
-            :data="rateData"
-            title="就业率"
-            width="100%"
-            suffix="%"
-          ></Bar>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card class="mb-20" :shadow="cardShadow">
-      <el-row>
-        <!-- 就业人数 -->
-        <el-col :span="12">
-          <Bar
-            id="empl-people"
-            :data="emplData"
-            :title="type + '就业人数'"
-            width="100%"
-            suffix="人"
-            horizontal
-          ></Bar>
-        </el-col>
-
-        <!-- 未就业人数 -->
-        <el-col :span="12">
-          <Bar
-            id="un-empl-people"
-            :data="unEmplData"
-            :title="type + '未就业人数'"
-            width="100%"
-            suffix="人"
-            horizontal
-          ></Bar>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card :shadow="cardShadow">
-      <el-row>
         <el-col :span="24">
           <el-table
             :data="
@@ -177,6 +134,49 @@
             :page.sync="currentPage"
             :size.sync="pageSize"
           ></Pager>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <el-card class="mb-20" :shadow="cardShadow">
+      <el-row>
+        <!-- 就业率 -->
+        <el-col :span="24">
+          <Bar
+            id="empl-rate"
+            :data="rateData"
+            title="就业率"
+            width="100%"
+            suffix="%"
+          ></Bar>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <el-card :shadow="cardShadow">
+      <el-row>
+        <!-- 就业人数 -->
+        <el-col :span="12">
+          <Bar
+            id="empl-people"
+            :data="emplData"
+            :title="type + '就业人数'"
+            width="100%"
+            suffix="人"
+            horizontal
+          ></Bar>
+        </el-col>
+
+        <!-- 未就业人数 -->
+        <el-col :span="12">
+          <Bar
+            id="un-empl-people"
+            :data="unEmplData"
+            :title="type + '未就业人数'"
+            width="100%"
+            suffix="人"
+            horizontal
+          ></Bar>
         </el-col>
       </el-row>
     </el-card>
