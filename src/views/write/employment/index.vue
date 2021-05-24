@@ -108,17 +108,15 @@
                 v-model="params.date"
                 type="month"
                 placeholder="请选择"
+                format="yyyy年M月"
+                value-format="yyyy年M月"
               >
               </el-date-picker>
             </el-form-item>
-            <el-form-item
-              v-if="params.status == '0'"
-              label="是否下载就业APP"
-              prop="app"
-            >
+            <el-form-item label="是否下载就业APP" prop="app">
               <el-select v-model="params.app">
-                <el-option :value="0" label="否"></el-option>
-                <el-option :value="1" label="是"></el-option>
+                <el-option value="0" label="否">否</el-option>
+                <el-option value="1" label="是">是</el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="接下来打算" prop="plan">

@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-card :shadow="cardShadow">
-      <el-row>
-        <el-form label-suffix=":" :key="key">
-          <el-col :span="8">
+      <el-row type="flex" justify="center">
+        <el-col :xs="24" :lg="12">
+          <el-form label-suffix=":" :key="key">
             <el-form-item label="学号">
               <span>{{ student.code }}</span>
             </el-form-item>
@@ -19,9 +19,7 @@
             <el-form-item label="状态">
               <span>{{ student.status_text }}</span>
             </el-form-item>
-          </el-col>
 
-          <el-col :span="8">
             <el-form-item label="所属学院">
               <span v-text="student.college.name">院系名称</span>
             </el-form-item>
@@ -34,9 +32,10 @@
             <el-form-item label="所属班级">
               <span v-text="student.class.name">班级名称</span>
             </el-form-item>
-          </el-col>
+            <el-form-item label="学生备注">
+              <span>{{ student.remark }}</span>
+            </el-form-item>
 
-          <el-col :span="8">
             <el-form-item label="就业信息填写">
               <span>{{ student.empl_write_text }}</span>
             </el-form-item>
@@ -48,6 +47,7 @@
               <el-form-item label="接下来的打算">
                 <span>{{ student.empl_plan_text }}</span>
               </el-form-item>
+
               <template v-if="student.empl_info.status == '1'">
                 <el-form-item label="单位名称">
                   <span>{{ student.empl_info.company }}</span>
@@ -62,12 +62,27 @@
                   <span>{{ student.empl_protocol_text }}</span>
                 </el-form-item>
               </template>
-              <el-form-item label="备注">
-                <span>{{ student.remark }}</span>
+
+              <el-form-item
+                v-if="
+                  student.empl_info.status == '0' ||
+                  student.empl_info.protocol == '0'
+                "
+                label="预计签约日期"
+              >
+                <span>{{ student.empl_info.date }}</span>
+              </el-form-item>
+              <el-form-item label="是否下载就业APP">
+                <span
+                  v-text="student.empl_info.app == '0' ? '未下载' : '已下载'"
+                ></span>
+              </el-form-item>
+              <el-form-item label="就业信息备注">
+                <span>{{ student.empl_info.remark }}</span>
               </el-form-item>
             </template>
-          </el-col>
-        </el-form>
+          </el-form>
+        </el-col>
       </el-row>
     </el-card>
   </div>
