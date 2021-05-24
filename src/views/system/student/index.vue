@@ -22,7 +22,7 @@
             <span class="label">专业班级</span>
             <el-cascader
               size="mini"
-              v-model="params.temp"
+              v-model="params.org_id"
               :options="orgList"
               :props="orgProps"
               filterable
@@ -39,6 +39,7 @@
               v-model="params.tutor_code"
               size="mini"
               clearable
+              no-data-text="请先选择院系"
             >
               <el-option
                 v-for="item in users2"
@@ -397,6 +398,7 @@ export default {
       params: {
         grade: new Date().getFullYear() - 4,
         user_code: getSubjectCode(),
+        org_id: "500291302093488128",
       },
       statusOptions: [],
       genderOptions: [],
@@ -457,6 +459,7 @@ export default {
         this.params = {};
         this.params.grade = grade;
         this.params.user_code = getSubjectCode();
+        this.params.org_id = "500291302093488128";
       }
       this.keyword = "";
       this.currentPage = 1;
@@ -495,6 +498,8 @@ export default {
       this.getDictData("sys_protocol_status").then((resp) => {
         this.protocolOptions = resp.obj;
       });
+      //获取导师
+      this.getTutor(true, this.params.org_id);
     },
     openDialog(type, row) {
       this.dialogVisible = true;
@@ -697,9 +702,12 @@ export default {
         }
       });
     },
-    getTutor(query) {
+    getTutor(query, params) {
       if (query) {
-        let collegeId = this.$refs.cascader.getCheckedNodes()[0].path[0];
+        let collegeId = params
+          ? params
+          : this.$refs.cascader.getCheckedNodes()[0].path[0];
+        console.log(collegeId);
         getUsersByCollege(collegeId).then((resp) => {
           this.users2 = resp.obj;
         });
