@@ -93,6 +93,12 @@
             >
           </div>
         </el-col>
+      </el-row>
+    </el-card>
+
+    <!-- 表格 -->
+    <el-card :shadow="cardShadow">
+      <el-row>
         <el-col :span="24">
           <el-button size="mini" @click="openDialog('add')" type="success"
             >添加</el-button
@@ -100,14 +106,22 @@
           <el-button size="mini" type="primary" @click="dialogVisible2 = true"
             >导入</el-button
           >
-          <el-button size="mini" type="warning" @click="output">导出</el-button>
+          <!-- <el-button size="mini" type="warning" @click="output">导出</el-button> -->
+          <el-dropdown trigger="click" @command="handleOutput" style="margin-left: 10px;">
+            <el-button size="mini" type="warning">
+              导出<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="current"
+                >导出当前全部</el-dropdown-item
+              >
+              <el-dropdown-item command="selected">
+                导出当前所选
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </el-col>
-      </el-row>
-    </el-card>
 
-    <!-- 表格 -->
-    <el-card :shadow="cardShadow">
-      <el-row>
         <el-col :span="24">
           <el-table
             ref="table"
@@ -118,7 +132,9 @@
               )
             "
             :row-class-name="color"
+            @selection-change="handleSelect"
           >
+            <el-table-column type="selection" width="50"> </el-table-column>
             <el-table-column label="姓名" prop="name" sortable>
             </el-table-column>
             <el-table-column label="学号" prop="code" sortable>
@@ -358,6 +374,7 @@ import {
   outputStudents,
   uploadStudentsExcel,
   downloadProtocol,
+  outputSelectedStudents,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
 import { validateWaN } from "@/utils/validator";
@@ -399,7 +416,7 @@ export default {
         grade: new Date().getFullYear() - 4,
         user_code: getSubjectCode(),
         org_id: "500291302093488128",
-        temp:"500291302093488128"
+        temp: "500291302093488128",
       },
       statusOptions: [],
       genderOptions: [],
@@ -451,6 +468,8 @@ export default {
       },
       users: [],
       users2: [],
+      //被选择的学生对象
+      selectedStudents: [],
     };
   },
   methods: {
@@ -648,11 +667,6 @@ export default {
         return "un_write";
       }
     },
-    output() {
-      outputStudents(this.params).then((resp) => {
-        this.fileDownloader(resp, "学生数据.xlsx");
-      });
-    },
     uploadFile(data) {
       //Add file data
       var formData = new FormData();
@@ -718,6 +732,29 @@ export default {
         getUsersByCollege(collegeId).then((resp) => {
           this.users = resp.obj;
         });
+      }
+    },
+    //表格多选框选择事件
+    handleSelect(val) {
+      this.selectedStudents = val;
+    },
+    //处理导出数据操作
+    handleOutput(type) {
+      if (type == "current") {
+        outputStudents(this.params).then((resp) => {
+          this.fileDownloader(resp, "学生数据.xlsx");
+        });
+      } else if (type == "selected") {
+        if (this.selectedStudents.length == 0) {
+          this.$message({
+            message: "没有数据被选择",
+            type: "error",
+          });
+        } else {
+          outputSelectedStudents(this.selectedStudents).then((resp) => {
+            this.fileDownloader(resp, "学生数据.xlsx");
+          });
+        }
       }
     },
   },

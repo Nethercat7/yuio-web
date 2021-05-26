@@ -87,3 +87,12 @@ export function downloadProtocol(code) {
         responseType: "blob"
     })
 }
+
+export function outputSelectedStudents(params) {
+    return request({
+        url: "sys/student/outputSelected",
+        method: "post",
+        responseType: "blob",
+        data: params
+    })
+}
