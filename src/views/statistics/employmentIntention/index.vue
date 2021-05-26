@@ -41,6 +41,7 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row class="mb-20">
         <el-col :span="12">
+          <el-button size="mini" type="warning">导出当前数据</el-button>
           <ScatterMap
             id="intention-city"
             :data="cityData"
@@ -73,6 +74,7 @@
     <el-card :shadow="cardShadow">
       <el-row class="mb-20">
         <el-col :span="12">
+          <el-button size="mini" type="warning">导出当前数据</el-button>
           <Radar
             id="intention-work"
             :data="workData"

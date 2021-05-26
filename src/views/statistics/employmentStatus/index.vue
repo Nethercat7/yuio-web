@@ -42,6 +42,9 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
+          <el-button size="mini" type="warning" @click="handleOutput('city')"
+            >导出当前数据</el-button
+          >
           <ScatterMap
             id="empl-city"
             :data="cityData"
@@ -75,6 +78,7 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
+          <el-button size="mini" type="warning">导出当前数据</el-button>
           <Radar
             id="empl-work"
             :data="workData"
@@ -139,6 +143,7 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
+          <el-button size="mini" type="warning">导出当前数据</el-button>
           <Bar
             id="empl-plan"
             :data="emplPlanData"
@@ -203,6 +208,7 @@
     <el-card :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
+          <el-button size="mini" type="warning">导出当前数据</el-button>
           <Bar
             id="unempl-plan"
             :data="unEmplPlanData"
@@ -277,6 +283,7 @@ import {
   getEmplWorkInfo,
   getUnEmplStudentPlan,
   getEmplStudentPlan,
+  outputCityInfo,
 } from "@/api/statistics/status";
 
 export default {
@@ -316,6 +323,7 @@ export default {
       emplPlan: {},
       unEmplPlan: {},
       planList: [],
+      srcCityData: [],
       // industryData: {
       //   name: [],
       //   data: [],
@@ -328,6 +336,7 @@ export default {
       //获取就业城市选择信息
       getEmplCityInfo(this.params).then((resp) => {
         let data = resp.obj;
+        this.srcCityData = resp.obj;
         //格式化数据
         let cities = data.map((item) => {
           return {
@@ -448,6 +457,13 @@ export default {
     },
     planFormatter(row) {
       return this.selectDictLabel(this.planList, row.plan);
+    },
+    handleOutput(type) {
+      if (type == "city") {
+        outputCityInfo(this.srcCityData).then(resp=>{
+          this.fileDownloader(resp,"就业城市人数分布.xlsx");
+        })
+      }
     },
   },
   mounted() {
