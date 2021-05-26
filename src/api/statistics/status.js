@@ -40,3 +40,12 @@ export function outputCityInfo(params) {
         data: params
     })
 }
+
+export function outputWorkInfo(params) {
+    return request({
+        url: '/stats/status/outputWorkInfo',
+        method: "post",
+        responseType: "blob",
+        data: params
+    })
+}

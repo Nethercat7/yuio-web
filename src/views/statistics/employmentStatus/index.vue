@@ -78,7 +78,7 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning">导出当前数据</el-button>
+          <el-button size="mini" type="warning" @click="handleOutput('work')">导出当前数据</el-button>
           <Radar
             id="empl-work"
             :data="workData"
@@ -284,6 +284,7 @@ import {
   getUnEmplStudentPlan,
   getEmplStudentPlan,
   outputCityInfo,
+  outputWorkInfo,
 } from "@/api/statistics/status";
 
 export default {
@@ -324,6 +325,7 @@ export default {
       unEmplPlan: {},
       planList: [],
       srcCityData: [],
+      srcWorkData: [],
       // industryData: {
       //   name: [],
       //   data: [],
@@ -350,6 +352,7 @@ export default {
       //获取就业岗位选择信息
       getEmplWorkInfo(this.params).then((resp) => {
         let data = resp.obj.results;
+        this.srcWorkData = resp.obj;
         // //格式化行业数据
         // let peoples1 = [];
         // data.forEach((element) => {
@@ -460,9 +463,13 @@ export default {
     },
     handleOutput(type) {
       if (type == "city") {
-        outputCityInfo(this.srcCityData).then(resp=>{
-          this.fileDownloader(resp,"就业城市人数分布.xlsx");
-        })
+        outputCityInfo(this.srcCityData).then((resp) => {
+          this.fileDownloader(resp, "就业城市人数分布.xlsx");
+        });
+      } else if (type == "work") {
+        outputWorkInfo(this.srcWorkData).then((resp) => {
+          this.fileDownloader(resp, "就业岗位人数分布.xlsx");
+        });
       }
     },
   },
