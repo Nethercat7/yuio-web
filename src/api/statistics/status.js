@@ -49,3 +49,12 @@ export function outputWorkInfo(params) {
         data: params
     })
 }
+
+export function outputStudentPlan(params) {
+    return request({
+        url: '/stats/status/outputStudentPlan',
+        method: "post",
+        responseType: "blob",
+        data: params
+    })
+}

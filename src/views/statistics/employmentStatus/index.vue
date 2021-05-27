@@ -54,12 +54,7 @@
           ></ScatterMap>
         </el-col>
         <el-col :span="12">
-          <el-table
-            :data="city"
-            :default-sort="{ prop: 'total_people', order: 'descending' }"
-            height="700"
-            stripe
-          >
+          <el-table :data="city" height="700" stripe>
             <el-table-column type="index"> </el-table-column>
             <el-table-column
               prop="city_name"
@@ -78,7 +73,9 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning" @click="handleOutput('work')">导出当前数据</el-button>
+          <el-button size="mini" type="warning" @click="handleOutput('work')"
+            >导出当前数据</el-button
+          >
           <Radar
             id="empl-work"
             :data="workData"
@@ -143,7 +140,12 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning">导出当前数据</el-button>
+          <el-button
+            size="mini"
+            type="warning"
+            @click="handleOutput('emplPlan')"
+            >导出当前数据</el-button
+          >
           <Bar
             id="empl-plan"
             :data="emplPlanData"
@@ -208,7 +210,7 @@
     <el-card :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning">导出当前数据</el-button>
+          <el-button size="mini" type="warning" @click="handleOutput('unEmplPlan')">导出当前数据</el-button>
           <Bar
             id="unempl-plan"
             :data="unEmplPlanData"
@@ -285,6 +287,7 @@ import {
   getEmplStudentPlan,
   outputCityInfo,
   outputWorkInfo,
+  outputStudentPlan,
 } from "@/api/statistics/status";
 
 export default {
@@ -469,6 +472,14 @@ export default {
       } else if (type == "work") {
         outputWorkInfo(this.srcWorkData).then((resp) => {
           this.fileDownloader(resp, "就业岗位人数分布.xlsx");
+        });
+      } else if (type == "emplPlan") {
+        outputStudentPlan(this.emplPlan).then((resp) => {
+          this.fileDownloader(resp, "已就业学生计划.xlsx");
+        });
+      }else if(type=="unEmplPlan"){
+        outputStudentPlan(this.unEmplPlan).then((resp) => {
+          this.fileDownloader(resp, "未就业学生计划.xlsx");
         });
       }
     },
