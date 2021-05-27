@@ -41,7 +41,9 @@
     <el-card class="mb-20" :shadow="cardShadow">
       <el-row class="mb-20">
         <el-col :span="12">
-          <el-button size="mini" type="warning">导出当前数据</el-button>
+          <el-button size="mini" type="warning" @click="handleOutput('city')"
+            >导出当前数据</el-button
+          >
           <ScatterMap
             id="intention-city"
             :data="cityData"
@@ -52,7 +54,6 @@
         <el-col :span="12">
           <el-table
             :data="city"
-            :default-sort="{ prop: 'total_people', order: 'descending' }"
             stripe
             height="700"
           >
@@ -74,7 +75,9 @@
     <el-card :shadow="cardShadow">
       <el-row class="mb-20">
         <el-col :span="12">
-          <el-button size="mini" type="warning">导出当前数据</el-button>
+          <el-button size="mini" type="warning" @click="handleOutput('work')"
+            >导出当前数据</el-button
+          >
           <Radar
             id="intention-work"
             :data="workData"
@@ -145,6 +148,7 @@ import {
   getIntentionWorkInfo,
 } from "@/api/statistics/intention";
 import { convertData } from "@/utils/yuio";
+import { outputCityInfo, outputWorkInfo } from "@/api/statistics/output";
 
 export default {
   name: "EmploymentIntention",
@@ -234,6 +238,17 @@ export default {
       getCompleteOrg(this.params.grade).then((resp) => {
         this.orgList = resp.obj;
       });
+    },
+    handleOutput(type) {
+      if (type == "city") {
+        outputCityInfo(this.city).then((resp) => {
+          this.fileDownloader(resp, "意向城市人数分布.xlsx");
+        });
+      } else if (type == "work") {
+        outputWorkInfo(this.work).then((resp) => {
+          this.fileDownloader(resp, "意向岗位人数分布.xlsx");
+        });
+      }
     },
   },
   mounted() {
