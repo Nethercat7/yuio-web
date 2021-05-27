@@ -210,7 +210,12 @@
     <el-card :shadow="cardShadow">
       <el-row>
         <el-col :span="12">
-          <el-button size="mini" type="warning" @click="handleOutput('unEmplPlan')">导出当前数据</el-button>
+          <el-button
+            size="mini"
+            type="warning"
+            @click="handleOutput('unEmplPlan')"
+            >导出当前数据</el-button
+          >
           <Bar
             id="unempl-plan"
             :data="unEmplPlanData"
@@ -285,10 +290,12 @@ import {
   getEmplWorkInfo,
   getUnEmplStudentPlan,
   getEmplStudentPlan,
+} from "@/api/statistics/status";
+import {
   outputCityInfo,
   outputWorkInfo,
   outputStudentPlan,
-} from "@/api/statistics/status";
+} from "@/api/statistics/output";
 
 export default {
   name: "EmploymentStatus",
@@ -477,7 +484,7 @@ export default {
         outputStudentPlan(this.emplPlan).then((resp) => {
           this.fileDownloader(resp, "已就业学生计划.xlsx");
         });
-      }else if(type=="unEmplPlan"){
+      } else if (type == "unEmplPlan") {
         outputStudentPlan(this.unEmplPlan).then((resp) => {
           this.fileDownloader(resp, "未就业学生计划.xlsx");
         });

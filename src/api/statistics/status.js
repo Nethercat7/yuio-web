@@ -31,30 +31,3 @@ export function getEmplStudentPlan(params) {
         data: params
     })
 }
-
-export function outputCityInfo(params) {
-    return request({
-        url: '/stats/status/outputCityInfo',
-        method: "post",
-        responseType: "blob",
-        data: params
-    })
-}
-
-export function outputWorkInfo(params) {
-    return request({
-        url: '/stats/status/outputWorkInfo',
-        method: "post",
-        responseType: "blob",
-        data: params
-    })
-}
-
-export function outputStudentPlan(params) {
-    return request({
-        url: '/stats/status/outputStudentPlan',
-        method: "post",
-        responseType: "blob",
-        data: params
-    })
-}
