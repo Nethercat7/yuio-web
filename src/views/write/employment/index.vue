@@ -175,6 +175,7 @@ export default {
         label: "name",
         emitPath: false,
         multiple: true,
+        checkStrictly: true,
       },
       update: false,
       rules: {
@@ -221,10 +222,20 @@ export default {
       //获取城市
       getCities().then((resp) => {
         this.cityList = resp.obj;
+        this.cityList.forEach((element) => {
+          if (element.level == 0 && element.direct == 0) {
+            element.disabled = true;
+          }
+        });
       });
       //获取岗位
       getWorks().then((resp) => {
         this.workList = resp.obj;
+        this.workList.forEach((element) => {
+          if (element.level == 0) {
+            element.disabled = true;
+          }
+        });
       });
       //获取协议状况
       this.getDictData("sys_protocol_status").then((resp) => {
