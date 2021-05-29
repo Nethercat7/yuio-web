@@ -107,7 +107,11 @@
             >导入</el-button
           >
           <!-- <el-button size="mini" type="warning" @click="output">导出</el-button> -->
-          <el-dropdown trigger="click" @command="handleOutput" style="margin-left: 10px;">
+          <el-dropdown
+            trigger="click"
+            @command="handleOutput"
+            style="margin-left: 10px"
+          >
             <el-button size="mini" type="warning">
               导出<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
@@ -287,7 +291,7 @@
             :options="orgList2"
             :props="cascaderProps"
             :show-all-levels="false"
-            @change="getTutor"
+            @change="getTutor(false)"
           >
           </el-cascader>
         </el-form-item>
@@ -530,6 +534,8 @@ export default {
         this.type = type;
         this.form = JSON.parse(JSON.stringify(row));
         this.getOrg(false);
+        //获取指导老师
+        this.getTutor(false, row.college.id);
       }
     },
     submitDialog() {
@@ -719,16 +725,16 @@ export default {
       });
     },
     getTutor(query, params) {
+      let collegeId = params
+        ? params
+        : this.$refs.cascader.getCheckedNodes()[0].path[0];
+
       if (query) {
-        let collegeId = params
-          ? params
-          : this.$refs.cascader.getCheckedNodes()[0].path[0];
-        console.log(collegeId);
         getUsersByCollege(collegeId).then((resp) => {
           this.users2 = resp.obj;
         });
       } else {
-        let collegeId = this.$refs.cascader2.getCheckedNodes()[0].path[0];
+        console.log("college id:" + collegeId);
         getUsersByCollege(collegeId).then((resp) => {
           this.users = resp.obj;
         });
