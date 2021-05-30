@@ -734,7 +734,6 @@ export default {
           this.users2 = resp.obj;
         });
       } else {
-        console.log("college id:" + collegeId);
         getUsersByCollege(collegeId).then((resp) => {
           this.users = resp.obj;
         });

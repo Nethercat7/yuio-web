@@ -2,6 +2,13 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import router from '../router';
 import { getStorage } from "./storage";
+import { Loading } from 'element-ui';
+
+let loading;
+//loading动画配置项
+const loadingConfig = {
+  fullscreen: true
+}
 
 //创建实例
 const service = axios.create({
@@ -16,6 +23,7 @@ service.interceptors.request.use(config => {
   if (token) {
     config.headers.token = token;
   }
+  loading = Loading.service(loadingConfig);
   return config
 }, error => {
   Promise.reject(error)
@@ -23,6 +31,7 @@ service.interceptors.request.use(config => {
 
 //配置响应拦截器
 service.interceptors.response.use(resp => {
+  loading.close()
   return resp.data
 }, error => {
   /***** 接收到异常响应的处理开始 *****/
@@ -31,7 +40,7 @@ service.interceptors.response.use(resp => {
     // 2.根据响应码具体处理
     switch (error.response.status) {
       case 400:
-        error.message="参数错误"
+        error.message = "参数错误"
         break;
       case 402:
         error.message = '未登录'
@@ -83,6 +92,7 @@ service.interceptors.response.use(resp => {
     }
     error.message('连接服务器失败')
   }
+  loading.close()
   Message.error(error.message)
   /***** 处理结束 *****/
   //如果不需要错误处理，以上的处理过程都可省略

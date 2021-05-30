@@ -135,7 +135,11 @@
 
             <el-divider></el-divider>
             <div class="text-center">
-              <el-button type="primary" @click="submit">提交</el-button>
+              <el-button
+                type="primary"
+                @click="submit"
+                >提交</el-button
+              >
             </div>
           </el-form>
         </el-col>
@@ -270,8 +274,8 @@ export default {
       }
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          var formData = new FormData();
           //格式化表单其他数据
+          var formData = new FormData();
           formData.append(
             "params",
             new Blob([JSON.stringify(this.params)], {
