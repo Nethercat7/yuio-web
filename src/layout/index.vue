@@ -69,7 +69,7 @@
           </el-submenu>
         </el-menu>
       </el-header>
-      <el-main>
+      <el-main id="content">
         <router-view :screenWidth="screenWidth"></router-view>
       </el-main>
       <el-footer class="footer">

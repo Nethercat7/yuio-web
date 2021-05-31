@@ -11,8 +11,9 @@ let requestCount = 0;
 function enableLoading() {
   if (requestCount === 0) {
     loading = Loading.service({
-      target: document.querySelector('.el-main'),
+      target: "#content",
       lock: true,
+      text:"请稍等..."
     });
   }
   requestCount++;
