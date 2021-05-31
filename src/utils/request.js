@@ -4,10 +4,26 @@ import router from '../router';
 import { getStorage } from "./storage";
 import { Loading } from 'element-ui';
 
+// loading动画配置
 let loading;
-//loading动画配置项
-const loadingConfig = {
-  fullscreen: true
+let requestCount = 0;
+
+function enableLoading() {
+  if (requestCount === 0) {
+    loading = Loading.service({
+      target: document.querySelector('.el-main'),
+      lock: true,
+    });
+  }
+  requestCount++;
+}
+
+function disableLoading() {
+  if (requestCount <= 0) return;
+  requestCount--;
+  if (requestCount === 0) {
+    loading.close();
+  }
 }
 
 //创建实例
@@ -23,17 +39,19 @@ service.interceptors.request.use(config => {
   if (token) {
     config.headers.token = token;
   }
-  loading = Loading.service(loadingConfig);
+  enableLoading()
   return config
 }, error => {
+  disableLoading();
   Promise.reject(error)
 })
 
 //配置响应拦截器
 service.interceptors.response.use(resp => {
-  loading.close()
+  disableLoading();
   return resp.data
 }, error => {
+  disableLoading();
   /***** 接收到异常响应的处理开始 *****/
   if (error && error.response) {
     // 1.公共错误处理
@@ -92,7 +110,6 @@ service.interceptors.response.use(resp => {
     }
     error.message('连接服务器失败')
   }
-  loading.close()
   Message.error(error.message)
   /***** 处理结束 *****/
   //如果不需要错误处理，以上的处理过程都可省略
