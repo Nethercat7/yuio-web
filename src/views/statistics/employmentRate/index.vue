@@ -305,7 +305,7 @@ export default {
     },
     output() {
       outputRates(this.params).then((resp) => {
-        this.fileDownloader(resp, "就业率数据.xlsx");
+        if(!resp.status) this.fileDownloader(resp, "就业率数据.xlsx");
       });
     },
   },

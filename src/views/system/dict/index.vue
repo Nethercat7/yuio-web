@@ -183,7 +183,7 @@ import Pager from "@/components/pager";
 
 export default {
   name: "DictType",
-  components: { Pager,ImportText },
+  components: { Pager, ImportText },
   data() {
     return {
       dialogVisible2: false,
@@ -290,12 +290,12 @@ export default {
     },
     output() {
       outputDictType().then((resp) => {
-        this.fileDownloader(resp, "字典类型数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "字典类型数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("dict_type", type).then((resp) => {
-        this.fileDownloader(resp, "字典类型导入模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "字典类型导入模板." + type);
       });
     },
     uploadFile(data) {

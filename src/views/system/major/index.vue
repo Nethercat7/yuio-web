@@ -187,7 +187,7 @@ import { getColleges } from "@/api/system/college";
 
 export default {
   name: "majorManagement",
-  components: { Pager,ImportText },
+  components: { Pager, ImportText },
   data() {
     return {
       dialogVisible2: false,
@@ -319,12 +319,12 @@ export default {
     },
     output() {
       outputMajors().then((resp) => {
-        this.fileDownloader(resp, "专业数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "专业数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("major", type).then((resp) => {
-        this.fileDownloader(resp, "专业导入模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "专业导入模板." + type);
       });
     },
     uploadFile(data) {

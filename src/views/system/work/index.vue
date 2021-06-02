@@ -314,12 +314,12 @@ export default {
     },
     output() {
       outputWorks().then((resp) => {
-        this.fileDownloader(resp, "岗位数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "岗位数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("work", type).then((resp) => {
-        this.fileDownloader(resp, "岗位数据导入模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "岗位数据导入模板." + type);
       });
     },
     uploadFile(data) {

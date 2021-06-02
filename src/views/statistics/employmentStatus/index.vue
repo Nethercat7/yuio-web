@@ -474,19 +474,19 @@ export default {
     handleOutput(type) {
       if (type == "city") {
         outputCityInfo(this.srcCityData).then((resp) => {
-          this.fileDownloader(resp, "就业城市人数分布.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "就业城市人数分布.xlsx");
         });
       } else if (type == "work") {
         outputWorkInfo(this.srcWorkData).then((resp) => {
-          this.fileDownloader(resp, "就业岗位人数分布.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "就业岗位人数分布.xlsx");
         });
       } else if (type == "emplPlan") {
         outputStudentPlan(this.emplPlan).then((resp) => {
-          this.fileDownloader(resp, "已就业学生计划.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "已就业学生计划.xlsx");
         });
       } else if (type == "unEmplPlan") {
         outputStudentPlan(this.unEmplPlan).then((resp) => {
-          this.fileDownloader(resp, "未就业学生计划.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "未就业学生计划.xlsx");
         });
       }
     },

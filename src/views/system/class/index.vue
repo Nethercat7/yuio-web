@@ -342,12 +342,12 @@ export default {
     },
     output() {
       outputClasses().then((resp) => {
-        this.fileDownloader(resp, "班级数据.xlsx");
+       if(!resp.status) this.fileDownloader(resp, "班级数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("class", type).then((resp) => {
-        this.fileDownloader(resp, "班级导入模板." + type);
+       if(!resp.status) this.fileDownloader(resp, "班级导入模板." + type);
       });
     },
     uploadFile(data) {

@@ -311,12 +311,12 @@ export default {
     },
     output() {
       outputCities().then((resp) => {
-        this.fileDownloader(resp, "城市数据.xlsx");
+       if(!resp.status) this.fileDownloader(resp, "城市数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("city", type).then((resp) => {
-        this.fileDownloader(resp, "城市数据导入模板." + type);
+        if(!resp.status) this.fileDownloader(resp, "城市数据导入模板." + type);
       });
     },
     uploadFile(data) {

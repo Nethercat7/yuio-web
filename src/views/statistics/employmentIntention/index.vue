@@ -52,11 +52,7 @@
           ></ScatterMap>
         </el-col>
         <el-col :span="12">
-          <el-table
-            :data="city"
-            stripe
-            height="700"
-          >
+          <el-table :data="city" stripe height="700">
             <el-table-column type="index"></el-table-column>
             <el-table-column
               label="城市名称"
@@ -242,11 +238,11 @@ export default {
     handleOutput(type) {
       if (type == "city") {
         outputCityInfo(this.city).then((resp) => {
-          this.fileDownloader(resp, "意向城市人数分布.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "意向城市人数分布.xlsx");
         });
       } else if (type == "work") {
         outputWorkInfo(this.work).then((resp) => {
-          this.fileDownloader(resp, "意向岗位人数分布.xlsx");
+          if (!resp.status) this.fileDownloader(resp, "意向岗位人数分布.xlsx");
         });
       }
     },

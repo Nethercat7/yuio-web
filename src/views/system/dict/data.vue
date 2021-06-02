@@ -285,12 +285,12 @@ export default {
     },
     output() {
       outputDictData().then((resp) => {
-        this.fileDownloader(resp, "字典类型数据.xlsx");
+       if(!resp.status) this.fileDownloader(resp, "字典类型数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("dict_data", type).then((resp) => {
-        this.fileDownloader(resp, "字典数据导入模板." + type);
+       if(!resp.status) this.fileDownloader(resp, "字典数据导入模板." + type);
       });
     },
     uploadFile(data) {

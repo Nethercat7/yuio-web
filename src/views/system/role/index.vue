@@ -325,7 +325,7 @@ export default {
     },
     output() {
       outputRoles().then((resp) => {
-        this.fileDownloader(resp, "角色数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "角色数据.xlsx");
       });
     },
     uploadFile(data) {
@@ -350,7 +350,7 @@ export default {
     },
     download(type) {
       this.getExcelTemplate("role", type).then((resp) => {
-        this.fileDownloader(resp, "角色数据上传模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "角色数据上传模板." + type);
       });
     },
     search() {

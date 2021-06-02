@@ -418,7 +418,7 @@ export default {
     },
     output() {
       outputUsers(this.outputOptions).then((resp) => {
-        this.fileDownloader(resp, "用户数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "用户数据.xlsx");
       });
     },
     uploadFile(data) {
@@ -443,7 +443,7 @@ export default {
     },
     download(type) {
       this.getExcelTemplate("user", type).then((resp) => {
-        this.fileDownloader(resp, "用户数据上传模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "用户数据上传模板." + type);
       });
     },
   },

@@ -360,12 +360,12 @@ export default {
     },
     output() {
       outputPerms().then((resp) => {
-        this.fileDownloader(resp, "系统权限数据.xlsx");
+        if (!resp.status) this.fileDownloader(resp, "系统权限数据.xlsx");
       });
     },
     getTemplate(type) {
       this.getExcelTemplate("perms", type).then((resp) => {
-        this.fileDownloader(resp, "权限数据导入模板." + type);
+        if (!resp.status) this.fileDownloader(resp, "权限数据导入模板." + type);
       });
     },
     uploadFile(data) {
