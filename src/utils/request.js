@@ -13,7 +13,7 @@ function enableLoading() {
     loading = Loading.service({
       target: "#content",
       lock: true,
-      text:"请稍等..."
+      text: "请稍等..."
     });
   }
   requestCount++;

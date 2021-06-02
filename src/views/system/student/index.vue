@@ -695,32 +695,36 @@ export default {
     },
     download(type) {
       this.getExcelTemplate("student", type).then((resp) => {
-        this.fileDownloader(resp, "学生数据上传模板." + type);
+        if (!resp.status) {
+          this.fileDownloader(resp, "学生数据上传模板." + type);
+        }
       });
     },
     //下载三方协议
     downProtocol({ row }) {
       downloadProtocol(row.code).then((resp) => {
-        let suffix = row.empl_info.protocol_file.substr(
-          row.empl_info.protocol_file.lastIndexOf(".")
-        );
-        if (resp.size != 0) {
-          let filename =
-            row.college.name +
-            "_" +
-            row.major.name +
-            "_" +
-            row.class.name +
-            "_" +
-            row.name +
-            "_三方协议" +
-            suffix;
-          this.fileDownloader(resp, filename);
-        } else {
-          this.$message({
-            message: "下载失败，文件可能不存在",
-            type: "error",
-          });
+        if (!resp.status) {
+          let suffix = row.empl_info.protocol_file.substr(
+            row.empl_info.protocol_file.lastIndexOf(".")
+          );
+          if (resp.size != 0) {
+            let filename =
+              row.college.name +
+              "_" +
+              row.major.name +
+              "_" +
+              row.class.name +
+              "_" +
+              row.name +
+              "_三方协议" +
+              suffix;
+            this.fileDownloader(resp, filename);
+          } else {
+            this.$message({
+              message: "下载失败，文件可能不存在",
+              type: "error",
+            });
+          }
         }
       });
     },
@@ -747,7 +751,9 @@ export default {
     handleOutput(type) {
       if (type == "current") {
         outputStudents(this.params).then((resp) => {
-          this.fileDownloader(resp, "学生数据.xlsx");
+          if (!resp.status) {
+            this.fileDownloader(resp, "学生数据.xlsx");
+          }
         });
       } else if (type == "selected") {
         if (this.selectedStudents.length == 0) {
@@ -757,7 +763,7 @@ export default {
           });
         } else {
           outputSelectedStudents(this.selectedStudents).then((resp) => {
-            this.fileDownloader(resp, "学生数据.xlsx");
+            if (!resp.status) this.fileDownloader(resp, "学生数据.xlsx");
           });
         }
       }
