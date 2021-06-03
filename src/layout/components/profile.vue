@@ -3,8 +3,8 @@
     <el-card>
       <el-row type="flex" justify="center">
         <el-col :xs="24" :lg="12">
-          <el-tabs tab-position="top" style="height: 100%">
-            <el-tab-pane label="个人资料">
+          <el-tabs tab-position="top" style="height: 100%" :value="$route.query.type">
+            <el-tab-pane label="个人资料" name="profile">
               <el-form
                 ref="profile"
                 v-model="profile"
@@ -40,7 +40,7 @@
               </el-form>
             </el-tab-pane>
 
-            <el-tab-pane label="修改资料">
+            <el-tab-pane label="修改资料" name="update">
               <el-form
                 ref="form"
                 :model="profile"
@@ -83,7 +83,7 @@
               </el-form>
             </el-tab-pane>
 
-            <el-tab-pane label="修改密码">
+            <el-tab-pane label="修改密码" name="password">
               <el-form
                 ref="pass"
                 :model="pwd"
@@ -173,13 +173,6 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { validator: this.validateRepeat, trigger: "blur" },
         ],
-        // tutors_code: [
-        //   {
-        //     required: true,
-        //     message: "请选择至少一个指导老师",
-        //     trigger: "change",
-        //   },
-        // ],
       },
       users: [],
     };
@@ -195,7 +188,6 @@ export default {
           this.profile = resp.obj;
           this.isUser = false;
           getUsersByCollege(this.profile.college.id).then((resp) => {
-            console.log(resp.obj);
             this.users = resp.obj;
           });
         });

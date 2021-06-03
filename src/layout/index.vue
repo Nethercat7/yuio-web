@@ -62,10 +62,29 @@
           <!-- 个人资料 -->
           <el-submenu index="1" style="float: right">
             <template slot="title">{{ subject.name }}</template>
-            <el-menu-item index="1-1" @click="$router.push('/profile')"
+            <el-menu-item
+              index="1-1"
+              @click="
+                $router.push({ name: 'Profile', query: { type: 'profile' } })
+              "
               >个人资料</el-menu-item
             >
-            <el-menu-item index="1-2" @click="exit">退出登录</el-menu-item>
+            <el-menu-item
+              v-text="subject.type == 'student'?'选择导师':'修改资料'"
+              index="1-2"
+              @click="
+                $router.push({ name: 'Profile', query: { type: 'update' } })
+              "
+              >选择导师</el-menu-item
+            >
+            <el-menu-item
+              index="1-3"
+              @click="
+                $router.push({ name: 'Profile', query: { type: 'password' } })
+              "
+              >修改密码</el-menu-item
+            >
+            <el-menu-item index="1-4" @click="exit">退出登录</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-header>
