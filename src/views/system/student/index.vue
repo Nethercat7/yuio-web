@@ -381,7 +381,7 @@ import {
   outputSelectedStudents,
 } from "@/api/system/student";
 import { resetPwd, getCompleteOrg, getGrade } from "@/api/system/sys";
-import { validateWaN } from "@/utils/validator";
+import { validateNumber } from "@/utils/validator";
 import { getUsersByCollege } from "@/api/system/user";
 import { getSubjectCode } from "@/utils/storage";
 
@@ -455,7 +455,7 @@ export default {
             trigger: "blur",
           },
           {
-            validator: validateWaN,
+            validator: validateNumber,
             trigger: "blur",
           },
         ],

@@ -77,8 +77,12 @@
           <el-col :xs="24" :lg="12">
             <span class="text-center" style="font-size: 85%"
               >Copyright © 2021 by
-              <a href="https://gitee.com/nethercat7" style="color:#fff;text-decoration: none;" target="_blank">Nethercat7</a></span
-              
+              <a
+                href="https://gitee.com/nethercat7"
+                style="color: #fff; text-decoration: none"
+                target="_blank"
+                >Nethercat7</a
+              ></span
             >
           </el-col>
         </el-row>
