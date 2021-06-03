@@ -10,7 +10,6 @@ import UserLogin from '@/layout/login'
 //各模块路由
 import system from './modules/system'
 import statistics from './modules/statistics'
-import compare from './modules/compare'
 import write from './modules/write'
 
 // 解决路由重复控制台报错
@@ -50,7 +49,6 @@ const constantRoutes = [
     },
     system,
     statistics,
-    compare,
     write
 ]
 
