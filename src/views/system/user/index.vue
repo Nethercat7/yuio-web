@@ -158,8 +158,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属学院" prop="college_id">
-          <el-select v-model="form.college_id" placeholder="请选择">
+        <el-form-item label="所属学院">
+          <el-select v-model="form.college_id" placeholder="请选择" clearable>
             <el-option
               v-for="item in collegeList"
               :key="item.id"
@@ -283,9 +283,6 @@ export default {
         phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
         roles: [
           { required: true, message: "请选择至少一个角色", trigger: "blur" },
-        ],
-        college_id: [
-          { required: true, message: "请选择一个学院", trigger: "change" },
         ],
       },
       collegeList: [],

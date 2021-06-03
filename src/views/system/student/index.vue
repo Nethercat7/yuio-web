@@ -295,7 +295,7 @@
           >
           </el-cascader>
         </el-form-item>
-        <el-form-item label="指导老师" prop="tutors_code">
+        <el-form-item label="指导老师">
           <el-select v-model="form.tutors_code" multiple>
             <el-option
               v-for="item in users"
@@ -461,13 +461,6 @@ export default {
         ],
         gender: [
           { required: true, message: "请选择一个性别", trigger: "change" },
-        ],
-        tutors_code: [
-          {
-            required: true,
-            message: "请选择至少一个指导老师",
-            trigger: "change",
-          },
         ],
       },
       users: [],
