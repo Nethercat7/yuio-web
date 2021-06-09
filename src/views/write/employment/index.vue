@@ -135,11 +135,7 @@
 
             <el-divider></el-divider>
             <div class="text-center">
-              <el-button
-                type="primary"
-                @click="submit"
-                >提交</el-button
-              >
+              <el-button type="primary" @click="submit">提交</el-button>
             </div>
           </el-form>
         </el-col>
@@ -172,6 +168,7 @@ export default {
         value: "id",
         label: "name",
         emitPath: false,
+        disabled: "ban",
       },
       //就业意向选择器
       cascaderProps2: {
@@ -227,7 +224,10 @@ export default {
       getCities().then((resp) => {
         this.cityList = resp.obj;
         this.cityList.forEach((element) => {
-          if (element.level == 0 && element.direct == 0) {
+          if (
+            (element.level == 0 && element.direct == 0) ||
+            element.status == "1"
+          ) {
             element.disabled = true;
           }
         });
@@ -236,7 +236,7 @@ export default {
       getWorks().then((resp) => {
         this.workList = resp.obj;
         this.workList.forEach((element) => {
-          if (element.level == 0) {
+          if (element.level == 0 || element.status == "1") {
             element.disabled = true;
           }
         });
