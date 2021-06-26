@@ -48,7 +48,7 @@ export default {
       });
     },
   },
-  created() {
+  mounted() {
     this.id = getSubjectId();
     this.type = getSubjectType();
     this.getData();

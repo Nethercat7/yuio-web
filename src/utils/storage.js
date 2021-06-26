@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import router from '../router';
 
 export function setStorage(k, v) {
     return localStorage.setItem(k, JSON.stringify(v));
@@ -21,7 +22,7 @@ export function setSubject(v) {
 }
 
 export function getSubject() {
-    let subject = jwt.verify(localStorage.getItem("token").split('"').join(""), "*******");
+    let subject = verifyToken();
     subject.id.toFixed(0);
     return subject
 }
@@ -31,17 +32,29 @@ export function delSubject() {
 }
 
 export function getSubjectId() {
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").id.toFixed(0);//因为JS数字类型过长会造成精度丢失，所以使用雪花算法作为ID的话，要先转为字符串。
+    return verifyToken().id.toFixed(0);//因为JS数字类型过长会造成精度丢失，所以使用雪花算法作为ID的话，要先转为字符串。
 }
 
 export function getSubjectName() {
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").name
+    return verifyToken().name
 }
 
 export function getSubjectCode() {
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").code
+    return verifyToken().code
 }
 
 export function getSubjectType() {
-    return jwt.verify(localStorage.getItem("token").split('"').join(""), "*******").type
+    return verifyToken().type
+}
+
+function verifyToken() {
+    let token = null;
+    try {
+        token = jwt.verify(localStorage.getItem("token").split('"').join(""), "*******")
+    } catch (error) {
+        if (error.name == 'TokenExpiredError') {
+            router.push("/login")
+        }
+    }
+    return token;
 }
